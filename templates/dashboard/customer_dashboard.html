@@ -1,0 +1,2172 @@
+{% extends "customer_base.html" %}
+
+{% block title %}Customer Dashboard | SHATHIMART{% endblock %}
+
+{% block content %}
+
+<style>
+
+    :root {
+        --primary: #b08d57;
+        --primary-dark: #8f713f;
+        --dark: #18212b;
+        --light: #f7f7f2;
+        --muted: #6b7280;
+        --border: #e7e5df;
+        --success: #198754;
+        --warning: #f59e0b;
+        --danger: #dc3545;
+        --info: #0d6efd;
+        --purple: #6f42c1;
+    }
+
+
+    /* =========================================================
+       PAGE
+    ========================================================= */
+
+    body {
+        background: var(--light);
+    }
+
+    .dashboard-wrapper {
+        width: 100%;
+        padding: 35px 0 60px;
+    }
+
+
+    /* =========================================================
+       DASHBOARD LAYOUT
+    ========================================================= */
+
+    .dashboard-layout {
+        width: 100%;
+        min-height: calc(100vh - 80px);
+    }
+
+
+    /* =========================================================
+       FIXED SIDEBAR
+    ========================================================= */
+
+    .dashboard-sidebar-wrapper {
+        width: 270px;
+
+        position: fixed;
+
+        top: 80px;
+        left: 0;
+        bottom: 0;
+
+        padding: 20px 15px 25px;
+
+        z-index: 1000;
+    }
+
+
+    .dashboard-sidebar {
+
+        background: #ffffff;
+
+        border: 1px solid var(--border);
+
+        border-radius: 20px;
+
+        padding: 22px 15px;
+
+        height: 100%;
+
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        position: relative;
+    }
+
+
+    /* Sidebar scrollbar */
+
+    .dashboard-sidebar::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .dashboard-sidebar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .dashboard-sidebar::-webkit-scrollbar-thumb {
+        background: #d6d3cc;
+        border-radius: 10px;
+    }
+
+    .dashboard-sidebar::-webkit-scrollbar-thumb:hover {
+        background: var(--primary);
+    }
+
+
+    /* =========================================================
+       PROFILE MINI
+    ========================================================= */
+
+    .profile-mini {
+
+        text-align: center;
+
+        padding: 10px 10px 22px;
+
+        border-bottom: 1px solid var(--border);
+
+        margin-bottom: 15px;
+    }
+
+
+    .profile-avatar {
+
+        width: 70px;
+        height: 70px;
+
+        border-radius: 50%;
+
+        object-fit: cover;
+
+        border: 3px solid rgba(176, 141, 87, 0.25);
+
+        margin-bottom: 10px;
+    }
+
+
+    .profile-avatar-placeholder {
+
+        width: 70px;
+        height: 70px;
+
+        border-radius: 50%;
+
+        background: var(--primary);
+
+        color: #ffffff;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 25px;
+
+        font-weight: 700;
+
+        margin: 0 auto 10px;
+    }
+
+
+    .profile-mini h6 {
+
+        margin-bottom: 3px;
+
+        font-weight: 700;
+
+        color: var(--dark);
+    }
+
+
+    .profile-mini span {
+
+        color: var(--muted);
+
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       SIDEBAR MENU
+    ========================================================= */
+
+    .sidebar-title {
+
+        font-size: 11px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 1px;
+
+        color: #9ca3af;
+
+        font-weight: 700;
+
+        padding: 10px 13px 7px;
+    }
+
+
+    .sidebar-link {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 12px;
+
+        padding: 12px 14px;
+
+        border-radius: 12px;
+
+        color: #4b5563;
+
+        text-decoration: none;
+
+        font-size: 14px;
+
+        font-weight: 500;
+
+        margin-bottom: 4px;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .sidebar-link i {
+
+        width: 20px;
+
+        text-align: center;
+
+        font-size: 17px;
+
+        flex-shrink: 0;
+    }
+
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+
+        background: rgba(176, 141, 87, 0.12);
+
+        color: var(--primary-dark);
+    }
+
+
+    .sidebar-link.logout:hover {
+
+        background: rgba(220, 53, 69, 0.08);
+
+        color: var(--danger);
+    }
+
+
+    .notification-count {
+
+        margin-left: auto;
+
+        min-width: 21px;
+
+        height: 21px;
+
+        padding: 0 6px;
+
+        border-radius: 50px;
+
+        background: var(--primary);
+
+        color: #ffffff;
+
+        font-size: 10px;
+
+        font-weight: 700;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+    }
+
+
+    /* =========================================================
+       MAIN CONTENT
+    ========================================================= */
+
+    .dashboard-main {
+
+        margin-left: 285px;
+
+        padding: 35px 25px 60px 10px;
+
+        min-width: 0;
+    }
+
+
+    /* =========================================================
+       WELCOME CARD
+    ========================================================= */
+
+    .welcome-card {
+
+        background: var(--dark);
+
+        border-radius: 22px;
+
+        padding: 30px;
+
+        color: #ffffff;
+
+        position: relative;
+
+        overflow: hidden;
+
+        margin-bottom: 25px;
+    }
+
+
+    .welcome-card::before {
+
+        content: "";
+
+        position: absolute;
+
+        width: 230px;
+        height: 230px;
+
+        border-radius: 50%;
+
+        background: rgba(176, 141, 87, 0.14);
+
+        right: -70px;
+
+        top: -100px;
+    }
+
+
+    .welcome-card::after {
+
+        content: "";
+
+        position: absolute;
+
+        width: 150px;
+        height: 150px;
+
+        border-radius: 50%;
+
+        background: rgba(255, 255, 255, 0.04);
+
+        right: 90px;
+
+        bottom: -90px;
+    }
+
+
+    .welcome-content {
+
+        position: relative;
+
+        z-index: 2;
+    }
+
+
+    .welcome-card .eyebrow {
+
+        color: #d5bd96;
+
+        text-transform: uppercase;
+
+        letter-spacing: 1.5px;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        margin-bottom: 8px;
+    }
+
+
+    .welcome-card h2 {
+
+        font-family: "Playfair Display", serif;
+
+        font-size: 32px;
+
+        margin-bottom: 8px;
+    }
+
+
+    .welcome-card p {
+
+        color: #cbd1d8;
+
+        margin-bottom: 20px;
+
+        max-width: 620px;
+    }
+
+
+    .welcome-actions {
+
+        display: flex;
+
+        align-items: center;
+
+        flex-wrap: wrap;
+    }
+
+
+    /* =========================================================
+       BUTTONS
+    ========================================================= */
+
+    .btn-gold {
+
+        background: var(--primary);
+
+        color: #ffffff;
+
+        border: none;
+
+        border-radius: 10px;
+
+        padding: 11px 18px;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+        text-decoration: none;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 8px;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .btn-gold:hover {
+
+        background: var(--primary-dark);
+
+        color: #ffffff;
+
+        transform: translateY(-1px);
+    }
+
+
+    .btn-light-custom {
+
+        background: #ffffff;
+
+        color: var(--dark);
+
+        border-radius: 10px;
+
+        padding: 10px 17px;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+        text-decoration: none;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 8px;
+
+        margin-left: 8px;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .btn-light-custom:hover {
+
+        background: #f3f4f6;
+
+        color: var(--dark);
+
+        transform: translateY(-1px);
+    }
+
+
+    /* =========================================================
+       STATISTICS
+    ========================================================= */
+
+    .stat-card {
+
+        background: #ffffff;
+
+        border: 1px solid var(--border);
+
+        border-radius: 17px;
+
+        padding: 21px;
+
+        height: 100%;
+
+        transition: all 0.25s ease;
+    }
+
+
+    .stat-card:hover {
+
+        transform: translateY(-3px);
+
+        box-shadow: 0 10px 30px rgba(24, 33, 43, 0.07);
+    }
+
+
+    .stat-top {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: flex-start;
+
+        margin-bottom: 17px;
+    }
+
+
+    .stat-icon {
+
+        width: 45px;
+        height: 45px;
+
+        border-radius: 12px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 20px;
+
+        flex-shrink: 0;
+    }
+
+
+    .icon-total {
+
+        background: rgba(176, 141, 87, 0.13);
+
+        color: var(--primary-dark);
+    }
+
+
+    .icon-pending {
+
+        background: rgba(245, 158, 11, 0.12);
+
+        color: #d97706;
+    }
+
+
+    .icon-transit {
+
+        background: rgba(13, 110, 253, 0.10);
+
+        color: var(--info);
+    }
+
+
+    .icon-delivery {
+
+        background: rgba(111, 66, 193, 0.10);
+
+        color: var(--purple);
+    }
+
+
+    .icon-delivered {
+
+        background: rgba(25, 135, 84, 0.10);
+
+        color: var(--success);
+    }
+
+
+    .stat-label {
+
+        color: var(--muted);
+
+        font-size: 13px;
+
+        margin-bottom: 5px;
+    }
+
+
+    .stat-value {
+
+        color: var(--dark);
+
+        font-size: 27px;
+
+        font-weight: 700;
+
+        line-height: 1;
+    }
+
+
+    /* =========================================================
+       SECTION
+    ========================================================= */
+
+    .dashboard-section {
+
+        background: #ffffff;
+
+        border: 1px solid var(--border);
+
+        border-radius: 20px;
+
+        overflow: hidden;
+    }
+
+
+    .section-header {
+
+        padding: 21px 23px;
+
+        border-bottom: 1px solid var(--border);
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 15px;
+    }
+
+
+    .section-header h5 {
+
+        margin: 0;
+
+        color: var(--dark);
+
+        font-size: 17px;
+
+        font-weight: 700;
+    }
+
+
+    .section-header p {
+
+        margin: 4px 0 0;
+
+        color: var(--muted);
+
+        font-size: 12px;
+    }
+
+
+    .view-all {
+
+        color: var(--primary-dark);
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        text-decoration: none;
+
+        white-space: nowrap;
+    }
+
+
+    .view-all:hover {
+
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       TABLE
+    ========================================================= */
+
+    .table-container {
+
+        overflow-x: auto;
+    }
+
+
+    .parcel-table {
+
+        margin: 0;
+
+        min-width: 750px;
+    }
+
+
+    .parcel-table thead th {
+
+        background: #fafaf8;
+
+        border-bottom: 1px solid var(--border);
+
+        color: #6b7280;
+
+        font-size: 11px;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.5px;
+
+        font-weight: 700;
+
+        padding: 13px 18px;
+
+        white-space: nowrap;
+    }
+
+
+    .parcel-table tbody td {
+
+        padding: 16px 18px;
+
+        vertical-align: middle;
+
+        border-bottom: 1px solid #f0efeb;
+
+        color: #4b5563;
+
+        font-size: 13px;
+    }
+
+
+    .parcel-table tbody tr:last-child td {
+
+        border-bottom: none;
+    }
+
+
+    .parcel-table tbody tr {
+
+        transition: background 0.2s ease;
+    }
+
+
+    .parcel-table tbody tr:hover {
+
+        background: #fcfcfa;
+    }
+
+
+    .tracking-number {
+
+        color: var(--dark);
+
+        font-weight: 700;
+
+        text-decoration: none;
+    }
+
+
+    .tracking-number:hover {
+
+        color: var(--primary-dark);
+    }
+
+
+    .parcel-type {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        white-space: nowrap;
+    }
+
+
+    .parcel-type i {
+
+        color: var(--primary);
+    }
+
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
+
+    .status-badge {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        border-radius: 30px;
+
+        padding: 6px 10px;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+
+    .status-badge::before {
+
+        content: "";
+
+        width: 6px;
+
+        height: 6px;
+
+        border-radius: 50%;
+
+        background: currentColor;
+
+        flex-shrink: 0;
+    }
+
+
+    .status-pending,
+    .status-pickup_requested {
+
+        background: #fff7e6;
+
+        color: #c27a00;
+    }
+
+
+    .status-assigned {
+
+        background: #eef4ff;
+
+        color: #356ae6;
+    }
+
+
+    .status-picked_up {
+
+        background: #f1edff;
+
+        color: #6f42c1;
+    }
+
+
+    .status-in_transit {
+
+        background: #eaf5ff;
+
+        color: #0d6efd;
+    }
+
+
+    .status-out_for_delivery {
+
+        background: #f1edff;
+
+        color: #6f42c1;
+    }
+
+
+    .status-delivered {
+
+        background: #e9f8f0;
+
+        color: #198754;
+    }
+
+
+    .status-cancelled,
+    .status-failed {
+
+        background: #fdecec;
+
+        color: #dc3545;
+    }
+
+
+    .status-rescheduled {
+
+        background: #fff3e8;
+
+        color: #d66b00;
+    }
+
+
+    /* =========================================================
+       ACTION BUTTON
+    ========================================================= */
+
+    .action-btn {
+
+        width: 34px;
+        height: 34px;
+
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9px;
+
+        border: 1px solid var(--border);
+
+        color: #6b7280;
+
+        text-decoration: none;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .action-btn:hover {
+
+        background: rgba(176, 141, 87, 0.1);
+
+        border-color: rgba(176, 141, 87, 0.3);
+
+        color: var(--primary-dark);
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty-state {
+
+        text-align: center;
+
+        padding: 55px 20px;
+    }
+
+
+    .empty-icon {
+
+        width: 70px;
+        height: 70px;
+
+        margin: 0 auto 17px;
+
+        border-radius: 50%;
+
+        background: rgba(176, 141, 87, 0.10);
+
+        color: var(--primary);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 28px;
+    }
+
+
+    .empty-state h6 {
+
+        color: var(--dark);
+
+        font-weight: 700;
+
+        margin-bottom: 7px;
+    }
+
+
+    .empty-state p {
+
+        color: var(--muted);
+
+        font-size: 13px;
+
+        margin-bottom: 18px;
+    }
+
+
+    /* =========================================================
+       QUICK ACTIONS
+    ========================================================= */
+
+    .quick-card {
+
+        background: #ffffff;
+
+        border: 1px solid var(--border);
+
+        border-radius: 17px;
+
+        padding: 19px;
+
+        text-decoration: none;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        height: 100%;
+
+        transition: all 0.2s ease;
+    }
+
+
+    .quick-card:hover {
+
+        transform: translateY(-2px);
+
+        box-shadow: 0 8px 25px rgba(24, 33, 43, 0.06);
+
+        border-color: rgba(176, 141, 87, 0.35);
+    }
+
+
+    .quick-icon {
+
+        width: 43px;
+        height: 43px;
+
+        min-width: 43px;
+
+        border-radius: 11px;
+
+        background: rgba(176, 141, 87, 0.11);
+
+        color: var(--primary-dark);
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        font-size: 18px;
+    }
+
+
+    .quick-card h6 {
+
+        margin: 0 0 4px;
+
+        color: var(--dark);
+
+        font-size: 14px;
+
+        font-weight: 700;
+    }
+
+
+    .quick-card span {
+
+        color: var(--muted);
+
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE - TABLET
+    ========================================================= */
+
+    @media (max-width: 991px) {
+
+        .dashboard-sidebar-wrapper {
+
+            width: 230px;
+
+            top: 75px;
+        }
+
+
+        .dashboard-main {
+
+            margin-left: 245px;
+
+            padding-left: 10px;
+
+            padding-right: 15px;
+        }
+
+
+        .sidebar-link {
+
+            padding: 11px 10px;
+
+            font-size: 13px;
+        }
+
+
+        .sidebar-link i {
+
+            font-size: 16px;
+        }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE - MOBILE
+    ========================================================= */
+
+    @media (max-width: 767px) {
+
+        .dashboard-wrapper {
+
+            padding-top: 20px;
+        }
+
+
+        .dashboard-sidebar-wrapper {
+
+            position: static;
+
+            width: 100%;
+
+            padding: 20px 15px 0;
+
+            margin-bottom: 5px;
+        }
+
+
+        .dashboard-sidebar {
+
+            height: auto;
+
+            max-height: none;
+
+            overflow: visible;
+        }
+
+
+        .dashboard-main {
+
+            margin-left: 0;
+
+            padding: 20px 15px 50px;
+        }
+
+
+        .sidebar-menu {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 5px;
+        }
+
+
+        .sidebar-title {
+
+            grid-column: 1 / -1;
+        }
+
+
+        .welcome-card {
+
+            padding: 25px 22px;
+        }
+
+
+        .welcome-card h2 {
+
+            font-size: 28px;
+        }
+
+
+        .stat-value {
+
+            font-size: 24px;
+        }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE - SMALL MOBILE
+    ========================================================= */
+
+    @media (max-width: 575px) {
+
+        .dashboard-wrapper {
+
+            padding-top: 15px;
+        }
+
+
+        .dashboard-sidebar-wrapper {
+
+            padding: 15px 10px 0;
+        }
+
+
+        .dashboard-main {
+
+            padding: 15px 10px 40px;
+        }
+
+
+        .sidebar-menu {
+
+            grid-template-columns: 1fr;
+        }
+
+
+        .sidebar-title {
+
+            grid-column: auto;
+        }
+
+
+        .welcome-card {
+
+            padding: 24px 20px;
+        }
+
+
+        .welcome-card h2 {
+
+            font-size: 25px;
+        }
+
+
+        .welcome-actions {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: stretch;
+        }
+
+
+        .btn-gold,
+        .btn-light-custom {
+
+            width: 100%;
+
+            margin-left: 0;
+
+            margin-top: 8px;
+        }
+
+
+        .btn-gold:first-child {
+
+            margin-top: 0;
+        }
+
+
+        .section-header {
+
+            padding: 18px;
+        }
+
+
+        .section-header h5 {
+
+            font-size: 16px;
+        }
+    }
+
+</style>
+
+<!-- =========================================================
+     DASHBOARD WRAPPER
+========================================================= -->
+
+<div class="dashboard-wrapper">
+
+<div class="dashboard-layout">
+
+
+    <!-- =================================================
+         FIXED SIDEBAR
+    ================================================== -->
+
+    <div class="dashboard-sidebar-wrapper">
+
+        <aside class="dashboard-sidebar">
+
+
+            <!-- =================================================
+                 PROFILE
+            ================================================== -->
+
+            <div class="profile-mini">
+
+                {% if request.user.profile.profile_image %}
+
+                    <img
+                        src="{{ request.user.profile.profile_image.url }}"
+                        alt="Profile"
+                        class="profile-avatar"
+                    >
+
+                {% else %}
+
+                    <div class="profile-avatar-placeholder">
+
+                        {{ request.user.first_name|default:request.user.username|first|upper }}
+
+                    </div>
+
+                {% endif %}
+
+
+                <h6>
+
+                    {{ request.user.get_full_name|default:request.user.username }}
+
+                </h6>
+
+
+                <span>
+
+                    Customer Account
+
+                </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 SIDEBAR MENU
+            ================================================== -->
+
+            <div class="sidebar-menu">
+
+
+                <div class="sidebar-title">
+
+                    Main Menu
+
+                </div>
+
+
+                <!-- DASHBOARD -->
+
+                <a
+                    href="{% url 'dashboard' %}"
+                    class="sidebar-link active"
+                >
+
+                    <i class="bi bi-grid-1x2"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- MY PARCELS -->
+
+                <a
+                    href="{% url 'parcel_list' %}"
+                    class="sidebar-link"
+                >
+
+                    <i class="bi bi-box-seam"></i>
+
+                    <span>
+                        My Parcels
+                    </span>
+
+                </a>
+
+
+                <!-- SEND PARCEL -->
+
+                <a
+                    href="{% url 'create_parcel' %}"
+                    class="sidebar-link"
+                >
+
+                    <i class="bi bi-plus-circle"></i>
+
+                    <span>
+                        Send Parcel
+                    </span>
+
+                </a>
+
+
+                <!-- TRACK PARCEL -->
+
+                <a
+                    href="{% url 'track_parcel' %}"
+                    class="sidebar-link"
+                >
+
+                    <i class="bi bi-geo-alt"></i>
+
+                    <span>
+                        Track Parcel
+                    </span>
+
+                </a>
+
+
+                <!-- ACCOUNT -->
+
+                <div class="sidebar-title">
+
+                    Account
+
+                </div>
+
+
+                <!-- PROFILE -->
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="sidebar-link"
+                >
+
+                    <i class="bi bi-person"></i>
+
+                    <span>
+                        My Profile
+                    </span>
+
+                </a>
+
+
+                <!-- EDIT PROFILE -->
+
+                <a
+                    href="{% url 'profile_edit' %}"
+                    class="sidebar-link"
+                >
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    <span>
+                        Edit Profile
+                    </span>
+
+                </a>
+
+
+                <!-- NOTIFICATIONS -->
+
+                <a
+                    href="{% url 'notification_list' %}"
+                    class="sidebar-link"
+                >
+
+                    <i class="bi bi-bell"></i>
+
+                    <span>
+                        Notifications
+                    </span>
+
+
+                    {% if unread_notifications > 0 %}
+
+                        <span class="notification-count">
+
+                            {{ unread_notifications }}
+
+                        </span>
+
+                    {% endif %}
+
+                </a>
+
+
+                <!-- LOGOUT -->
+
+                <a
+                    href="{% url 'logout' %}"
+                    class="sidebar-link logout"
+                >
+
+                    <i class="bi bi-box-arrow-right"></i>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </a>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+
+    <!-- =================================================
+         MAIN CONTENT
+    ================================================== -->
+
+    <div class="dashboard-main">
+
+
+        <!-- =================================================
+             WELCOME
+        ================================================== -->
+
+        <div class="welcome-card">
+
+            <div class="welcome-content">
+
+
+                <div class="eyebrow">
+
+                    Customer Dashboard
+
+                </div>
+
+
+                <h2>
+
+                    Welcome back,
+
+                    {{ request.user.first_name|default:request.user.username }}!
+
+                </h2>
+
+
+                <p>
+
+                    Manage your parcels, check delivery progress,
+                    and send new shipments from one place.
+
+                </p>
+
+
+                <div class="welcome-actions">
+
+
+                    <a
+                        href="{% url 'create_parcel' %}"
+                        class="btn-gold"
+                    >
+
+                        <i class="bi bi-plus-lg"></i>
+
+                        Send New Parcel
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'track_parcel' %}"
+                        class="btn-light-custom"
+                    >
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        Track Parcel
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <div class="row g-3 mb-4">
+
+
+            <!-- TOTAL -->
+
+            <div class="col-sm-6 col-xl-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+
+                                Total Parcels
+
+                            </div>
+
+                            <div class="stat-value">
+
+                                {{ total_parcels }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon icon-total">
+
+                            <i class="bi bi-box-seam"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PENDING -->
+
+            <div class="col-sm-6 col-xl-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+
+                                Pending
+
+                            </div>
+
+                            <div class="stat-value">
+
+                                {{ pending_count }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon icon-pending">
+
+                            <i class="bi bi-clock-history"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- IN TRANSIT -->
+
+            <div class="col-sm-6 col-xl-4">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+
+                                In Transit
+
+                            </div>
+
+                            <div class="stat-value">
+
+                                {{ in_transit_count }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon icon-transit">
+
+                            <i class="bi bi-truck"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- OUT FOR DELIVERY -->
+
+            <div class="col-sm-6 col-xl-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+
+                                Out for Delivery
+
+                            </div>
+
+                            <div class="stat-value">
+
+                                {{ out_for_delivery_count }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon icon-delivery">
+
+                            <i class="bi bi-send-check"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DELIVERED -->
+
+            <div class="col-sm-6 col-xl-6">
+
+                <div class="stat-card">
+
+                    <div class="stat-top">
+
+                        <div>
+
+                            <div class="stat-label">
+
+                                Delivered
+
+                            </div>
+
+                            <div class="stat-value">
+
+                                {{ delivered_count }}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-icon icon-delivered">
+
+                            <i class="bi bi-check2-circle"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RECENT PARCELS
+        ================================================== -->
+
+        <div class="dashboard-section mb-4">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <h5>
+
+                        Recent Parcels
+
+                    </h5>
+
+
+                    <p>
+
+                        Your latest parcel activity
+
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'parcel_list' %}"
+                    class="view-all"
+                >
+
+                    View All
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            {% if recent_parcels %}
+
+
+                <div class="table-container">
+
+                    <table class="table parcel-table">
+
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Tracking Number
+                                </th>
+
+                                <th>
+                                    Receiver
+                                </th>
+
+                                <th>
+                                    Type
+                                </th>
+
+                                <th>
+                                    Created
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            {% for parcel in recent_parcels %}
+
+                                <tr>
+
+
+                                    <!-- TRACKING NUMBER -->
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'parcel_detail' parcel.id %}"
+                                            class="tracking-number"
+                                        >
+
+                                            {{ parcel.tracking_number }}
+
+                                        </a>
+
+                                    </td>
+
+
+                                    <!-- RECEIVER -->
+
+                                    <td>
+
+                                        {{ parcel.receiver_name }}
+
+                                    </td>
+
+
+                                    <!-- TYPE -->
+
+                                    <td>
+
+                                        <span class="parcel-type">
+
+
+                                            {% if parcel.parcel_type == "document" %}
+
+                                                <i class="bi bi-file-earmark-text"></i>
+
+
+                                            {% elif parcel.parcel_type == "electronics" %}
+
+                                                <i class="bi bi-laptop"></i>
+
+
+                                            {% elif parcel.parcel_type == "clothing" %}
+
+                                                <i class="bi bi-bag"></i>
+
+
+                                            {% elif parcel.parcel_type == "food" %}
+
+                                                <i class="bi bi-cup-hot"></i>
+
+
+                                            {% elif parcel.parcel_type == "fragile" %}
+
+                                                <i class="bi bi-exclamation-triangle"></i>
+
+
+                                            {% elif parcel.parcel_type == "package" %}
+
+                                                <i class="bi bi-box-seam"></i>
+
+
+                                            {% else %}
+
+                                                <i class="bi bi-box"></i>
+
+                                            {% endif %}
+
+
+                                            {{ parcel.get_parcel_type_display }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- CREATED -->
+
+                                    <td>
+
+                                        {{ parcel.created_at|date:"M d, Y" }}
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        <span
+                                            class="status-badge status-{{ parcel.status }}"
+                                        >
+
+                                            {{ parcel.get_status_display }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- ACTION -->
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'parcel_detail' parcel.id %}"
+                                            class="action-btn"
+                                            title="View Parcel"
+                                        >
+
+                                            <i class="bi bi-arrow-right"></i>
+
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- =================================================
+                     EMPTY STATE
+                ================================================== -->
+
+                <div class="empty-state">
+
+
+                    <div class="empty-icon">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+
+
+                    <h6>
+
+                        No parcels yet
+
+                    </h6>
+
+
+                    <p>
+
+                        You haven't created any parcel shipments yet.
+
+                    </p>
+
+
+                    <a
+                        href="{% url 'create_parcel' %}"
+                        class="btn-gold"
+                    >
+
+                        <i class="bi bi-plus-lg"></i>
+
+                        Send Your First Parcel
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             QUICK ACTIONS
+        ================================================== -->
+
+        <div class="row g-3">
+
+
+            <!-- SEND PARCEL -->
+
+            <div class="col-md-4">
+
+                <a
+                    href="{% url 'create_parcel' %}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-icon">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h6>
+
+                            Send a Parcel
+
+                        </h6>
+
+
+                        <span>
+
+                            Create a new shipment
+
+                        </span>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- TRACK PARCEL -->
+
+            <div class="col-md-4">
+
+                <a
+                    href="{% url 'track_parcel' %}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-icon">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h6>
+
+                            Track Parcel
+
+                        </h6>
+
+
+                        <span>
+
+                            Check delivery status
+
+                        </span>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+
+            <!-- PROFILE -->
+
+            <div class="col-md-4">
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="quick-card"
+                >
+
+                    <div class="quick-icon">
+
+                        <i class="bi bi-person"></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <h6>
+
+                            My Profile
+
+                        </h6>
+
+
+                        <span>
+
+                            Manage your account
+
+                        </span>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

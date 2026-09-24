@@ -1,0 +1,985 @@
+{% extends "dashboard/admin_base.html" %}
+
+
+{% block title %}
+SHATHIMART | Administrator Profile
+{% endblock %}
+
+
+{% block administrators_active %}
+active
+{% endblock %}
+
+
+{% block topbar_title %}
+Administrator Profile
+{% endblock %}
+
+
+{% block breadcrumb %}
+Administrators / Profile
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /* ======================================================
+       PAGE
+    ====================================================== */
+
+    .profile-page {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+
+    /* ======================================================
+       BACK BUTTON
+    ====================================================== */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        color: #777;
+
+        text-decoration: none;
+
+        font-size: 13px;
+        font-weight: 600;
+
+        margin-bottom: 20px;
+
+        transition: 0.2s ease;
+    }
+
+
+    .back-link:hover {
+        color: #9f9d2f;
+    }
+
+
+    /* ======================================================
+       PROFILE HEADER
+    ====================================================== */
+
+    .profile-header {
+        background: #252525;
+
+        border-radius: 18px;
+
+        padding: 30px;
+
+        color: #ffffff;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 25px;
+
+        margin-bottom: 22px;
+    }
+
+
+    .profile-header-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+
+    .profile-avatar {
+        width: 82px;
+        height: 82px;
+
+        border-radius: 50%;
+
+        background: #b8b63b;
+
+        color: #ffffff;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 32px;
+        font-weight: 700;
+
+        border: 4px solid rgba(255,255,255,0.15);
+
+        flex-shrink: 0;
+    }
+
+
+    .profile-name {
+        margin: 0 0 5px;
+
+        font-size: 25px;
+
+        font-weight: 700;
+    }
+
+
+    .profile-username {
+        margin: 0 0 10px;
+
+        color: #cfcfcf;
+
+        font-size: 14px;
+    }
+
+
+    .admin-badge {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 6px;
+
+        background: rgba(184,182,59,0.18);
+
+        color: #d9d75f;
+
+        padding: 6px 11px;
+
+        border-radius: 20px;
+
+        font-size: 11px;
+
+        font-weight: 700;
+    }
+
+
+    .profile-status {
+        text-align: right;
+    }
+
+
+    .active-status {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        background: #eaf7ed;
+
+        color: #27833b;
+
+        padding: 8px 13px;
+
+        border-radius: 20px;
+
+        font-size: 12px;
+
+        font-weight: 700;
+    }
+
+
+    .status-circle {
+        width: 7px;
+        height: 7px;
+
+        background: #35a84a;
+
+        border-radius: 50%;
+    }
+
+
+    /* ======================================================
+       GRID
+    ====================================================== */
+
+    .profile-grid {
+        display: grid;
+
+        grid-template-columns: 2fr 1fr;
+
+        gap: 22px;
+    }
+
+
+    /* ======================================================
+       CARDS
+    ====================================================== */
+
+    .profile-card {
+        background: #ffffff;
+
+        border: 1px solid #eeeeee;
+
+        border-radius: 16px;
+
+        box-shadow: 0 5px 20px rgba(0,0,0,0.04);
+
+        overflow: hidden;
+
+        margin-bottom: 22px;
+    }
+
+
+    .profile-card-header {
+        padding: 18px 20px;
+
+        border-bottom: 1px solid #eeeeee;
+    }
+
+
+    .profile-card-header h5 {
+        margin: 0;
+
+        font-size: 16px;
+
+        font-weight: 700;
+
+        color: #292929;
+    }
+
+
+    .profile-card-body {
+        padding: 22px;
+    }
+
+
+    /* ======================================================
+       INFORMATION ROW
+    ====================================================== */
+
+    .info-row {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 20px;
+
+        padding: 14px 0;
+
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+
+    .info-row:first-child {
+        padding-top: 0;
+    }
+
+
+    .info-row:last-child {
+        border-bottom: none;
+
+        padding-bottom: 0;
+    }
+
+
+    .info-label {
+        color: #888;
+
+        font-size: 13px;
+
+        font-weight: 500;
+    }
+
+
+    .info-value {
+        color: #333;
+
+        font-size: 14px;
+
+        font-weight: 600;
+
+        text-align: right;
+
+        word-break: break-word;
+    }
+
+
+    /* ======================================================
+       ACCOUNT CARD
+    ====================================================== */
+
+    .account-icon {
+        width: 55px;
+        height: 55px;
+
+        border-radius: 14px;
+
+        background: #f7f7f2;
+
+        color: #b8b63b;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 25px;
+
+        margin-bottom: 15px;
+    }
+
+
+    .account-title {
+        margin-bottom: 5px;
+
+        font-size: 18px;
+
+        font-weight: 700;
+
+        color: #292929;
+    }
+
+
+    .account-description {
+        color: #888;
+
+        font-size: 13px;
+
+        line-height: 1.6;
+
+        margin-bottom: 20px;
+    }
+
+
+    /* ======================================================
+       QUICK ACTIONS
+    ====================================================== */
+
+    .profile-action {
+        display: flex;
+
+        align-items: center;
+
+        gap: 10px;
+
+        padding: 11px 12px;
+
+        border-radius: 9px;
+
+        color: #555;
+
+        text-decoration: none;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        transition: 0.2s ease;
+
+        margin-bottom: 6px;
+    }
+
+
+    .profile-action:hover {
+        background: #f7f7f2;
+
+        color: #9f9d2f;
+    }
+
+
+    .profile-action i {
+        width: 20px;
+
+        font-size: 16px;
+
+        color: #b8b63b;
+    }
+
+
+    /* ======================================================
+       RESPONSIVE
+    ====================================================== */
+
+    @media (max-width: 850px) {
+
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .profile-header {
+            flex-direction: column;
+
+            align-items: flex-start;
+
+            padding: 22px;
+        }
+
+
+        .profile-status {
+            text-align: left;
+        }
+
+
+        .profile-header-left {
+            align-items: flex-start;
+        }
+
+
+        .profile-avatar {
+            width: 65px;
+            height: 65px;
+
+            font-size: 25px;
+        }
+
+
+        .profile-name {
+            font-size: 20px;
+        }
+
+
+        .info-row {
+            align-items: flex-start;
+
+            flex-direction: column;
+
+            gap: 5px;
+        }
+
+
+        .info-value {
+            text-align: left;
+        }
+
+    }
+
+</style>
+
+
+<div class="profile-page">
+
+
+    <!-- ==================================================
+         BACK
+    ================================================== -->
+
+    <a
+        href="{% url 'admin_administrators' %}"
+        class="back-link"
+    >
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back to Administrators
+
+    </a>
+
+
+    <!-- ==================================================
+         PROFILE HEADER
+    ================================================== -->
+
+    <div class="profile-header">
+
+
+        <div class="profile-header-left">
+
+
+            <!-- AVATAR -->
+
+            <div class="profile-avatar">
+
+                {% if administrator.user.first_name %}
+
+                    {{ administrator.user.first_name|first|upper }}
+
+                {% else %}
+
+                    {{ administrator.user.username|first|upper }}
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- NAME -->
+
+            <div>
+
+                <h1 class="profile-name">
+
+                    {% if administrator.user.get_full_name %}
+
+                        {{ administrator.user.get_full_name }}
+
+                    {% else %}
+
+                        {{ administrator.user.username }}
+
+                    {% endif %}
+
+                </h1>
+
+
+                <p class="profile-username">
+
+                    @{{ administrator.user.username }}
+
+                </p>
+
+
+                <span class="admin-badge">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    Administrator
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="profile-status">
+
+            {% if administrator.user.is_active %}
+
+                <span class="active-status">
+
+                    <span class="status-circle"></span>
+
+                    Active Account
+
+                </span>
+
+            {% else %}
+
+                <span
+                    class="active-status"
+                    style="
+                        background:#fceaea;
+                        color:#c0392b;
+                    "
+                >
+
+                    <span
+                        class="status-circle"
+                        style="background:#c0392b;"
+                    ></span>
+
+                    Inactive Account
+
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         PROFILE GRID
+    ================================================== -->
+
+    <div class="profile-grid">
+
+
+        <!-- =================================================
+             LEFT
+        ================================================== -->
+
+        <div>
+
+
+            <!-- PERSONAL INFORMATION -->
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+
+                    <h5>
+                        Personal Information
+                    </h5>
+
+                </div>
+
+
+                <div class="profile-card-body">
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Full Name
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if administrator.user.get_full_name %}
+
+                                {{ administrator.user.get_full_name }}
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Username
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ administrator.user.username }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Email
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ administrator.user.email|default:"—" }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Phone
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ administrator.phone|default:"—" }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            City
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ administrator.city|default:"—" }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Address
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ administrator.address|default:"—" }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACCOUNT INFORMATION -->
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+
+                    <h5>
+                        Account Information
+                    </h5>
+
+                </div>
+
+
+                <div class="profile-card-body">
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Account Role
+                        </span>
+
+                        <span class="info-value">
+                            {{ administrator.get_role_display }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Account Status
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if administrator.user.is_active %}
+
+                                Active
+
+                            {% else %}
+
+                                Inactive
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Staff ID
+                        </span>
+
+                        <span class="info-value">
+
+                            #{{ administrator.user.id }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Joined
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ administrator.created_at|date:"F d, Y" }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Last Login
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if administrator.user.last_login %}
+
+                                {{ administrator.user.last_login|date:"M d, Y h:i A" }}
+
+                            {% else %}
+
+                                Never
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT
+        ================================================== -->
+
+        <div>
+
+
+            <!-- ADMIN ACCOUNT -->
+
+            <div class="profile-card">
+
+                <div class="profile-card-body">
+
+
+                    <div class="account-icon">
+
+                        <i class="bi bi-shield-lock"></i>
+
+                    </div>
+
+
+                    <div class="account-title">
+
+                        Administrator Account
+
+                    </div>
+
+
+                    <p class="account-description">
+
+                        This account has administrator-level
+                        access to the SHATHIMART management
+                        dashboard.
+
+                    </p>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Role
+                        </span>
+
+                        <span class="info-value">
+                            Administrator
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Status
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if administrator.user.is_active %}
+
+                                Active
+
+                            {% else %}
+
+                                Inactive
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="profile-card">
+
+                <div class="profile-card-header">
+
+                    <h5>
+                        Quick Actions
+                    </h5>
+
+                </div>
+
+
+                <div class="profile-card-body">
+
+
+                    <a
+                        href="{% url 'admin_administrators' %}"
+                        class="profile-action"
+                    >
+
+                        <i class="bi bi-people"></i>
+
+                        <span>
+                            All Administrators
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'admin_dashboard' %}"
+                        class="profile-action"
+                    >
+
+                        <i class="bi bi-speedometer2"></i>
+
+                        <span>
+                            Admin Dashboard
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'admin_staff' %}"
+                        class="profile-action"
+                    >
+
+                        <i class="bi bi-person-badge"></i>
+
+                        <span>
+                            Delivery Staff
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'logout' %}"
+                        class="profile-action"
+                    >
+
+                        <i class="bi bi-box-arrow-right"></i>
+
+                        <span>
+                            Logout
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,846 @@
+{% extends "base.html" %}
+
+{% block title %}
+Create Account | SHATHIMART
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    .register-page {
+        min-height: calc(100vh - 74px);
+        padding: 35px 0;
+        background:
+            radial-gradient(
+                circle at top left,
+                rgba(176,141,87,.12),
+                transparent 32%
+            ),
+            #f7f7f2;
+    }
+
+    .register-wrapper {
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .register-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 15px 45px rgba(24,33,43,.10);
+        border: 1px solid rgba(0,0,0,.04);
+    }
+
+
+    /* =================================
+       HEADER
+    ================================= */
+
+    .register-header {
+        background: var(--dark);
+        color: white;
+        padding: 28px 35px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .register-header::after {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border: 1px solid rgba(208,169,104,.25);
+        border-radius: 50%;
+        right: -100px;
+        top: -130px;
+    }
+
+    .register-header::before {
+        content: "";
+        position: absolute;
+        width: 160px;
+        height: 160px;
+        border: 1px solid rgba(208,169,104,.15);
+        border-radius: 50%;
+        right: -50px;
+        bottom: -110px;
+    }
+
+    .register-logo {
+        font-family: "Playfair Display", serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        position: relative;
+        z-index: 2;
+    }
+
+    .register-logo span {
+        color: #d0a968;
+    }
+
+    .register-header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 2rem;
+        margin-top: 18px;
+        margin-bottom: 7px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .register-header p {
+        color: rgba(255,255,255,.7);
+        max-width: 600px;
+        margin: 0;
+        font-size: .88rem;
+        line-height: 1.5;
+        position: relative;
+        z-index: 2;
+    }
+
+
+    /* =================================
+       FORM BODY
+    ================================= */
+
+    .register-body {
+        padding: 30px 35px;
+    }
+
+    .form-section-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 16px;
+        font-size: .98rem;
+    }
+
+    .form-section-title span {
+        width: 28px;
+        height: 28px;
+        background: rgba(176,141,87,.12);
+        color: var(--primary-dark);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .85rem;
+    }
+
+
+    /* =================================
+       FORM FIELDS
+    ================================= */
+
+    .custom-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 5px;
+        font-size: .82rem;
+    }
+
+    .custom-input {
+        height: 43px;
+        border: 1px solid #e1e5e9;
+        border-radius: 7px;
+        font-size: .84rem;
+        padding: 8px 12px;
+    }
+
+    textarea.custom-input {
+        height: 75px;
+        min-height: 75px;
+        resize: vertical;
+    }
+
+    .custom-input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(176,141,87,.09);
+    }
+
+    .custom-input::placeholder {
+        color: #a0a7ae;
+        font-size: .82rem;
+    }
+
+    .field-error {
+        color: #dc3545;
+        font-size: .74rem;
+        margin-top: 4px;
+    }
+
+
+    /* =================================
+       PASSWORD NOTE
+    ================================= */
+
+    .password-note {
+        background: #f8f9fa;
+        border-radius: 7px;
+        padding: 10px 12px;
+        font-size: .74rem;
+        color: #6b7280;
+        margin-top: 10px;
+        line-height: 1.4;
+    }
+
+
+    /* =================================
+       BUTTON
+    ================================= */
+
+    .register-btn {
+        height: 46px;
+        background: var(--primary);
+        border: none;
+        border-radius: 7px;
+        color: white;
+        font-weight: 700;
+        font-size: .88rem;
+        transition: .2s;
+    }
+
+    .register-btn:hover {
+        background: var(--primary-dark);
+        color: white;
+        transform: translateY(-1px);
+    }
+
+
+    /* =================================
+       LOGIN
+    ================================= */
+
+    .login-text {
+        color: #6b7280;
+        font-size: .82rem;
+    }
+
+    .login-text a {
+        color: var(--primary-dark);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .login-text a:hover {
+        color: var(--primary);
+    }
+
+
+    /* =================================
+       BOOTSTRAP ROW GAP REDUCTION
+    ================================= */
+
+    .register-body .row.g-4 {
+        --bs-gutter-x: 1.2rem;
+        --bs-gutter-y: 1rem;
+    }
+
+    .register-body .mt-5 {
+        margin-top: 1.8rem !important;
+    }
+
+    .register-body .mt-4 {
+        margin-top: 1.2rem !important;
+    }
+
+
+    /* =================================
+       MOBILE
+    ================================= */
+
+    @media(max-width: 768px) {
+
+        .register-page {
+            padding: 20px 12px;
+        }
+
+        .register-wrapper {
+            max-width: 100%;
+        }
+
+        .register-header {
+            padding: 24px 22px;
+        }
+
+        .register-logo {
+            font-size: 1.35rem;
+        }
+
+        .register-header h1 {
+            font-size: 1.7rem;
+            margin-top: 15px;
+        }
+
+        .register-header p {
+            font-size: .8rem;
+        }
+
+        .register-body {
+            padding: 25px 22px;
+        }
+
+        .register-body .row.g-4 {
+            --bs-gutter-y: .85rem;
+        }
+
+        .register-body .mt-5 {
+            margin-top: 1.6rem !important;
+        }
+
+    }
+
+
+    /* =================================
+       SMALL MOBILE
+    ================================= */
+
+    @media(max-width: 480px) {
+
+        .register-page {
+            padding: 15px 8px;
+        }
+
+        .register-card {
+            border-radius: 12px;
+        }
+
+        .register-header {
+            padding: 22px 18px;
+        }
+
+        .register-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .register-body {
+            padding: 22px 18px;
+        }
+
+        .custom-input {
+            height: 42px;
+        }
+
+        textarea.custom-input {
+            min-height: 70px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="register-page">
+
+<div class="container">
+
+    <div class="register-wrapper">
+
+        <div class="register-card">
+
+
+            <!-- =========================================
+                 HEADER
+            ========================================== -->
+
+            <div class="register-header">
+
+                <div class="register-logo">
+                    SHATHI<span>MART</span>
+                </div>
+
+                <h1>
+                    Create Your Account
+                </h1>
+
+                <p>
+                    Join SHATHIMART and manage your parcel
+                    deliveries from one simple platform.
+                </p>
+
+            </div>
+
+
+            <!-- =========================================
+                 FORM
+            ========================================== -->
+
+            <div class="register-body">
+
+                <form
+                    method="POST"
+                    action="{% url 'register' %}"
+                    novalidate
+                >
+
+                    {% csrf_token %}
+
+
+                    <!-- =================================
+                         ACCOUNT INFORMATION
+                    ================================== -->
+
+                    <div class="form-section-title">
+
+                        <span>
+                            <i class="bi bi-person"></i>
+                        </span>
+
+                        Account Information
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- USERNAME -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.username.id_for_label }}"
+                                class="custom-label"
+                            >
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                name="username"
+                                id="{{ form.username.id_for_label }}"
+                                value="{{ form.username.value|default:'' }}"
+                                class="form-control custom-input"
+                                placeholder="Choose a username"
+                                required
+                            >
+
+                            {% if form.username.errors %}
+
+                                {% for error in form.username.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.email.id_for_label }}"
+                                class="custom-label"
+                            >
+                                Email Address
+                            </label>
+
+                            <input
+                                type="email"
+                                name="email"
+                                id="{{ form.email.id_for_label }}"
+                                value="{{ form.email.value|default:'' }}"
+                                class="form-control custom-input"
+                                placeholder="you@example.com"
+                                required
+                            >
+
+                            {% if form.email.errors %}
+
+                                {% for error in form.email.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- FIRST NAME -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.first_name.id_for_label }}"
+                                class="custom-label"
+                            >
+                                First Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="first_name"
+                                id="{{ form.first_name.id_for_label }}"
+                                value="{{ form.first_name.value|default:'' }}"
+                                class="form-control custom-input"
+                                placeholder="Enter first name"
+                                required
+                            >
+
+                            {% if form.first_name.errors %}
+
+                                {% for error in form.first_name.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- LAST NAME -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.last_name.id_for_label }}"
+                                class="custom-label"
+                            >
+                                Last Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="last_name"
+                                id="{{ form.last_name.id_for_label }}"
+                                value="{{ form.last_name.value|default:'' }}"
+                                class="form-control custom-input"
+                                placeholder="Enter last name"
+                                required
+                            >
+
+                            {% if form.last_name.errors %}
+
+                                {% for error in form.last_name.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         CONTACT INFORMATION
+                    ================================== -->
+
+                    <div class="form-section-title mt-5">
+
+                        <span>
+                            <i class="bi bi-telephone"></i>
+                        </span>
+
+                        Contact Information
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- PHONE -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.phone.id_for_label }}"
+                                class="custom-label"
+                            >
+                                Phone Number
+                            </label>
+
+                            <input
+                                type="tel"
+                                name="phone"
+                                id="{{ form.phone.id_for_label }}"
+                                value="{{ form.phone.value|default:'' }}"
+                                class="form-control custom-input"
+                                placeholder="98XXXXXXXX"
+                                required
+                            >
+
+                            {% if form.phone.errors %}
+
+                                {% for error in form.phone.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- CITY -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.city.id_for_label }}"
+                                class="custom-label"
+                            >
+                                City
+                            </label>
+
+                            <input
+                                type="text"
+                                name="city"
+                                id="{{ form.city.id_for_label }}"
+                                value="{{ form.city.value|default:'' }}"
+                                class="form-control custom-input"
+                                placeholder="Enter your city"
+                                required
+                            >
+
+                            {% if form.city.errors %}
+
+                                {% for error in form.city.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+
+                        <div class="col-12">
+
+                            <label
+                                for="{{ form.address.id_for_label }}"
+                                class="custom-label"
+                            >
+                                Address
+                            </label>
+
+                            <textarea
+                                name="address"
+                                id="{{ form.address.id_for_label }}"
+                                class="form-control custom-input"
+                                placeholder="Enter your full address"
+                                required
+                            >{{ form.address.value|default:'' }}</textarea>
+
+                            {% if form.address.errors %}
+
+                                {% for error in form.address.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================
+                         PASSWORD
+                    ================================== -->
+
+                    <div class="form-section-title mt-5">
+
+                        <span>
+                            <i class="bi bi-shield-lock"></i>
+                        </span>
+
+                        Security
+
+                    </div>
+
+
+                    <div class="row g-4">
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.password1.id_for_label }}"
+                                class="custom-label"
+                            >
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password1"
+                                id="{{ form.password1.id_for_label }}"
+                                class="form-control custom-input"
+                                placeholder="Create a strong password"
+                                required
+                            >
+
+                            {% if form.password1.errors %}
+
+                                {% for error in form.password1.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="col-md-6">
+
+                            <label
+                                for="{{ form.password2.id_for_label }}"
+                                class="custom-label"
+                            >
+                                Confirm Password
+                            </label>
+
+                            <input
+                                type="password"
+                                name="password2"
+                                id="{{ form.password2.id_for_label }}"
+                                class="form-control custom-input"
+                                placeholder="Repeat your password"
+                                required
+                            >
+
+                            {% if form.password2.errors %}
+
+                                {% for error in form.password2.errors %}
+
+                                    <div class="field-error">
+                                        {{ error }}
+                                    </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PASSWORD NOTE -->
+
+                    <div class="password-note">
+
+                        <i class="bi bi-info-circle me-2"></i>
+
+                        Your password should be at least 8
+                        characters and should not be too
+                        similar to your personal information.
+
+                    </div>
+
+
+                    <!-- =================================
+                         NON FIELD ERRORS
+                    ================================== -->
+
+                    {% if form.non_field_errors %}
+
+                        <div class="alert alert-danger mt-4">
+
+                            {% for error in form.non_field_errors %}
+
+                                <div>
+                                    {{ error }}
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================
+                         SUBMIT
+                    ================================== -->
+
+                    <button
+                        type="submit"
+                        class="register-btn w-100 mt-4"
+                    >
+
+                        <i class="bi bi-person-plus me-2"></i>
+
+                        Create Account
+
+                    </button>
+
+
+                    <!-- =================================
+                         LOGIN
+                    ================================== -->
+
+                    <div
+                        class="text-center login-text mt-4"
+                    >
+
+                        Already have an account?
+
+                        <a
+                            href="{% url 'login' %}"
+                            class="ms-1"
+                        >
+                            Sign In
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endblock %}

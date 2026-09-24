@@ -1,0 +1,1496 @@
+{% extends "dashboard/admin_base.html" %}
+
+
+{% block title %}
+    SHATHIMART | Parcel Tracking
+{% endblock %}
+
+
+{% block tracking_active %}
+    active
+{% endblock %}
+
+
+{% block topbar_title %}
+    Parcel Tracking
+{% endblock %}
+
+
+{% block breadcrumb %}
+    Tracking / {{ parcel.tracking_number }}
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /* ============================================================
+       TRACKING DETAIL HEADER
+    ============================================================ */
+
+    .tracking-detail-header {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 22px;
+        margin-bottom: 20px;
+    }
+
+
+    .tracking-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        transition: .2s ease;
+    }
+
+
+    .tracking-back:hover {
+        color: var(--dark);
+    }
+
+
+    .parcel-tracking-number {
+        color: var(--dark);
+        font-size: 22px;
+        font-weight: 700;
+        word-break: break-word;
+    }
+
+
+    .parcel-subtitle {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+
+    /* ============================================================
+       CURRENT STATUS
+    ============================================================ */
+
+    .current-status-box {
+        background: #fafaf8;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 15px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+
+    .current-status-label {
+        color: var(--muted);
+        font-size: 10px;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: .5px;
+        margin-bottom: 8px;
+    }
+
+
+    .current-status-value {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        width: fit-content;
+    }
+
+
+    .status-pending {
+        background: rgba(108,117,125,.12);
+        color: #6c757d;
+    }
+
+
+    .status-pickup_requested {
+        background: rgba(255,193,7,.13);
+        color: #9a7200;
+    }
+
+
+    .status-assigned {
+        background: rgba(13,110,253,.12);
+        color: #0d6efd;
+    }
+
+
+    .status-picked_up {
+        background: rgba(111,66,193,.12);
+        color: #6f42c1;
+    }
+
+
+    .status-in_transit {
+        background: rgba(13,202,240,.13);
+        color: #087990;
+    }
+
+
+    .status-out_for_delivery {
+        background: rgba(255,152,0,.13);
+        color: #b26a00;
+    }
+
+
+    .status-delivered {
+        background: rgba(25,135,84,.12);
+        color: #198754;
+    }
+
+
+    .status-cancelled {
+        background: rgba(220,53,69,.12);
+        color: #dc3545;
+    }
+
+
+    .status-failed {
+        background: rgba(220,53,69,.12);
+        color: #dc3545;
+    }
+
+
+    .status-rescheduled {
+        background: rgba(13,202,240,.12);
+        color: #087990;
+    }
+
+
+    /* ============================================================
+       TRACKING CARD
+    ============================================================ */
+
+    .tracking-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+
+    .tracking-card-header {
+        padding: 20px;
+        border-bottom: 1px solid var(--border);
+    }
+
+
+    .tracking-card-title {
+        color: var(--dark);
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+
+    .tracking-card-subtitle {
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: 4px;
+    }
+
+
+    /* ============================================================
+       TIMELINE
+    ============================================================ */
+
+    .timeline {
+        position: relative;
+        padding: 25px 25px 25px 55px;
+    }
+
+
+    .timeline::before {
+        content: "";
+        position: absolute;
+        left: 29px;
+        top: 35px;
+        bottom: 35px;
+        width: 2px;
+        background: var(--border);
+    }
+
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 28px;
+    }
+
+
+    .timeline-item:last-child {
+        padding-bottom: 0;
+    }
+
+
+    .timeline-icon {
+        position: absolute;
+        left: -39px;
+        top: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--white);
+        border: 2px solid var(--primary);
+        color: var(--primary-dark);
+        font-size: 12px;
+        z-index: 2;
+    }
+
+
+    .timeline-content {
+        border: 1px solid var(--border);
+        border-radius: 11px;
+        padding: 15px;
+        background: #fff;
+        transition: .2s ease;
+    }
+
+
+    .timeline-content:hover {
+        border-color: rgba(176,141,87,.45);
+        box-shadow: 0 5px 18px rgba(0,0,0,.04);
+    }
+
+
+    .timeline-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+
+    .timeline-status {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+
+    .timeline-date {
+        color: var(--muted);
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
+
+    .timeline-location {
+        color: var(--text);
+        font-size: 11px;
+        margin-top: 9px;
+    }
+
+
+    .timeline-location i {
+        color: var(--primary);
+    }
+
+
+    .timeline-remarks {
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: 8px;
+        line-height: 1.6;
+    }
+
+
+    /* ============================================================
+       INFO CARDS
+    ============================================================ */
+
+    .parcel-info-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px;
+    }
+
+
+    .info-title {
+        color: var(--dark);
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+    }
+
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 9px 0;
+        border-bottom: 1px solid #f0f0ec;
+    }
+
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+
+    .info-label {
+        color: var(--muted);
+        font-size: 11px;
+        flex-shrink: 0;
+    }
+
+
+    .info-value {
+        color: var(--dark);
+        font-size: 11px;
+        font-weight: 600;
+        text-align: right;
+        word-break: break-word;
+    }
+
+
+    /* ============================================================
+       PAYMENT STATUS
+    ============================================================ */
+
+    .payment-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 9px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+
+    .payment-status.pending {
+        background: rgba(255,193,7,.13);
+        color: #9a7200;
+    }
+
+
+    .payment-status.paid {
+        background: rgba(25,135,84,.12);
+        color: #198754;
+    }
+
+
+    .payment-status.failed {
+        background: rgba(220,53,69,.12);
+        color: #dc3545;
+    }
+
+
+    .payment-status.refunded {
+        background: rgba(13,202,240,.13);
+        color: #087990;
+    }
+
+
+    /* ============================================================
+       EMPTY TRACKING
+    ============================================================ */
+
+    .empty-tracking {
+        padding: 70px 20px;
+        text-align: center;
+    }
+
+
+    .empty-tracking-icon {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: rgba(176,141,87,.10);
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        font-size: 25px;
+    }
+
+
+    .empty-tracking h6 {
+        color: var(--dark);
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+
+    .empty-tracking p {
+        color: var(--muted);
+        font-size: 12px;
+        margin: 0;
+    }
+
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+
+    @media (max-width: 991px) {
+
+        .current-status-box {
+            min-height: auto;
+        }
+
+    }
+
+
+    @media (max-width: 575px) {
+
+        .tracking-detail-header {
+            padding: 17px;
+        }
+
+
+        .parcel-tracking-number {
+            font-size: 18px;
+        }
+
+
+        .tracking-top {
+            flex-direction: column;
+        }
+
+
+        .timeline {
+            padding-left: 48px;
+            padding-right: 15px;
+        }
+
+
+        .timeline::before {
+            left: 22px;
+        }
+
+
+        .timeline-icon {
+            left: -35px;
+        }
+
+
+        .timeline-top {
+            flex-direction: column;
+            gap: 7px;
+        }
+
+
+        .timeline-date {
+            white-space: normal;
+        }
+
+
+        .parcel-info-card {
+            padding: 16px;
+        }
+
+
+        .info-row {
+            gap: 10px;
+        }
+
+    }
+
+</style>
+
+
+<!-- ============================================================
+     HEADER
+============================================================= -->
+
+<div class="tracking-detail-header">
+
+    <a
+        href="{% url 'admin_tracking' %}"
+        class="tracking-back"
+    >
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back to Tracking
+
+    </a>
+
+
+    <div class="row g-3 align-items-stretch">
+
+
+        <!-- PARCEL -->
+
+        <div class="col-12 col-lg-8">
+
+            <div>
+
+                <div
+                    style="
+                        color: var(--muted);
+                        font-size: 10px;
+                        font-weight: 700;
+                        text-transform: uppercase;
+                        letter-spacing: .6px;
+                        margin-bottom: 5px;
+                    "
+                >
+                    Tracking Number
+                </div>
+
+
+                <div class="parcel-tracking-number">
+
+                    <i
+                        class="bi bi-box-seam me-2"
+                        style="color: var(--primary);"
+                    ></i>
+
+                    {{ parcel.tracking_number }}
+
+                </div>
+
+
+                <div class="parcel-subtitle">
+
+                    Complete tracking history for this parcel
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CURRENT STATUS -->
+
+        <div class="col-12 col-lg-4">
+
+            <div class="current-status-box">
+
+                <div class="current-status-label">
+                    Current Status
+                </div>
+
+
+                <span
+                    class="
+                        status-badge
+                        status-{{ parcel.status }}
+                    "
+                >
+
+                    {% if parcel.status == "pending" %}
+
+                        <i class="bi bi-clock"></i>
+
+                    {% elif parcel.status == "pickup_requested" %}
+
+                        <i class="bi bi-hand-index"></i>
+
+                    {% elif parcel.status == "assigned" %}
+
+                        <i class="bi bi-person-check"></i>
+
+                    {% elif parcel.status == "picked_up" %}
+
+                        <i class="bi bi-box-arrow-up"></i>
+
+                    {% elif parcel.status == "in_transit" %}
+
+                        <i class="bi bi-truck"></i>
+
+                    {% elif parcel.status == "out_for_delivery" %}
+
+                        <i class="bi bi-truck-front"></i>
+
+                    {% elif parcel.status == "delivered" %}
+
+                        <i class="bi bi-check-circle"></i>
+
+                    {% elif parcel.status == "cancelled" %}
+
+                        <i class="bi bi-x-circle"></i>
+
+                    {% elif parcel.status == "failed" %}
+
+                        <i class="bi bi-exclamation-circle"></i>
+
+                    {% elif parcel.status == "rescheduled" %}
+
+                        <i class="bi bi-calendar-event"></i>
+
+                    {% else %}
+
+                        <i class="bi bi-info-circle"></i>
+
+                    {% endif %}
+
+
+                    {{ parcel.get_status_display }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ============================================================
+     MAIN CONTENT
+============================================================= -->
+
+<div class="row g-4">
+
+
+    <!-- ========================================================
+         TRACKING TIMELINE
+    ========================================================= -->
+
+    <div class="col-12 col-lg-8">
+
+        <div class="tracking-card">
+
+
+            <!-- CARD HEADER -->
+
+            <div class="tracking-card-header">
+
+                <h5 class="tracking-card-title">
+
+                    Tracking History
+
+                </h5>
+
+
+                <div class="tracking-card-subtitle">
+
+                    {{ total_tracking }}
+
+                    tracking update{{ total_tracking|pluralize }}
+
+                    for
+
+                    <strong>
+                        {{ parcel.tracking_number }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- TRACKING HISTORY -->
+
+            {% if tracking_history %}
+
+                <div class="timeline">
+
+
+                    {% for tracking in tracking_history %}
+
+                        <div class="timeline-item">
+
+
+                            <!-- ICON -->
+
+                            <div class="timeline-icon">
+
+                                {% if tracking.status == "pending" %}
+
+                                    <i class="bi bi-clock"></i>
+
+                                {% elif tracking.status == "pickup_requested" %}
+
+                                    <i class="bi bi-hand-index"></i>
+
+                                {% elif tracking.status == "assigned" %}
+
+                                    <i class="bi bi-person-check"></i>
+
+                                {% elif tracking.status == "picked_up" %}
+
+                                    <i class="bi bi-box-arrow-up"></i>
+
+                                {% elif tracking.status == "in_transit" %}
+
+                                    <i class="bi bi-truck"></i>
+
+                                {% elif tracking.status == "out_for_delivery" %}
+
+                                    <i class="bi bi-truck-front"></i>
+
+                                {% elif tracking.status == "delivered" %}
+
+                                    <i class="bi bi-check-circle"></i>
+
+                                {% elif tracking.status == "cancelled" %}
+
+                                    <i class="bi bi-x-circle"></i>
+
+                                {% elif tracking.status == "failed" %}
+
+                                    <i class="bi bi-exclamation-circle"></i>
+
+                                {% elif tracking.status == "rescheduled" %}
+
+                                    <i class="bi bi-calendar-event"></i>
+
+                                {% else %}
+
+                                    <i class="bi bi-info-circle"></i>
+
+                                {% endif %}
+
+                            </div>
+
+
+
+                            <!-- CONTENT -->
+
+                            <div class="timeline-content">
+
+
+                                <div class="timeline-top">
+
+                                    <div>
+
+                                        <div class="timeline-status">
+
+                                            {{ tracking.get_status_display }}
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="timeline-date">
+
+                                        {{ tracking.created_at|date:"M d, Y" }}
+
+                                        at
+
+                                        {{ tracking.created_at|date:"h:i A" }}
+
+                                    </div>
+
+                                </div>
+
+
+
+                                {% if tracking.location %}
+
+                                    <div class="timeline-location">
+
+                                        <i class="bi bi-geo-alt me-1"></i>
+
+                                        {{ tracking.location }}
+
+                                    </div>
+
+                                {% endif %}
+
+
+
+                                {% if tracking.remarks %}
+
+                                    <div class="timeline-remarks">
+
+                                        <i class="bi bi-chat-left-text me-1"></i>
+
+                                        {{ tracking.remarks }}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- EMPTY -->
+
+                <div class="empty-tracking">
+
+                    <div class="empty-tracking-icon">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                    </div>
+
+
+                    <h6>
+
+                        No Tracking History
+
+                    </h6>
+
+
+                    <p>
+
+                        No tracking updates have been recorded
+                        for this parcel yet.
+
+                    </p>
+
+                </div>
+
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================================================
+         RIGHT INFORMATION COLUMN
+    ========================================================= -->
+
+    <div class="col-12 col-lg-4">
+
+
+        <!-- ====================================================
+             PARCEL INFORMATION
+        ===================================================== -->
+
+        <div class="parcel-info-card">
+
+            <div class="info-title">
+
+                <i
+                    class="bi bi-box-seam me-2"
+                    style="color: var(--primary);"
+                ></i>
+
+                Parcel Information
+
+            </div>
+
+
+            <!-- TRACKING NUMBER -->
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    Tracking Number
+                </span>
+
+                <span class="info-value">
+                    {{ parcel.tracking_number }}
+                </span>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    Status
+                </span>
+
+                <span class="info-value">
+
+                    {{ parcel.get_status_display }}
+
+                </span>
+
+            </div>
+
+
+            <!-- CREATED -->
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    Created
+                </span>
+
+                <span class="info-value">
+
+                    {{ parcel.created_at|date:"M d, Y" }}
+
+                </span>
+
+            </div>
+
+
+            <!-- LAST UPDATED -->
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    Last Updated
+                </span>
+
+                <span class="info-value">
+
+                    {{ parcel.updated_at|date:"M d, Y" }}
+
+                </span>
+
+            </div>
+
+
+            <!-- DELIVERY DATE -->
+
+            {% if parcel.delivery_date %}
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Delivery Date
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ parcel.delivery_date|date:"M d, Y" }}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- DELIVERY STAFF -->
+
+            {% if parcel.delivery %}
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Delivery Staff
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if parcel.delivery.delivery_staff %}
+
+                            {{ parcel.delivery.delivery_staff.get_full_name|default:parcel.delivery.delivery_staff.username }}
+
+                        {% else %}
+
+                            Not Assigned
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- ====================================================
+             PAYMENT INFORMATION
+        ===================================================== -->
+
+        <div
+            class="parcel-info-card"
+            style="margin-top: 20px;"
+        >
+
+            <div class="info-title">
+
+                <i
+                    class="bi bi-credit-card me-2"
+                    style="color: var(--primary);"
+                ></i>
+
+                Payment Information
+
+            </div>
+
+
+            <!-- DELIVERY CHARGE -->
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    Delivery Charge
+                </span>
+
+                <span class="info-value">
+
+                    {% if parcel.delivery_charge %}
+                        Rs. {{ parcel.delivery_charge }}
+                    {% else %}
+                        Rs. 0.00
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <!-- PAYMENT STATUS -->
+
+            <div class="info-row">
+
+                <span class="info-label">
+                    Payment Status
+                </span>
+
+                <span class="info-value">
+
+                    {% if payment %}
+
+                        {% if payment.payment_status == "paid" %}
+
+                            <span class="payment-status paid">
+
+                                <i class="bi bi-check-circle"></i>
+
+                                Paid
+
+                            </span>
+
+                        {% elif payment.payment_status == "failed" %}
+
+                            <span class="payment-status failed">
+
+                                <i class="bi bi-x-circle"></i>
+
+                                Failed
+
+                            </span>
+
+                        {% elif payment.payment_status == "refunded" %}
+
+                            <span class="payment-status refunded">
+
+                                <i class="bi bi-arrow-counterclockwise"></i>
+
+                                Refunded
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="payment-status pending">
+
+                                <i class="bi bi-clock"></i>
+
+                                Pending
+
+                            </span>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <span class="payment-status pending">
+
+                            <i class="bi bi-clock"></i>
+
+                            Pending
+
+                        </span>
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <!-- PAID DATE -->
+
+            {% if payment and payment.paid_at %}
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Paid At
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ payment.paid_at|date:"M d, Y" }}
+
+                        <br>
+
+                        {{ payment.paid_at|date:"h:i A" }}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+
+            <!-- TRANSACTION -->
+
+            {% if payment and payment.transaction_id %}
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Transaction ID
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ payment.transaction_id }}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- ====================================================
+             CUSTOMER
+        ===================================================== -->
+
+        <div
+            class="parcel-info-card"
+            style="margin-top: 20px;"
+        >
+
+            <div class="info-title">
+
+                <i
+                    class="bi bi-person me-2"
+                    style="color: var(--primary);"
+                ></i>
+
+                Customer
+
+            </div>
+
+
+            {% if parcel.customer %}
+
+
+                {% if parcel.customer.user %}
+
+
+                    <!-- NAME -->
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Name
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.customer.user.get_full_name|default:parcel.customer.user.username }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- USERNAME -->
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Username
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.customer.user.username }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Email
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.customer.user.email|default:"—" }}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    {% if parcel.customer.phone %}
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Phone
+                            </span>
+
+                            <span class="info-value">
+
+                                {{ parcel.customer.phone }}
+
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- ADDRESS -->
+
+                    {% if parcel.customer.address %}
+
+                        <div class="info-row">
+
+                            <span class="info-label">
+                                Address
+                            </span>
+
+                            <span class="info-value">
+
+                                {{ parcel.customer.address }}
+
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+
+                {% else %}
+
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Customer
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.customer }}
+
+                        </span>
+
+                    </div>
+
+
+                {% endif %}
+
+
+            {% else %}
+
+
+                <div
+                    style="
+                        color: var(--muted);
+                        font-size: 11px;
+                    "
+                >
+
+                    Customer information unavailable.
+
+                </div>
+
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- ====================================================
+             DELIVERY INFORMATION
+        ===================================================== -->
+
+        {% if parcel.delivery %}
+
+            <div
+                class="parcel-info-card"
+                style="margin-top: 20px;"
+            >
+
+                <div class="info-title">
+
+                    <i
+                        class="bi bi-truck me-2"
+                        style="color: var(--primary);"
+                    ></i>
+
+                    Delivery Information
+
+                </div>
+
+
+                <!-- DELIVERY STATUS -->
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Delivery Status
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ parcel.delivery.get_status_display }}
+
+                    </span>
+
+                </div>
+
+
+                <!-- STAFF -->
+
+                <div class="info-row">
+
+                    <span class="info-label">
+                        Assigned Staff
+                    </span>
+
+                    <span class="info-value">
+
+                        {% if parcel.delivery.delivery_staff %}
+
+                            {{ parcel.delivery.delivery_staff.get_full_name|default:parcel.delivery.delivery_staff.username }}
+
+                        {% else %}
+
+                            Not Assigned
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+
+                <!-- PICKUP TIME -->
+
+                {% if parcel.delivery.pickup_time %}
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Pickup Time
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.delivery.pickup_time|date:"M d, Y" }}
+
+                            <br>
+
+                            {{ parcel.delivery.pickup_time|date:"h:i A" }}
+
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- DELIVERY TIME -->
+
+                {% if parcel.delivery.delivery_time %}
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Delivery Time
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.delivery.delivery_time|date:"M d, Y" }}
+
+                            <br>
+
+                            {{ parcel.delivery.delivery_time|date:"h:i A" }}
+
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- REMARKS -->
+
+                {% if parcel.delivery.remarks %}
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Remarks
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.delivery.remarks }}
+
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+
+{% endblock %}

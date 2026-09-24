@@ -1,0 +1,212 @@
+{% extends "dashboard/admin_base.html" %}
+
+{% block title %}
+Parcel Management | SHATHIMART 
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .admin-page {
+        background: #f7f7f2;
+        min-height: calc(100vh - 80px);
+        padding: 45px 0;
+    }
+
+    .page-header h1 {
+        font-family: "Playfair Display", serif;
+        color: #18212b;
+        font-weight: 700;
+    }
+
+    .page-header p {
+        color: #6b7280;
+    }
+
+    .table-card {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #eeeeea;
+        box-shadow: 0 8px 25px rgba(24, 33, 43, .06);
+    }
+
+    .table th {
+        background: #18212b;
+        color: #ffffff;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .tracking {
+        color: #8f713f;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .tracking:hover {
+        color: #b08d57;
+    }
+
+    .status {
+        display: inline-block;
+        background: #f0f1ec;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+</style>
+
+
+<section class="admin-page">
+
+    <div class="container">
+
+        <div class="page-header mb-4">
+
+            <h1>Parcel Management</h1>
+
+            <p>
+                Manage all SwiftShip customer parcels and delivery statuses.
+            </p>
+
+        </div>
+
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <div class="table-card">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Tracking Number</th>
+
+                            <th>Customer</th>
+
+                            <th>Receiver</th>
+
+                            <th>Type</th>
+
+                            <th>Weight</th>
+
+                            <th>Status</th>
+
+                            <th>Created</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for parcel in parcels %}
+
+                            <tr>
+
+                                <td>
+
+                                    <a
+                                        href="{% url 'admin_parcel_detail' parcel.id %}"
+                                        class="tracking"
+                                    >
+                                        {{ parcel.tracking_number }}
+                                    </a>
+
+                                </td>
+
+                                <td>
+                                    {{ parcel.customer.get_full_name|default:parcel.customer.username }}
+                                </td>
+
+                                <td>
+                                    {{ parcel.receiver_name }}
+                                </td>
+
+                                <td>
+                                    {{ parcel.get_parcel_type_display }}
+                                </td>
+
+                                <td>
+                                    {{ parcel.weight }} kg
+                                </td>
+
+                                <td>
+
+                                    <span class="status">
+                                        {{ parcel.get_status_display }}
+                                    </span>
+
+                                </td>
+
+                                <td>
+                                    {{ parcel.created_at|date:"M d, Y" }}
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="{% url 'admin_parcel_detail' parcel.id %}"
+                                        class="btn btn-sm btn-outline-dark"
+                                    >
+                                        Manage
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+
+                                <td
+                                    colspan="8"
+                                    class="text-center py-5 text-muted"
+                                >
+                                    No parcels have been created yet.
+
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

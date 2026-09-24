@@ -1,0 +1,1132 @@
+{% extends "dashboard/admin_base.html" %}
+
+
+{% block title %}
+SHATHIMART | Delivery Staff
+{% endblock %}
+
+
+{% block staff_active %}
+active
+{% endblock %}
+
+
+{% block topbar_title %}
+Delivery Staff
+{% endblock %}
+
+
+{% block breadcrumb %}
+Delivery Staff
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =========================================================
+       PAGE
+    ========================================================= */
+
+    .staff-page {
+        width: 100%;
+    }
+
+
+    .content-header {
+        margin-bottom: 25px;
+    }
+
+
+    .content-title {
+        color: #18212b;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+
+    .content-subtitle {
+        color: #6b7280;
+        font-size: 14px;
+        margin: 0;
+    }
+
+
+    /* =========================================================
+       SUMMARY CARD
+    ========================================================= */
+
+    .staff-summary {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        padding: 22px;
+        height: 100%;
+        transition: .25s ease;
+    }
+
+
+    .staff-summary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(24,33,43,.08);
+    }
+
+
+    .summary-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+    .summary-label {
+        color: #6b7280;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    .summary-number {
+        color: #18212b;
+        font-size: 30px;
+        font-weight: 700;
+        margin-top: 4px;
+    }
+
+
+    .summary-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        background: #f2eee7;
+        color: #8f713f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+    }
+
+
+    /* =========================================================
+       CARDS
+    ========================================================= */
+
+    .staff-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+
+    .staff-card-header {
+        padding: 21px 23px;
+        border-bottom: 1px solid #eef0f2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+
+    .staff-card-title {
+        margin: 0;
+        color: #18212b;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+
+    .staff-card-subtitle {
+        color: #9ca3af;
+        font-size: 12px;
+        margin: 4px 0 0;
+    }
+
+
+    /* =========================================================
+       ADD STAFF FORM
+    ========================================================= */
+
+    .form-body {
+        padding: 25px;
+    }
+
+
+    .form-section-title {
+        color: #18212b;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 17px;
+    }
+
+
+    .form-section-title i {
+        color: #b08d57;
+        margin-right: 7px;
+    }
+
+
+    .form-label-custom {
+        color: #374151;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+
+    .required-star {
+        color: #dc2626;
+    }
+
+
+    .form-control-custom {
+        width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 13px;
+        color: #374151;
+        background: #ffffff;
+        outline: none;
+        transition: .2s ease;
+    }
+
+
+    .form-control-custom:focus {
+        border-color: #b08d57;
+        box-shadow: 0 0 0 3px rgba(176,141,87,.12);
+    }
+
+
+    .form-control-custom::placeholder {
+        color: #b0b5bc;
+    }
+
+
+    textarea.form-control-custom {
+        min-height: 90px;
+        resize: vertical;
+    }
+
+
+    .password-help {
+        color: #9ca3af;
+        font-size: 10px;
+        margin-top: 5px;
+    }
+
+
+    .create-staff-btn {
+        background: #b08d57;
+        border: none;
+        color: #ffffff;
+        padding: 11px 20px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: .2s ease;
+    }
+
+
+    .create-staff-btn:hover {
+        background: #8f713f;
+        color: #ffffff;
+    }
+
+
+    .reset-btn {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        color: #6b7280;
+        padding: 10px 17px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+
+    .reset-btn:hover {
+        background: #f9fafb;
+    }
+
+
+    /* =========================================================
+       STAFF TABLE
+    ========================================================= */
+
+    .table-responsive {
+        width: 100%;
+    }
+
+
+    .staff-table {
+        width: 100%;
+        min-width: 950px;
+        border-collapse: collapse;
+    }
+
+
+    .staff-table thead th {
+        background: #fafafa;
+        color: #6b7280;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        padding: 14px 18px;
+        border-bottom: 1px solid #eef0f2;
+        white-space: nowrap;
+    }
+
+
+    .staff-table tbody td {
+        padding: 15px 18px;
+        border-bottom: 1px solid #f0f1f3;
+        vertical-align: middle;
+        font-size: 12px;
+        color: #374151;
+    }
+
+
+    .staff-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    .staff-table tbody tr:hover {
+        background: #fafaf8;
+    }
+
+
+    /* =========================================================
+       STAFF PROFILE
+    ========================================================= */
+
+    .staff-profile {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+    }
+
+
+    .staff-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #f2eee7;
+        color: #8f713f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+
+    .staff-name {
+        color: #18212b;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+
+    .staff-role {
+        color: #9ca3af;
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+
+    .username {
+        color: #4b5563;
+        font-weight: 600;
+    }
+
+
+    .muted {
+        color: #9ca3af;
+    }
+
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
+
+    .active-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 10px;
+        border-radius: 50px;
+        background: #ecfdf5;
+        color: #047857;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+
+    .active-dot {
+        width: 6px;
+        height: 6px;
+        background: #10b981;
+        border-radius: 50%;
+    }
+
+
+    /* =========================================================
+       MESSAGES
+    ========================================================= */
+
+    .message-box {
+        margin-bottom: 20px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 767px) {
+
+        .content-title {
+            font-size: 23px;
+        }
+
+        .form-body {
+            padding: 18px;
+        }
+
+        .staff-card-header {
+            padding: 17px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="staff-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="content-header">
+
+        <div>
+
+            <h1 class="content-title">
+                Delivery Staff
+            </h1>
+
+            <p class="content-subtitle">
+                Create and manage SHATHIMART delivery staff members.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MESSAGES
+    ====================================================== -->
+
+    {% if messages %}
+
+        <div class="message-box">
+
+            {% for message in messages %}
+
+                <div
+                    class="alert
+                    {% if message.tags == 'success' %}
+                        alert-success
+                    {% elif message.tags == 'error' %}
+                        alert-danger
+                    {% else %}
+                        alert-info
+                    {% endif %}
+                    alert-dismissible fade show"
+                    role="alert"
+                >
+
+                    <i
+                        class="bi
+                        {% if message.tags == 'success' %}
+                            bi-check-circle
+                        {% elif message.tags == 'error' %}
+                            bi-exclamation-circle
+                        {% else %}
+                            bi-info-circle
+                        {% endif %}
+                        me-2"
+                    ></i>
+
+                    {{ message }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                    ></button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         SUMMARY
+    ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-4">
+
+            <div class="staff-summary">
+
+                <div class="summary-inner">
+
+                    <div>
+
+                        <div class="summary-label">
+                            Total Delivery Staff
+                        </div>
+
+                        <div class="summary-number">
+                            {{ total_staff }}
+                        </div>
+
+                    </div>
+
+                    <div class="summary-icon">
+
+                        <i class="bi bi-person-badge"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ADD DELIVERY STAFF
+    ====================================================== -->
+
+    <div class="staff-card mb-4">
+
+        <div class="staff-card-header">
+
+            <div>
+
+                <h5 class="staff-card-title">
+                    Add Delivery Staff
+                </h5>
+
+                <p class="staff-card-subtitle">
+                    Create an account for a new SHATHIMART delivery person.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-body">
+
+            <form
+                method="POST"
+                autocomplete="off"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- =================================================
+                     PERSONAL INFORMATION
+                ================================================== -->
+
+                <div class="form-section-title">
+
+                    <i class="bi bi-person"></i>
+
+                    Personal Information
+
+                </div>
+
+
+                <div class="row g-3 mb-4">
+
+
+                    <!-- First Name -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label-custom">
+
+                            First Name
+
+                            <span class="required-star">
+                                *
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="first_name"
+                            class="form-control-custom"
+                            placeholder="Enter first name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Last Name -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label-custom">
+
+                            Last Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="last_name"
+                            class="form-control-custom"
+                            placeholder="Enter last name"
+                        >
+
+                    </div>
+
+
+                    <!-- Phone -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label-custom">
+
+                            Phone Number
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            class="form-control-custom"
+                            placeholder="Enter phone number"
+                        >
+
+                    </div>
+
+
+                    <!-- City -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label-custom">
+
+                            City
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="city"
+                            class="form-control-custom"
+                            placeholder="Enter city"
+                        >
+
+                    </div>
+
+
+                    <!-- Address -->
+
+                    <div class="col-12">
+
+                        <label class="form-label-custom">
+
+                            Address
+
+                        </label>
+
+                        <textarea
+                            name="address"
+                            class="form-control-custom"
+                            placeholder="Enter delivery staff address"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     LOGIN INFORMATION
+                ================================================== -->
+
+                <div class="form-section-title">
+
+                    <i class="bi bi-shield-lock"></i>
+
+                    Login Information
+
+                </div>
+
+
+                <div class="row g-3 mb-4">
+
+
+                    <!-- Username -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label-custom">
+
+                            Username
+
+                            <span class="required-star">
+                                *
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            class="form-control-custom"
+                            placeholder="Enter username"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label-custom">
+
+                            Email
+
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control-custom"
+                            placeholder="Enter email address"
+                        >
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label-custom">
+
+                            Password
+
+                            <span class="required-star">
+                                *
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control-custom"
+                            placeholder="Create password"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- Confirm Password -->
+
+                    <div class="col-md-4">
+
+                        <label class="form-label-custom">
+
+                            Confirm Password
+
+                            <span class="required-star">
+                                *
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="password"
+                            name="confirm_password"
+                            class="form-control-custom"
+                            placeholder="Confirm password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     BUTTONS
+                ================================================== -->
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <button
+                        type="submit"
+                        class="create-staff-btn"
+                    >
+
+                        <i class="bi bi-person-plus"></i>
+
+                        Create Delivery Staff
+
+                    </button>
+
+
+                    <button
+                        type="reset"
+                        class="reset-btn"
+                    >
+
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+
+                        Reset
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STAFF LIST
+    ====================================================== -->
+
+    <div class="staff-card">
+
+        <div class="staff-card-header">
+
+            <div>
+
+                <h5 class="staff-card-title">
+                    Delivery Staff List
+                </h5>
+
+                <p class="staff-card-subtitle">
+                    Staff members available for parcel assignment.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        {% if staff %}
+
+        <div class="table-responsive">
+
+            <table class="staff-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Staff Member
+                        </th>
+
+                        <th>
+                            Username
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Phone
+                        </th>
+
+                        <th>
+                            City
+                        </th>
+
+                        <th>
+                            Joined
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for member in staff %}
+
+                    <tr>
+
+
+                        <!-- STAFF MEMBER -->
+
+                        <td>
+
+                            <div class="staff-profile">
+
+                                <div class="staff-avatar">
+
+                                    {% if member.user.first_name %}
+
+                                        {{ member.user.first_name|first|upper }}
+
+                                    {% else %}
+
+                                        {{ member.user.username|first|upper }}
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="staff-name">
+
+                                        {% if member.user.get_full_name %}
+
+                                            {{ member.user.get_full_name }}
+
+                                        {% else %}
+
+                                            {{ member.user.username }}
+
+                                        {% endif %}
+
+                                    </div>
+
+                                    <div class="staff-role">
+
+                                        Delivery Staff
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- USERNAME -->
+
+                        <td>
+
+                            <span class="username">
+
+                                {{ member.user.username }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- EMAIL -->
+
+                        <td>
+
+                            {% if member.user.email %}
+
+                                {{ member.user.email }}
+
+                            {% else %}
+
+                                <span class="muted">
+                                    —
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- PHONE -->
+
+                        <td>
+
+                            {% if member.phone %}
+
+                                {{ member.phone }}
+
+                            {% else %}
+
+                                <span class="muted">
+                                    —
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- CITY -->
+
+                        <td>
+
+                            {% if member.city %}
+
+                                {{ member.city }}
+
+                            {% else %}
+
+                                <span class="muted">
+                                    —
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- JOINED -->
+
+                        <td>
+
+                            {{ member.created_at|date:"M d, Y" }}
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if member.user.is_active %}
+
+                                <span class="active-badge">
+
+                                    <span class="active-dot"></span>
+
+                                    Active
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+
+                                    Inactive
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="text-center py-5">
+
+            <div
+                style="
+                    width:65px;
+                    height:65px;
+                    border-radius:18px;
+                    background:#f5f5f1;
+                    color:#b08d57;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    margin:0 auto 15px;
+                    font-size:27px;
+                "
+            >
+
+                <i class="bi bi-person-badge"></i>
+
+            </div>
+
+            <div
+                style="
+                    color:#374151;
+                    font-size:15px;
+                    font-weight:700;
+                "
+            >
+                No delivery staff found.
+            </div>
+
+            <p
+                style="
+                    color:#9ca3af;
+                    font-size:12px;
+                    margin-top:5px;
+                "
+            >
+                Create your first delivery staff account above.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+{% endblock %}

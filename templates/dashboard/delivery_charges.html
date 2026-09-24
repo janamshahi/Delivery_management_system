@@ -1,0 +1,756 @@
+{% extends "dashboard/admin_base.html" %}
+
+{% block title %}
+Delivery Charges | SHATHIMART
+{% endblock %}
+
+{% block topbar_title %}
+Delivery Charges
+{% endblock %}
+
+{% block breadcrumb %}
+Delivery Charges
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .delivery-page {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+    .page-header h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        color: #18212b;
+    }
+
+    .page-header p {
+        margin: 7px 0 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .charge-card {
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid #e8e8e3;
+        box-shadow: 0 8px 25px rgba(24, 33, 43, 0.06);
+        overflow: hidden;
+    }
+
+    .card-header-custom {
+        padding: 22px 25px;
+        border-bottom: 1px solid #eeeeea;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .header-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: #f1f0c8;
+        color: #8f713f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+    }
+
+    .header-left h4 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: #18212b;
+    }
+
+    .header-left span {
+        display: block;
+        margin-top: 3px;
+        font-size: 13px;
+        color: #777;
+    }
+
+    .charge-body {
+        padding: 25px;
+    }
+
+    .rate-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .rate-box {
+        border: 1px solid #e6e6e1;
+        border-radius: 15px;
+        padding: 20px;
+        background: #fafaf7;
+        transition: 0.2s ease;
+    }
+
+    .rate-box:hover {
+        border-color: #b8b63b;
+        transform: translateY(-1px);
+    }
+
+    .rate-top {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .rate-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: #eeedc2;
+        color: #8f713f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .rate-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #18212b;
+        margin: 0;
+    }
+
+    .rate-description {
+        font-size: 12px;
+        color: #777;
+        margin-top: 3px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .currency {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 14px;
+        font-weight: 600;
+        color: #777;
+        pointer-events: none;
+    }
+
+    .charge-input {
+        width: 100%;
+        height: 48px;
+        border: 1px solid #dcdcd5;
+        border-radius: 10px;
+        padding: 0 15px 0 45px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #18212b;
+        background: #fff;
+        outline: none;
+        transition: 0.2s ease;
+        box-sizing: border-box;
+    }
+
+    .charge-input:focus {
+        border-color: #b8b63b;
+        box-shadow: 0 0 0 3px rgba(184, 182, 59, 0.12);
+    }
+
+    .information-box {
+        margin-top: 25px;
+        padding: 17px 18px;
+        border-radius: 12px;
+        background: #f7f7f2;
+        border: 1px solid #e8e8df;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .information-box i {
+        color: #8f713f;
+        font-size: 19px;
+        margin-top: 1px;
+    }
+
+    .information-box strong {
+        display: block;
+        color: #18212b;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .information-box p {
+        margin: 0;
+        color: #6b7280;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .action-area {
+        margin-top: 25px;
+        padding-top: 22px;
+        border-top: 1px solid #eeeeea;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .save-btn {
+        border: none;
+        border-radius: 10px;
+        background: #b8b63b;
+        color: #ffffff;
+        padding: 12px 22px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.2s ease;
+    }
+
+    .save-btn:hover {
+        background: #9f9d2f;
+        transform: translateY(-1px);
+    }
+
+    .rate-preview {
+        margin-top: 30px;
+    }
+
+    .preview-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #18212b;
+        margin-bottom: 15px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        border: 1px solid #e7e7e2;
+        border-radius: 14px;
+    }
+
+    .rate-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+        background: #fff;
+    }
+
+    .rate-table th {
+        background: #f7f7f2;
+        color: #555;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        padding: 14px 18px;
+        text-align: left;
+        border-bottom: 1px solid #e7e7e2;
+    }
+
+    .rate-table td {
+        padding: 15px 18px;
+        font-size: 14px;
+        color: #333;
+        border-bottom: 1px solid #eeeeea;
+    }
+
+    .rate-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .amount {
+        font-weight: 700;
+        color: #8f713f;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #e9f7ef;
+        color: #217a46;
+        border-radius: 20px;
+        padding: 5px 10px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #2ca35a;
+    }
+
+    @media (max-width: 768px) {
+        .rate-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .card-header-custom {
+            align-items: flex-start;
+        }
+
+        .charge-body {
+            padding: 18px;
+        }
+
+        .page-header h2 {
+            font-size: 23px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .header-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .header-left h4 {
+            font-size: 16px;
+        }
+
+        .action-area {
+            justify-content: stretch;
+        }
+
+        .save-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<div class="delivery-page">
+
+<div class="page-header">
+    <h2>Delivery Charges</h2>
+    <p>
+        Manage SHATHIMART delivery rates based on parcel weight.
+    </p>
+</div>
+
+
+<div class="charge-card">
+
+    <div class="card-header-custom">
+
+        <div class="header-left">
+
+            <div class="header-icon">
+                <i class="bi bi-truck"></i>
+            </div>
+
+            <div>
+                <h4>SHATHIMART Delivery Rates</h4>
+                <span>
+                    Set the delivery charge for each weight range.
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="charge-body">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <div class="rate-grid">
+
+
+                <!-- UP TO 1 KG -->
+                <div class="rate-box">
+
+                    <div class="rate-top">
+
+                        <div class="rate-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+
+                        <div>
+                            <div class="rate-title">
+                                Up to 1 kg
+                            </div>
+
+                            <div class="rate-description">
+                                0 kg – 1 kg
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="currency">
+                            Rs.
+                        </span>
+
+                        <input
+                            type="number"
+                            name="up_to_1kg"
+                            class="charge-input"
+                            value="{{ rates.up_to_1kg }}"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- 1 TO 3 KG -->
+                <div class="rate-box">
+
+                    <div class="rate-top">
+
+                        <div class="rate-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+
+                        <div>
+                            <div class="rate-title">
+                                Above 1 kg – 3 kg
+                            </div>
+
+                            <div class="rate-description">
+                                More than 1 kg up to 3 kg
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="currency">
+                            Rs.
+                        </span>
+
+                        <input
+                            type="number"
+                            name="up_to_3kg"
+                            class="charge-input"
+                            value="{{ rates.up_to_3kg }}"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- 3 TO 5 KG -->
+                <div class="rate-box">
+
+                    <div class="rate-top">
+
+                        <div class="rate-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+
+                        <div>
+                            <div class="rate-title">
+                                Above 3 kg – 5 kg
+                            </div>
+
+                            <div class="rate-description">
+                                More than 3 kg up to 5 kg
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="currency">
+                            Rs.
+                        </span>
+
+                        <input
+                            type="number"
+                            name="up_to_5kg"
+                            class="charge-input"
+                            value="{{ rates.up_to_5kg }}"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ABOVE 5 KG -->
+                <div class="rate-box">
+
+                    <div class="rate-top">
+
+                        <div class="rate-icon">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+
+                        <div>
+                            <div class="rate-title">
+                                Above 5 kg
+                            </div>
+
+                            <div class="rate-description">
+                                More than 5 kg
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="currency">
+                            Rs.
+                        </span>
+
+                        <input
+                            type="number"
+                            name="above_5kg"
+                            class="charge-input"
+                            value="{{ rates.above_5kg }}"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="information-box">
+
+                <i class="bi bi-info-circle-fill"></i>
+
+                <div>
+
+                    <strong>
+                        Automatic Delivery Charge Calculation
+                    </strong>
+
+                    <p>
+                        These rates are automatically used when creating
+                        a parcel. The delivery charge is calculated from
+                        the parcel weight and cannot be manually changed
+                        by customers or delivery staff.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="action-area">
+
+                <button
+                    type="submit"
+                    class="save-btn"
+                >
+                    <i class="bi bi-check-lg"></i>
+                    Save Delivery Rates
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- CURRENT RATE PREVIEW -->
+
+        <div class="rate-preview">
+
+            <div class="preview-title">
+                Current Delivery Rate Structure
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table class="rate-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Weight Range
+                            </th>
+
+                            <th>
+                                Delivery Charge
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Up to 1 kg
+                            </td>
+
+                            <td class="amount">
+                                Rs. {{ rates.up_to_1kg }}
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+
+                                    <span class="status-dot"></span>
+
+                                    Active
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Above 1 kg – 3 kg
+                            </td>
+
+                            <td class="amount">
+                                Rs. {{ rates.up_to_3kg }}
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+
+                                    <span class="status-dot"></span>
+
+                                    Active
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Above 3 kg – 5 kg
+                            </td>
+
+                            <td class="amount">
+                                Rs. {{ rates.up_to_5kg }}
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+
+                                    <span class="status-dot"></span>
+
+                                    Active
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Above 5 kg
+                            </td>
+
+                            <td class="amount">
+                                Rs. {{ rates.above_5kg }}
+                            </td>
+
+                            <td>
+
+                                <span class="status-badge">
+
+                                    <span class="status-dot"></span>
+
+                                    Active
+
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

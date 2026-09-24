@@ -1,0 +1,1830 @@
+{% extends "dashboard/staff_base.html" %}
+
+
+{% block title %}
+    Delivery Staff Dashboard | SHATHIMART
+{% endblock %}
+
+
+{% block staff_dashboard_active %}
+    active
+{% endblock %}
+
+
+{% block topbar_title %}
+    Delivery Staff Dashboard
+{% endblock %}
+
+
+{% block breadcrumb %}
+    <span>Dashboard</span>
+    <span class="breadcrumb-separator">/</span>
+    <span>Delivery Staff</span>
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =========================================================
+       MAIN DASHBOARD
+    ========================================================= */
+
+    .staff-dashboard {
+        width: 100%;
+    }
+
+
+    /* =========================================================
+       WELCOME CARD
+    ========================================================= */
+
+    .welcome-card {
+        position: relative;
+        overflow: hidden;
+        background:
+            linear-gradient(
+                135deg,
+                #18212b 0%,
+                #263442 55%,
+                #344454 100%
+            );
+        border-radius: 22px;
+        padding: 32px;
+        margin-bottom: 24px;
+        color: #ffffff;
+        box-shadow: 0 12px 30px rgba(24, 33, 43, .10);
+    }
+
+    .welcome-card::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.08);
+        right: -100px;
+        top: -130px;
+    }
+
+    .welcome-card::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.06);
+        right: 80px;
+        bottom: -120px;
+    }
+
+    .welcome-decoration {
+        position: absolute;
+        right: 40px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 105px;
+        height: 105px;
+        border-radius: 28px;
+        background: rgba(176,141,87,.12);
+        border: 1px solid rgba(176,141,87,.20);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d9c39a;
+        font-size: 44px;
+        z-index: 1;
+    }
+
+    .welcome-content {
+        position: relative;
+        z-index: 3;
+        max-width: 760px;
+    }
+
+    .welcome-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #d9c39a;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        margin-bottom: 9px;
+    }
+
+    .welcome-label i {
+        font-size: 13px;
+    }
+
+    .welcome-title {
+        font-family: "Playfair Display", serif;
+        font-size: 31px;
+        font-weight: 600;
+        line-height: 1.25;
+        margin: 0 0 9px;
+    }
+
+    .welcome-description {
+        max-width: 690px;
+        color: rgba(255,255,255,.72);
+        font-size: 13px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .staff-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 18px;
+        padding: 8px 14px;
+        border-radius: 50px;
+        background: rgba(176,141,87,.14);
+        border: 1px solid rgba(176,141,87,.28);
+        color: #e2cca4;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       STATISTICS
+    ========================================================= */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 17px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        position: relative;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid #e7e9ec;
+        border-radius: 18px;
+        padding: 21px;
+        transition: .25s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        border-color: #dfe2e5;
+        box-shadow: 0 12px 28px rgba(24,33,43,.08);
+    }
+
+    .stat-card::after {
+        content: "";
+        position: absolute;
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        right: -35px;
+        bottom: -35px;
+        background: rgba(176,141,87,.035);
+    }
+
+    .stat-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .stat-icon {
+        width: 47px;
+        height: 47px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .icon-total {
+        background: #f2eee7;
+        color: #8f713f;
+    }
+
+    .icon-assigned {
+        background: #eef2ff;
+        color: #4f46e5;
+    }
+
+    .icon-picked {
+        background: #fff7e8;
+        color: #b7791f;
+    }
+
+    .icon-transit {
+        background: #edf7f5;
+        color: #147d72;
+    }
+
+    .stat-label {
+        color: #6b7280;
+        font-size: 12px;
+        font-weight: 700;
+        margin-top: 1px;
+    }
+
+    .stat-value {
+        color: #18212b;
+        font-size: 29px;
+        line-height: 1;
+        font-weight: 750;
+        margin-top: 9px;
+    }
+
+    .stat-description {
+        color: #9ca3af;
+        font-size: 10px;
+        line-height: 1.5;
+        margin-top: 8px;
+    }
+
+
+    /* =========================================================
+       MAIN GRID
+    ========================================================= */
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 22px;
+        align-items: start;
+    }
+
+    .dashboard-card {
+        background: #ffffff;
+        border: 1px solid #e6e8eb;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+
+    /* =========================================================
+       CARD HEADER
+    ========================================================= */
+
+    .card-header-custom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 19px 21px;
+        border-bottom: 1px solid #eef0f2;
+    }
+
+    .card-header-title {
+        color: #18212b;
+        font-size: 16px;
+        font-weight: 750;
+        margin: 0;
+    }
+
+    .card-header-subtitle {
+        color: #9ca3af;
+        font-size: 11px;
+        line-height: 1.5;
+        margin: 4px 0 0;
+    }
+
+    .view-all-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 8px;
+        color: #8f713f;
+        background: #faf8f4;
+        border: 1px solid #eee7db;
+        font-size: 10px;
+        font-weight: 700;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: .2s ease;
+    }
+
+    .view-all-btn:hover {
+        background: #f2eee7;
+        color: #6f582f;
+        border-color: #dfd1bb;
+    }
+
+
+    /* =========================================================
+       TABLE
+    ========================================================= */
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .staff-table {
+        width: 100%;
+        min-width: 850px;
+        border-collapse: collapse;
+    }
+
+    .staff-table thead th {
+        padding: 12px 18px;
+        background: #fafafa;
+        border-bottom: 1px solid #eef0f2;
+        color: #7b8490;
+        font-size: 10px;
+        font-weight: 750;
+        text-transform: uppercase;
+        letter-spacing: .45px;
+        white-space: nowrap;
+    }
+
+    .staff-table tbody td {
+        padding: 15px 18px;
+        border-bottom: 1px solid #f0f1f3;
+        vertical-align: middle;
+        color: #374151;
+        font-size: 12px;
+    }
+
+    .staff-table tbody tr {
+        transition: .2s ease;
+    }
+
+    .staff-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .staff-table tbody tr:hover {
+        background: #fcfcfa;
+    }
+
+
+    /* =========================================================
+       TRACKING
+    ========================================================= */
+
+    .tracking-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .tracking-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f2eee7;
+        color: #8f713f;
+        flex-shrink: 0;
+        font-size: 14px;
+    }
+
+    .tracking-number {
+        color: #18212b;
+        font-size: 11px;
+        font-weight: 750;
+        text-decoration: none;
+    }
+
+    .tracking-number:hover {
+        color: #8f713f;
+    }
+
+    .parcel-type {
+        color: #9ca3af;
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       CUSTOMER
+    ========================================================= */
+
+    .customer-name {
+        color: #374151;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .customer-email {
+        color: #9ca3af;
+        font-size: 10px;
+        margin-top: 3px;
+        max-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       RECEIVER
+    ========================================================= */
+
+    .receiver-info {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-width: 145px;
+    }
+
+    .receiver-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        background: #f3f4f6;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .receiver-name {
+        color: #374151;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .receiver-phone {
+        color: #9ca3af;
+        font-size: 10px;
+        margin-top: 3px;
+    }
+
+
+    /* =========================================================
+       ADDRESS
+    ========================================================= */
+
+    .address-wrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        max-width: 185px;
+        color: #6b7280;
+        font-size: 10px;
+        line-height: 1.5;
+    }
+
+    .address-wrapper i {
+        color: #b08d57;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+
+    /* =========================================================
+       STATUS
+    ========================================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 50px;
+        font-size: 9px;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+    .status-badge i {
+        font-size: 9px;
+    }
+
+    .status-assigned {
+        background: #eef2ff;
+        color: #4f46e5;
+    }
+
+    .status-picked-up {
+        background: #fff7e8;
+        color: #b7791f;
+    }
+
+    .status-in-transit {
+        background: #edf7f5;
+        color: #147d72;
+    }
+
+    .status-out-for-delivery {
+        background: #f0fdf4;
+        color: #15803d;
+    }
+
+    .status-delivered {
+        background: #ecfdf5;
+        color: #047857;
+    }
+
+    .status-failed {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .status-rescheduled {
+        background: #fff7ed;
+        color: #c2410c;
+    }
+
+
+    /* =========================================================
+       ACTION BUTTONS
+    ========================================================= */
+
+    .action-buttons {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .action-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        color: #6b7280;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+    .action-btn:hover {
+        color: #8f713f;
+        border-color: #d9c39a;
+        background: #faf8f4;
+    }
+
+    .action-btn.update {
+        color: #147d72;
+    }
+
+    .action-btn.update:hover {
+        color: #ffffff;
+        background: #147d72;
+        border-color: #147d72;
+    }
+
+
+    /* =========================================================
+       RIGHT SIDEBAR
+    ========================================================= */
+
+    .side-card {
+        margin-bottom: 22px;
+    }
+
+    .side-card:last-child {
+        margin-bottom: 0;
+    }
+
+
+    /* =========================================================
+       DELIVERY STATUS
+    ========================================================= */
+
+    .status-list {
+        padding: 6px 0;
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 19px;
+        border-bottom: 1px solid #f0f1f3;
+    }
+
+    .status-item:last-child {
+        border-bottom: none;
+    }
+
+    .status-item-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+    }
+
+    .status-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .dot-assigned {
+        background: #4f46e5;
+    }
+
+    .dot-picked {
+        background: #d89a2b;
+    }
+
+    .dot-transit {
+        background: #147d72;
+    }
+
+    .dot-delivery {
+        background: #15803d;
+    }
+
+    .status-name {
+        color: #4b5563;
+        font-size: 11px;
+        font-weight: 650;
+    }
+
+    .status-count {
+        min-width: 30px;
+        height: 26px;
+        padding: 0 8px;
+        border-radius: 8px;
+        background: #f3f4f6;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #374151;
+        font-size: 10px;
+        font-weight: 750;
+    }
+
+
+    /* =========================================================
+       QUICK ACTIONS
+    ========================================================= */
+
+    .quick-actions {
+        padding: 11px;
+    }
+
+    .quick-action {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px;
+        border-radius: 11px;
+        color: #374151;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+    .quick-action:hover {
+        background: #faf8f4;
+        color: #8f713f;
+    }
+
+    .quick-action-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #f2eee7;
+        color: #8f713f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 15px;
+    }
+
+    .quick-action-title {
+        color: #374151;
+        font-size: 11px;
+        font-weight: 750;
+    }
+
+    .quick-action:hover .quick-action-title {
+        color: #8f713f;
+    }
+
+    .quick-action-description {
+        color: #9ca3af;
+        font-size: 9px;
+        line-height: 1.4;
+        margin-top: 2px;
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 25px;
+    }
+
+    .empty-icon {
+        width: 67px;
+        height: 67px;
+        margin: 0 auto 16px;
+        border-radius: 18px;
+        background: #f5f5f1;
+        color: #b08d57;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+    }
+
+    .empty-title {
+        color: #374151;
+        font-size: 15px;
+        font-weight: 750;
+        margin-bottom: 6px;
+    }
+
+    .empty-description {
+        color: #9ca3af;
+        font-size: 11px;
+        margin: 0;
+    }
+
+
+    /* =========================================================
+       TABLE FOOTER
+    ========================================================= */
+
+    .table-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 13px 18px;
+        background: #fafafa;
+        border-top: 1px solid #eef0f2;
+    }
+
+    .table-footer-text {
+        color: #9ca3af;
+        font-size: 10px;
+    }
+
+    .table-footer-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #8f713f;
+        font-size: 10px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .table-footer-link:hover {
+        color: #6f582f;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1200px) {
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .welcome-decoration {
+            right: 30px;
+        }
+    }
+
+
+    @media (max-width: 767px) {
+
+        .welcome-card {
+            padding: 23px;
+            border-radius: 17px;
+        }
+
+        .welcome-title {
+            font-size: 25px;
+        }
+
+        .welcome-description {
+            max-width: 100%;
+            font-size: 12px;
+        }
+
+        .welcome-decoration {
+            display: none;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-card {
+            padding: 17px;
+            border-radius: 15px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            font-size: 17px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+        }
+
+        .stat-description {
+            font-size: 9px;
+        }
+
+        .card-header-custom {
+            padding: 16px;
+        }
+
+        .card-header-title {
+            font-size: 14px;
+        }
+
+        .card-header-subtitle {
+            font-size: 10px;
+        }
+
+        .view-all-btn {
+            padding: 6px 9px;
+        }
+
+        .table-footer {
+            padding: 12px 15px;
+        }
+    }
+
+
+    @media (max-width: 480px) {
+
+        .welcome-card {
+            padding: 20px;
+        }
+
+        .welcome-title {
+            font-size: 22px;
+        }
+
+        .welcome-label {
+            font-size: 10px;
+        }
+
+        .welcome-description {
+            font-size: 11px;
+        }
+
+        .staff-badge {
+            font-size: 10px;
+            padding: 7px 11px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-card {
+            padding: 16px;
+        }
+
+        .card-header-custom {
+            align-items: flex-start;
+        }
+
+        .table-footer {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="staff-dashboard">
+
+
+    <!-- =====================================================
+         WELCOME CARD
+    ====================================================== -->
+
+    <div class="welcome-card">
+
+        <div class="welcome-content">
+
+            <div class="welcome-label">
+                <i class="bi bi-buildings"></i>
+                SHATHIMART Delivery Operations
+            </div>
+
+            <h1 class="welcome-title">
+
+                Welcome,
+
+                {% if profile.user.get_full_name %}
+                    {{ profile.user.get_full_name }}
+                {% else %}
+                    {{ profile.user.username }}
+                {% endif %}
+
+            </h1>
+
+            <p class="welcome-description">
+
+                Manage your assigned parcels, update delivery progress,
+                and keep customers informed throughout the delivery process.
+
+            </p>
+
+            <div class="staff-badge">
+
+                <i class="bi bi-truck"></i>
+
+                Delivery Staff
+
+            </div>
+
+        </div>
+
+
+        <div class="welcome-decoration">
+
+            <i class="bi bi-truck"></i>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <div class="stats-grid">
+
+
+        <!-- ACTIVE DELIVERIES -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        Active Deliveries
+                    </div>
+
+                    <div class="stat-value">
+                        {{ total_parcels }}
+                    </div>
+
+                    <div class="stat-description">
+                        Parcels currently assigned to you
+                    </div>
+
+                </div>
+
+                <div class="stat-icon icon-total">
+
+                    <i class="bi bi-box-seam"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ASSIGNED -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        Assigned
+                    </div>
+
+                    <div class="stat-value">
+                        {{ assigned_count }}
+                    </div>
+
+                    <div class="stat-description">
+                        Waiting for pickup
+                    </div>
+
+                </div>
+
+                <div class="stat-icon icon-assigned">
+
+                    <i class="bi bi-clipboard-check"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- PICKED UP -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        Picked Up
+                    </div>
+
+                    <div class="stat-value">
+                        {{ picked_up_count }}
+                    </div>
+
+                    <div class="stat-description">
+                        Parcels collected
+                    </div>
+
+                </div>
+
+                <div class="stat-icon icon-picked">
+
+                    <i class="bi bi-box2"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- IN TRANSIT -->
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div>
+
+                    <div class="stat-label">
+                        In Transit
+                    </div>
+
+                    <div class="stat-value">
+                        {{ in_transit_count }}
+                    </div>
+
+                    <div class="stat-description">
+                        Currently on the way
+                    </div>
+
+                </div>
+
+                <div class="stat-icon icon-transit">
+
+                    <i class="bi bi-truck"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- =================================================
+             ASSIGNED DELIVERY TABLE
+        ================================================== -->
+
+        <div class="dashboard-card">
+
+
+            <div class="card-header-custom">
+
+                <div>
+
+                    <h2 class="card-header-title">
+                        My Assigned Deliveries
+                    </h2>
+
+                    <p class="card-header-subtitle">
+                        Parcels currently assigned to your delivery queue
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'staff_parcels' %}"
+                    class="view-all-btn"
+                    title="View all assigned parcels"
+                >
+
+                    View All
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+
+            {% if recent_parcels %}
+
+                <div class="table-wrapper">
+
+                    <table class="staff-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Tracking
+                                </th>
+
+                                <th>
+                                    Customer
+                                </th>
+
+                                <th>
+                                    Receiver
+                                </th>
+
+                                <th>
+                                    Delivery Address
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for parcel in recent_parcels %}
+
+                                <tr>
+
+
+                                    <!-- TRACKING -->
+
+                                    <td>
+
+                                        <div class="tracking-wrapper">
+
+                                            <div class="tracking-icon">
+
+                                                <i class="bi bi-upc-scan"></i>
+
+                                            </div>
+
+                                            <div>
+
+                                                <a
+                                                    href="{% url 'staff_parcel_detail' parcel.id %}"
+                                                    class="tracking-number"
+                                                >
+                                                    {{ parcel.tracking_number }}
+                                                </a>
+
+                                                <div class="parcel-type">
+
+                                                    {{ parcel.get_parcel_type_display }}
+
+                                                    {% if parcel.weight %}
+                                                        · {{ parcel.weight }} kg
+                                                    {% endif %}
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- CUSTOMER -->
+
+                                    <td>
+
+                                        <div class="customer-name">
+
+                                            {% if parcel.customer.get_full_name %}
+
+                                                {{ parcel.customer.get_full_name }}
+
+                                            {% else %}
+
+                                                {{ parcel.customer.username }}
+
+                                            {% endif %}
+
+                                        </div>
+
+                                        <div class="customer-email">
+
+                                            {{ parcel.customer.email|default:"No email" }}
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- RECEIVER -->
+
+                                    <td>
+
+                                        <div class="receiver-info">
+
+                                            <div class="receiver-icon">
+
+                                                <i class="bi bi-person"></i>
+
+                                            </div>
+
+                                            <div>
+
+                                                <div class="receiver-name">
+
+                                                    {{ parcel.receiver_name }}
+
+                                                </div>
+
+                                                <div class="receiver-phone">
+
+                                                    {{ parcel.receiver_phone }}
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- DELIVERY ADDRESS -->
+
+                                    <td>
+
+                                        <div class="address-wrapper">
+
+                                            <i class="bi bi-geo-alt"></i>
+
+                                            <span>
+
+                                                {{ parcel.receiver_address|truncatechars:45 }}
+
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+
+                                        {% if parcel.status == "assigned" %}
+
+                                            <span class="status-badge status-assigned">
+
+                                                <i class="bi bi-person-check"></i>
+
+                                                Assigned
+
+                                            </span>
+
+
+                                        {% elif parcel.status == "picked_up" %}
+
+                                            <span class="status-badge status-picked-up">
+
+                                                <i class="bi bi-box-seam"></i>
+
+                                                Picked Up
+
+                                            </span>
+
+
+                                        {% elif parcel.status == "in_transit" %}
+
+                                            <span class="status-badge status-in-transit">
+
+                                                <i class="bi bi-truck"></i>
+
+                                                In Transit
+
+                                            </span>
+
+
+                                        {% elif parcel.status == "out_for_delivery" %}
+
+                                            <span class="status-badge status-out-for-delivery">
+
+                                                <i class="bi bi-geo-alt"></i>
+
+                                                Out for Delivery
+
+                                            </span>
+
+
+                                        {% elif parcel.status == "delivered" %}
+
+                                            <span class="status-badge status-delivered">
+
+                                                <i class="bi bi-check-circle"></i>
+
+                                                Delivered
+
+                                            </span>
+
+
+                                        {% elif parcel.status == "failed" %}
+
+                                            <span class="status-badge status-failed">
+
+                                                <i class="bi bi-x-circle"></i>
+
+                                                Failed
+
+                                            </span>
+
+
+                                        {% elif parcel.status == "rescheduled" %}
+
+                                            <span class="status-badge status-rescheduled">
+
+                                                <i class="bi bi-calendar-event"></i>
+
+                                                Rescheduled
+
+                                            </span>
+
+
+                                        {% else %}
+
+                                            <span class="status-badge">
+
+                                                {{ parcel.get_status_display }}
+
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+
+                                    <!-- ACTION -->
+
+                                    <td>
+
+                                        <div class="action-buttons">
+
+
+                                            <!-- VIEW -->
+
+                                            <a
+                                                href="{% url 'staff_parcel_detail' parcel.id %}"
+                                                class="action-btn"
+                                                title="View Parcel"
+                                            >
+
+                                                <i class="bi bi-eye"></i>
+
+                                            </a>
+
+
+                                            <!-- UPDATE -->
+
+                                            <a
+                                                href="{% url 'staff_parcel_detail' parcel.id %}"
+                                                class="action-btn update"
+                                                title="Update Delivery"
+                                            >
+
+                                                <i class="bi bi-pencil-square"></i>
+
+                                            </a>
+
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- TABLE FOOTER -->
+
+                <div class="table-footer">
+
+                    <div class="table-footer-text">
+
+                        Showing your latest assigned deliveries
+
+                    </div>
+
+                    <a
+                        href="{% url 'staff_parcels' %}"
+                        class="table-footer-link"
+                    >
+
+                        View all parcels
+
+                        <i class="bi bi-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- EMPTY STATE -->
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+
+                        <i class="bi bi-truck"></i>
+
+                    </div>
+
+                    <div class="empty-title">
+
+                        No Active Deliveries
+
+                    </div>
+
+                    <p class="empty-description">
+
+                        You currently have no parcels assigned for delivery.
+
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT SIDEBAR
+        ================================================== -->
+
+        <div>
+
+
+            <!-- =================================================
+                 DELIVERY STATUS
+            ================================================== -->
+
+            <div class="dashboard-card side-card">
+
+
+                <div class="card-header-custom">
+
+                    <div>
+
+                        <h2 class="card-header-title">
+                            Delivery Status
+                        </h2>
+
+                        <p class="card-header-subtitle">
+                            Current workload
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="status-list">
+
+
+                    <!-- ASSIGNED -->
+
+                    <div class="status-item">
+
+                        <div class="status-item-left">
+
+                            <span class="status-dot dot-assigned"></span>
+
+                            <span class="status-name">
+                                Assigned
+                            </span>
+
+                        </div>
+
+                        <span class="status-count">
+                            {{ assigned_count }}
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- PICKED UP -->
+
+                    <div class="status-item">
+
+                        <div class="status-item-left">
+
+                            <span class="status-dot dot-picked"></span>
+
+                            <span class="status-name">
+                                Picked Up
+                            </span>
+
+                        </div>
+
+                        <span class="status-count">
+                            {{ picked_up_count }}
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- IN TRANSIT -->
+
+                    <div class="status-item">
+
+                        <div class="status-item-left">
+
+                            <span class="status-dot dot-transit"></span>
+
+                            <span class="status-name">
+                                In Transit
+                            </span>
+
+                        </div>
+
+                        <span class="status-count">
+                            {{ in_transit_count }}
+                        </span>
+
+                    </div>
+
+
+
+                    <!-- OUT FOR DELIVERY -->
+
+                    <div class="status-item">
+
+                        <div class="status-item-left">
+
+                            <span class="status-dot dot-delivery"></span>
+
+                            <span class="status-name">
+                                Out for Delivery
+                            </span>
+
+                        </div>
+
+                        <span class="status-count">
+                            {{ out_for_delivery_count }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+            ================================================== -->
+
+            <div class="dashboard-card side-card">
+
+
+                <div class="card-header-custom">
+
+                    <div>
+
+                        <h2 class="card-header-title">
+                            Quick Actions
+                        </h2>
+
+                        <p class="card-header-subtitle">
+                            Useful delivery tools
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="quick-actions">
+
+
+                    <!-- MY DELIVERIES -->
+
+                    <a
+                        href="{% url 'staff_parcels' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            <i class="bi bi-box-seam"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-action-title">
+                                My Deliveries
+                            </div>
+
+                            <div class="quick-action-description">
+                                View all assigned parcels
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+
+                    <!-- TRACK PARCEL -->
+{% comment %} 
+                    <a
+                        href="{% url 'track_parcel' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            <i class="bi bi-search"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-action-title">
+                                Track Parcel
+                            </div>
+
+                            <div class="quick-action-description">
+                                Search parcel tracking
+                            </div>
+
+                        </div>
+
+                    </a> {% endcomment %}
+
+
+
+                    <!-- PROFILE -->
+
+                    <a
+                        href="{% url 'staff_profile' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            <i class="bi bi-person-circle"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-action-title">
+                                My Profile
+                            </div>
+
+                            <div class="quick-action-description">
+                                Manage your account
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+
+                    <!-- LOGOUT -->
+
+                    <a
+                        href="{% url 'logout' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            <i class="bi bi-box-arrow-right"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-action-title">
+                                Logout
+                            </div>
+
+                            <div class="quick-action-description">
+                                Sign out of your account
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

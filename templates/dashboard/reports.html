@@ -1,0 +1,235 @@
+{% extends "dashboard/admin_base.html" %}
+
+{% block title %}
+SHATHIMART | Reports
+{% endblock %}
+
+{% block reports_active %}
+active
+{% endblock %}
+
+{% block topbar_title %}
+Reports
+{% endblock %}
+
+{% block breadcrumb %}
+Reports
+{% endblock %}
+
+
+{% block content %}
+
+<div class="content-header">
+
+    <div>
+
+        <h1 class="content-title">
+            Reports
+        </h1>
+
+        <p class="content-subtitle">
+            SHATHIMART delivery management statistics and reports.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     USER STATISTICS
+========================================================= -->
+
+<div class="row g-4 mb-4">
+
+
+    <div class="col-md-4">
+
+        <div class="admin-card">
+
+            <div class="admin-card-body">
+
+                <div class="text-muted small">
+                    Customers
+                </div>
+
+                <div class="fs-2 fw-bold mt-2">
+                    {{ total_customers }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="admin-card">
+
+            <div class="admin-card-body">
+
+                <div class="text-muted small">
+                    Delivery Staff
+                </div>
+
+                <div class="fs-2 fw-bold mt-2">
+                    {{ total_staff }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-4">
+
+        <div class="admin-card">
+
+            <div class="admin-card-body">
+
+                <div class="text-muted small">
+                    Administrators
+                </div>
+
+                <div class="fs-2 fw-bold mt-2">
+                    {{ total_admins }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     PARCEL STATISTICS
+========================================================= -->
+
+<div class="admin-card">
+
+    <div class="admin-card-header">
+
+        <h5 class="admin-card-title">
+            Parcel Status Report
+        </h5>
+
+    </div>
+
+
+    <div class="table-responsive">
+
+        <table class="table admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Number of Parcels
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                <tr>
+                    <td>Pending</td>
+                    <td>{{ pending_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Pickup Requested</td>
+                    <td>{{ pickup_requested_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Assigned</td>
+                    <td>{{ assigned_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Picked Up</td>
+                    <td>{{ picked_up_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>In Transit</td>
+                    <td>{{ in_transit_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Out for Delivery</td>
+                    <td>{{ out_for_delivery_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Delivered</td>
+                    <td>{{ delivered_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Cancelled</td>
+                    <td>{{ cancelled_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Failed Delivery</td>
+                    <td>{{ failed_count }}</td>
+                </tr>
+
+
+                <tr>
+                    <td>Rescheduled</td>
+                    <td>{{ rescheduled_count }}</td>
+                </tr>
+
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            Total Parcels
+                        </strong>
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{ total_parcels }}
+                        </strong>
+                    </td>
+
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

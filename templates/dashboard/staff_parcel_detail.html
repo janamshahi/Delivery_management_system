@@ -1,0 +1,1521 @@
+{% extends "dashboard/staff_base.html" %}
+
+{% block title %}
+    SHATHIMART | Parcel {{ parcel.tracking_number }}
+{% endblock %}
+
+{% block staff_parcels_active %}
+    active
+{% endblock %}
+
+{% block topbar_title %}
+    Parcel Details
+{% endblock %}
+
+{% block breadcrumb %}
+    My Parcels / {{ parcel.tracking_number }}
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.page-wrapper {
+    padding: 10px 0 30px;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.detail-header {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 24px 26px;
+    margin-bottom: 22px;
+    border: 1px solid #e8e8e8;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.04);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.detail-header-left h2 {
+    margin: 0;
+
+    font-size: 25px;
+    font-weight: 700;
+
+    color: #202020;
+}
+
+.detail-header-left p {
+    margin: 7px 0 0;
+
+    color: #777;
+
+    font-size: 14px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+
+    text-decoration: none;
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    background: #f1f1e8;
+
+    color: #333;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.back-btn:hover {
+    background: #d9d75f;
+    color: #202020;
+}
+
+
+/* =====================================================
+   GRID
+===================================================== */
+
+.details-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.6fr)
+        minmax(320px, 0.9fr);
+
+    gap: 22px;
+
+    align-items: start;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card-box {
+    background: #ffffff;
+
+    border: 1px solid #e8e8e8;
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    margin-bottom: 22px;
+
+    box-shadow:
+        0 5px 20px rgba(0, 0, 0, 0.04);
+}
+
+.card-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+
+    padding-bottom: 14px;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+.card-title i {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    background: #f1f1e8;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #77752c;
+
+    font-size: 18px;
+}
+
+.card-title h4 {
+    margin: 0;
+
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #252525;
+}
+
+
+/* =====================================================
+   INFO GRID
+===================================================== */
+
+.info-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+.info-item {
+    background: #f8f8f5;
+
+    border-radius: 12px;
+
+    padding: 15px;
+}
+
+.info-label {
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+
+    color: #888;
+
+    margin-bottom: 6px;
+}
+
+.info-value {
+    display: block;
+
+    color: #282828;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    word-break: break-word;
+}
+
+
+/* =====================================================
+   ADDRESS
+===================================================== */
+
+.address-box {
+    background: #f8f8f5;
+
+    border-radius: 12px;
+
+    padding: 16px;
+
+    margin-bottom: 15px;
+}
+
+.address-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #555;
+
+    margin-bottom: 7px;
+}
+
+.address-title i {
+    color: #8a8834;
+}
+
+.address-text {
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    color: #333;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 14px;
+
+    border-radius: 30px;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    background: #f0f0f0;
+
+    color: #555;
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: currentColor;
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-label-custom {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #444;
+}
+
+.form-control-custom,
+.form-select-custom {
+    width: 100%;
+
+    border: 1px solid #dddddd;
+
+    border-radius: 10px;
+
+    padding: 12px 13px;
+
+    font-size: 14px;
+
+    background: #ffffff;
+
+    color: #333;
+
+    outline: none;
+
+    transition: 0.2s ease;
+
+    box-sizing: border-box;
+}
+
+.form-control-custom:focus,
+.form-select-custom:focus {
+    border-color: #b8b63b;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(184, 182, 59, 0.14);
+}
+
+textarea.form-control-custom {
+    min-height: 110px;
+
+    resize: vertical;
+}
+
+.update-btn {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 11px;
+
+    padding: 13px 18px;
+
+    background: #b8b63b;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.update-btn:hover {
+    background: #9f9d2d;
+
+    transform: translateY(-1px);
+}
+
+
+/* =====================================================
+   STAFF PROFILE
+===================================================== */
+
+.staff-profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+}
+
+.staff-icon {
+    width: 46px;
+    height: 46px;
+
+    border-radius: 50%;
+
+    background: #f1f1e8;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #77752c;
+
+    font-size: 20px;
+
+    flex-shrink: 0;
+}
+
+.staff-name {
+    font-size: 14px;
+
+    font-weight: 700;
+
+    color: #292929;
+}
+
+.staff-username {
+    margin-top: 3px;
+
+    font-size: 12px;
+
+    color: #888;
+}
+
+
+/* =====================================================
+   TIMELINE
+===================================================== */
+
+.timeline {
+    position: relative;
+
+    padding-left: 25px;
+}
+
+.timeline::before {
+    content: "";
+
+    position: absolute;
+
+    left: 6px;
+
+    top: 5px;
+
+    bottom: 5px;
+
+    width: 2px;
+
+    background: #e4e4e4;
+}
+
+.timeline-item {
+    position: relative;
+
+    padding-bottom: 22px;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+
+    left: -25px;
+
+    top: 3px;
+
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    background: #b8b63b;
+
+    border: 3px solid #ffffff;
+
+    box-shadow:
+        0 0 0 1px #d8d8d8;
+}
+
+.timeline-status {
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #333;
+}
+
+.timeline-date {
+    margin-top: 3px;
+
+    font-size: 11px;
+
+    color: #999;
+}
+
+.timeline-location {
+    margin-top: 7px;
+
+    font-size: 12px;
+
+    color: #666;
+}
+
+.timeline-remarks {
+    margin-top: 6px;
+
+    padding: 9px 11px;
+
+    background: #f8f8f5;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+
+    color: #555;
+}
+
+.empty-history {
+    text-align: center;
+
+    padding: 25px 10px;
+
+    color: #999;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .detail-header {
+        padding: 20px;
+    }
+
+    .detail-header-left h2 {
+        font-size: 21px;
+    }
+
+    .card-box {
+        padding: 18px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-wrapper">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================== -->
+
+    <div class="detail-header">
+
+        <div class="detail-header-left">
+
+            <h2>
+                Parcel Details
+            </h2>
+
+            <p>
+
+                Tracking Number:
+
+                <strong>
+                    {{ parcel.tracking_number }}
+                </strong>
+
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'staff_parcels' %}"
+            class="back-btn"
+        >
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to My Parcels
+
+        </a>
+
+    </div>
+
+
+
+    <!-- =================================================
+         MAIN GRID
+    ================================================== -->
+
+    <div class="details-grid">
+
+
+        <!-- =================================================
+             LEFT COLUMN
+        ================================================= -->
+
+        <div>
+
+
+            <!-- =============================================
+                 PARCEL INFORMATION
+            ============================================== -->
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    <h4>
+                        Parcel Information
+                    </h4>
+
+                </div>
+
+
+                <div class="info-grid">
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Tracking Number
+                        </span>
+
+                        <span class="info-value">
+                            {{ parcel.tracking_number }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Parcel Type
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if parcel.get_parcel_type_display %}
+
+                                {{ parcel.get_parcel_type_display }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Weight
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if parcel.weight %}
+
+                                {{ parcel.weight }} kg
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Delivery Charge
+                        </span>
+
+                        <span class="info-value">
+
+                            Rs.
+                            {{ parcel.delivery_charge|default:"0.00" }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Pickup Date
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if parcel.pickup_date %}
+
+                                {{ parcel.pickup_date|date:"M d, Y" }}
+
+                            {% else %}
+
+                                Not scheduled
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Delivery Date
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if parcel.delivery_date %}
+
+                                {{ parcel.delivery_date|date:"M d, Y" }}
+
+                            {% else %}
+
+                                Not delivered
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 SENDER INFORMATION
+            ============================================== -->
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-person"></i>
+
+                    <h4>
+                        Sender Information
+                    </h4>
+
+                </div>
+
+
+                <div class="info-grid">
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Name
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.sender_name }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Phone
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.sender_phone }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="address-box"
+                    style="margin-top:18px;"
+                >
+
+                    <div class="address-title">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        Sender Address
+
+                    </div>
+
+
+                    <p class="address-text">
+
+                        {{ parcel.sender_address }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 RECEIVER INFORMATION
+            ============================================== -->
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-person-check"></i>
+
+                    <h4>
+                        Receiver Information
+                    </h4>
+
+                </div>
+
+
+                <div class="info-grid">
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Name
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.receiver_name }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Phone
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.receiver_phone }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="address-box"
+                    style="margin-top:18px;"
+                >
+
+                    <div class="address-title">
+
+                        <i class="bi bi-geo-alt-fill"></i>
+
+                        Receiver Address
+
+                    </div>
+
+
+                    <p class="address-text">
+
+                        {{ parcel.receiver_address }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 DESCRIPTION
+            ============================================== -->
+
+            {% if parcel.description %}
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-card-text"></i>
+
+                    <h4>
+                        Parcel Description
+                    </h4>
+
+                </div>
+
+
+                <p
+                    style="
+                        margin:0;
+                        color:#555;
+                        font-size:14px;
+                        line-height:1.7;
+                    "
+                >
+
+                    {{ parcel.description }}
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+
+
+            <!-- =============================================
+                 TRACKING HISTORY
+            ============================================== -->
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-clock-history"></i>
+
+                    <h4>
+                        Tracking History
+                    </h4>
+
+                </div>
+
+
+                {% if tracking_history %}
+
+                    <div class="timeline">
+
+                        {% for history in tracking_history %}
+
+                            <div class="timeline-item">
+
+                                <div class="timeline-dot"></div>
+
+
+                                <div class="timeline-status">
+
+                                    {{ history.get_status_display }}
+
+                                </div>
+
+
+                                <div class="timeline-date">
+
+                                    {{ history.created_at|date:"M d, Y • h:i A" }}
+
+                                </div>
+
+
+                                {% if history.location %}
+
+                                    <div class="timeline-location">
+
+                                        <i class="bi bi-geo-alt"></i>
+
+                                        {{ history.location }}
+
+                                    </div>
+
+                                {% endif %}
+
+
+                                {% if history.remarks %}
+
+                                    <div class="timeline-remarks">
+
+                                        {{ history.remarks }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="empty-history">
+
+                        <i
+                            class="bi bi-clock"
+                            style="font-size:24px;"
+                        ></i>
+
+                        <div style="margin-top:8px;">
+
+                            No tracking history available.
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT COLUMN
+        ================================================== -->
+
+        <div>
+
+
+            <!-- =============================================
+                 CURRENT STATUS
+            ============================================== -->
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-activity"></i>
+
+                    <h4>
+                        Current Status
+                    </h4>
+
+                </div>
+
+
+                <div
+                    style="
+                        text-align:center;
+                        padding:8px 0 4px;
+                    "
+                >
+
+                    <span class="status-badge">
+
+                        <span class="status-dot"></span>
+
+                        {{ parcel.get_status_display }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 UPDATE DELIVERY
+                 PAYMENT STATUS IS INCLUDED HERE
+            ============================================== -->
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    <h4>
+                        Update Delivery
+                    </h4>
+
+                </div>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- =================================
+                         DELIVERY STATUS
+                    ================================== -->
+
+                    <div class="form-group">
+
+                        <label class="form-label-custom">
+
+                            Delivery Status
+
+                        </label>
+
+
+                        <select
+                            name="status"
+                            class="form-select-custom"
+                            required
+                        >
+
+                            {% for value, label in status_choices %}
+
+                                <option
+                                    value="{{ value }}"
+                                    {% if parcel.status == value %}
+                                        selected
+                                    {% endif %}
+                                >
+
+                                    {{ label }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- =================================
+                         PAYMENT STATUS
+                    ================================== -->
+
+                    <div class="form-group">
+
+                        <label class="form-label-custom">
+
+                            Payment Status
+
+                        </label>
+
+
+                        <select
+                            name="payment_status"
+                            class="form-select-custom"
+                            required
+                        >
+
+                            <option
+                                value="pending"
+                                {% if payment and payment.payment_status == "pending" %}
+                                    selected
+                                {% elif not payment %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Pending
+
+                            </option>
+
+
+                            <option
+                                value="paid"
+                                {% if payment and payment.payment_status == "paid" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Paid
+
+                            </option>
+
+
+                            <option
+                                value="failed"
+                                {% if payment and payment.payment_status == "failed" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Failed
+
+                            </option>
+
+
+                            <option
+                                value="refunded"
+                                {% if payment and payment.payment_status == "refunded" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Refunded
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <!-- =================================
+                         CURRENT LOCATION
+                    ================================== -->
+
+                    <div class="form-group">
+
+                        <label class="form-label-custom">
+
+                            Current Location
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="location"
+                            class="form-control-custom"
+                            placeholder="Enter current location"
+                        >
+
+                    </div>
+
+
+
+                    <!-- =================================
+                         REMARKS
+                    ================================== -->
+
+                    <div class="form-group">
+
+                        <label class="form-label-custom">
+
+                            Remarks
+
+                        </label>
+
+
+                        <textarea
+                            name="remarks"
+                            class="form-control-custom"
+                            placeholder="Enter delivery remarks..."
+                        ></textarea>
+
+                    </div>
+
+
+
+                    <!-- =================================
+                         UPDATE BUTTON
+                    ================================== -->
+
+                    <button
+                        type="submit"
+                        class="update-btn"
+                    >
+
+                        <i class="bi bi-check2-circle"></i>
+
+                        Update Delivery
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 ASSIGNED STAFF
+            ============================================== -->
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-person-badge"></i>
+
+                    <h4>
+                        Assigned Staff
+                    </h4>
+
+                </div>
+
+
+                {% if delivery.delivery_staff %}
+
+                    <div class="staff-profile">
+
+                        <div class="staff-icon">
+
+                            <i class="bi bi-person"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="staff-name">
+
+                                {{ delivery.delivery_staff.get_full_name|default:delivery.delivery_staff.username }}
+
+                            </div>
+
+
+                            <div class="staff-username">
+
+                                @{{ delivery.delivery_staff.username }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        style="
+                            margin-top:18px;
+                            font-size:12px;
+                            color:#777;
+                            line-height:1.8;
+                        "
+                    >
+
+                        {% if delivery.assigned_date %}
+
+                            <div>
+
+                                <strong>
+                                    Assigned:
+                                </strong>
+
+                                {{ delivery.assigned_date|date:"M d, Y • h:i A" }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if delivery.pickup_time %}
+
+                            <div>
+
+                                <strong>
+                                    Picked Up:
+                                </strong>
+
+                                {{ delivery.pickup_time|date:"M d, Y • h:i A" }}
+
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if delivery.delivery_time %}
+
+                            <div>
+
+                                <strong>
+                                    Delivered:
+                                </strong>
+
+                                {{ delivery.delivery_time|date:"M d, Y • h:i A" }}
+
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                {% else %}
+
+                    <div class="empty-history">
+
+                        <i
+                            class="bi bi-person-x"
+                            style="font-size:24px;"
+                        ></i>
+
+                        <div style="margin-top:8px;">
+
+                            No delivery staff assigned.
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =============================================
+                 CUSTOMER
+            ============================================== -->
+
+            <div class="card-box">
+
+                <div class="card-title">
+
+                    <i class="bi bi-person-circle"></i>
+
+                    <h4>
+                        Customer
+                    </h4>
+
+                </div>
+
+
+                <div class="info-item">
+
+                    <span class="info-label">
+                        Username
+                    </span>
+
+                    <span class="info-value">
+
+                        {{ parcel.customer.username }}
+
+                    </span>
+
+                </div>
+
+
+                {% if parcel.customer.email %}
+
+                    <div
+                        class="info-item"
+                        style="margin-top:10px;"
+                    >
+
+                        <span class="info-label">
+                            Email
+                        </span>
+
+                        <span class="info-value">
+
+                            {{ parcel.customer.email }}
+
+                        </span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

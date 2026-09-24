@@ -1,0 +1,1482 @@
+{% extends "base.html" %}
+
+{% block title %}
+    About Us | SHATHIMART
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =====================================================
+       ABOUT HERO
+    ====================================================== */
+
+    .about-hero {
+
+        background:
+            linear-gradient(
+                135deg,
+                rgba(24, 33, 43, .97),
+                rgba(38, 52, 66, .94)
+            );
+
+        color: #ffffff;
+
+        padding: 85px 0 80px;
+
+        position: relative;
+
+        overflow: hidden;
+
+    }
+
+
+    .about-hero::before {
+
+        content: "";
+
+        position: absolute;
+
+        width: 420px;
+
+        height: 420px;
+
+        border-radius: 50%;
+
+        background: rgba(176, 141, 87, .10);
+
+        top: -180px;
+
+        right: -100px;
+
+    }
+
+
+    .about-hero::after {
+
+        content: "";
+
+        position: absolute;
+
+        width: 280px;
+
+        height: 280px;
+
+        border-radius: 50%;
+
+        background: rgba(176, 141, 87, .08);
+
+        bottom: -150px;
+
+        left: -100px;
+
+    }
+
+
+    .about-hero-content {
+
+        position: relative;
+
+        z-index: 2;
+
+        max-width: 800px;
+
+        margin: auto;
+
+        text-align: center;
+
+    }
+
+
+    .about-badge {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        background: rgba(176, 141, 87, .15);
+
+        border: 1px solid rgba(176, 141, 87, .35);
+
+        color: #d9c39a;
+
+        padding: 8px 16px;
+
+        border-radius: 50px;
+
+        font-size: 13px;
+
+        font-weight: 600;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    .about-hero h1 {
+
+        font-family: "Playfair Display", serif;
+
+        font-size: clamp(2.4rem, 5vw, 4rem);
+
+        font-weight: 700;
+
+        margin-bottom: 18px;
+
+    }
+
+
+    .about-hero h1 span {
+
+        color: #b08d57;
+
+    }
+
+
+    .about-hero p {
+
+        color: rgba(255, 255, 255, .75);
+
+        font-size: 17px;
+
+        line-height: 1.8;
+
+        margin: 0 auto;
+
+        max-width: 680px;
+
+    }
+
+
+    /* =====================================================
+       GENERAL
+    ====================================================== */
+
+    .about-section {
+
+        padding: 85px 0;
+
+    }
+
+
+    .about-section-light {
+
+        background: #ffffff;
+
+    }
+
+
+    .section-label {
+
+        color: #b08d57;
+
+        text-transform: uppercase;
+
+        letter-spacing: 2px;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .section-title {
+
+        font-family: "Playfair Display", serif;
+
+        color: #18212b;
+
+        font-size: clamp(2rem, 4vw, 2.8rem);
+
+        font-weight: 700;
+
+        margin-bottom: 18px;
+
+    }
+
+
+    .section-text {
+
+        color: #6b7280;
+
+        line-height: 1.85;
+
+        font-size: 15px;
+
+    }
+
+
+    /* =====================================================
+       INTRO
+    ====================================================== */
+
+    .about-intro-card {
+
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 20px;
+
+        padding: 35px;
+
+        height: 100%;
+
+        box-shadow:
+            0 10px 30px rgba(24, 33, 43, .06);
+
+    }
+
+
+    .about-icon-box {
+
+        width: 58px;
+
+        height: 58px;
+
+        border-radius: 14px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        background: rgba(176, 141, 87, .12);
+
+        color: #b08d57;
+
+        font-size: 25px;
+
+        margin-bottom: 22px;
+
+    }
+
+
+    .about-intro-card h3 {
+
+        font-family: "Playfair Display", serif;
+
+        color: #18212b;
+
+        font-size: 24px;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    /* =====================================================
+       MISSION / VISION
+    ====================================================== */
+
+    .mission-card {
+
+        height: 100%;
+
+        padding: 35px;
+
+        border-radius: 20px;
+
+        background: #18212b;
+
+        color: #ffffff;
+
+        position: relative;
+
+        overflow: hidden;
+
+    }
+
+
+    .mission-card::after {
+
+        content: "";
+
+        position: absolute;
+
+        width: 170px;
+
+        height: 170px;
+
+        border-radius: 50%;
+
+        right: -70px;
+
+        bottom: -70px;
+
+        background: rgba(176, 141, 87, .12);
+
+    }
+
+
+    .mission-card.gold {
+
+        background: #b08d57;
+
+    }
+
+
+    .mission-card.gold::after {
+
+        background: rgba(255, 255, 255, .10);
+
+    }
+
+
+    .mission-icon {
+
+        width: 55px;
+
+        height: 55px;
+
+        border-radius: 14px;
+
+        background: rgba(255, 255, 255, .12);
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 23px;
+
+        margin-bottom: 22px;
+
+    }
+
+
+    .mission-card h3 {
+
+        font-family: "Playfair Display", serif;
+
+        font-size: 25px;
+
+        margin-bottom: 14px;
+
+        position: relative;
+
+        z-index: 2;
+
+    }
+
+
+    .mission-card p {
+
+        color: rgba(255, 255, 255, .78);
+
+        line-height: 1.8;
+
+        margin: 0;
+
+        position: relative;
+
+        z-index: 2;
+
+    }
+
+
+    .mission-card.gold p {
+
+        color: rgba(255, 255, 255, .88);
+
+    }
+
+
+    /* =====================================================
+       SERVICES
+    ====================================================== */
+
+    .service-card {
+
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 18px;
+
+        padding: 28px;
+
+        height: 100%;
+
+        transition: all .25s ease;
+
+    }
+
+
+    .service-card:hover {
+
+        transform: translateY(-5px);
+
+        border-color: rgba(176, 141, 87, .45);
+
+        box-shadow:
+            0 15px 35px rgba(24, 33, 43, .09);
+
+    }
+
+
+    .service-icon {
+
+        width: 55px;
+
+        height: 55px;
+
+        border-radius: 14px;
+
+        background: rgba(176, 141, 87, .12);
+
+        color: #b08d57;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 23px;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    .service-card h4 {
+
+        color: #18212b;
+
+        font-size: 18px;
+
+        font-weight: 700;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .service-card p {
+
+        color: #6b7280;
+
+        font-size: 14px;
+
+        line-height: 1.7;
+
+        margin: 0;
+
+    }
+
+
+    /* =====================================================
+       STATS
+    ====================================================== */
+
+    .stats-section {
+
+        background: #18212b;
+
+        padding: 65px 0;
+
+    }
+
+
+    .stat-box {
+
+        text-align: center;
+
+        padding: 15px;
+
+    }
+
+
+    .stat-icon {
+
+        color: #b08d57;
+
+        font-size: 28px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .stat-number {
+
+        color: #ffffff;
+
+        font-family: "Playfair Display", serif;
+
+        font-size: 2.2rem;
+
+        font-weight: 700;
+
+    }
+
+
+    .stat-label {
+
+        color: rgba(255, 255, 255, .62);
+
+        font-size: 13px;
+
+    }
+
+
+    /* =====================================================
+       WHY SHATHIMART
+    ====================================================== */
+
+    .feature-list {
+
+        margin: 0;
+
+        padding: 0;
+
+        list-style: none;
+
+    }
+
+
+    .feature-list li {
+
+        display: flex;
+
+        align-items: flex-start;
+
+        gap: 13px;
+
+        margin-bottom: 20px;
+
+        color: #4b5563;
+
+        line-height: 1.7;
+
+    }
+
+
+    .feature-check {
+
+        width: 30px;
+
+        height: 30px;
+
+        min-width: 30px;
+
+        border-radius: 50%;
+
+        background: rgba(176, 141, 87, .13);
+
+        color: #b08d57;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        margin-top: 2px;
+
+    }
+
+
+    /* =====================================================
+       CTA
+    ====================================================== */
+
+    .about-cta {
+
+        background:
+            linear-gradient(
+                135deg,
+                #b08d57,
+                #8f713f
+            );
+
+        border-radius: 24px;
+
+        padding: 55px 40px;
+
+        text-align: center;
+
+        color: #ffffff;
+
+        position: relative;
+
+        overflow: hidden;
+
+    }
+
+
+    .about-cta::before {
+
+        content: "";
+
+        position: absolute;
+
+        width: 240px;
+
+        height: 240px;
+
+        border-radius: 50%;
+
+        background: rgba(255, 255, 255, .08);
+
+        top: -130px;
+
+        right: -50px;
+
+    }
+
+
+    .about-cta h2 {
+
+        font-family: "Playfair Display", serif;
+
+        font-size: 2.3rem;
+
+        font-weight: 700;
+
+        position: relative;
+
+        z-index: 2;
+
+    }
+
+
+    .about-cta p {
+
+        max-width: 650px;
+
+        margin: 12px auto 25px;
+
+        color: rgba(255, 255, 255, .85);
+
+        position: relative;
+
+        z-index: 2;
+
+    }
+
+
+    .about-cta .btn {
+
+        position: relative;
+
+        z-index: 2;
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ====================================================== */
+
+    @media (max-width: 767px) {
+
+        .about-hero {
+
+            padding: 65px 0;
+
+        }
+
+
+        .about-section {
+
+            padding: 60px 0;
+
+        }
+
+
+        .about-intro-card,
+        .mission-card {
+
+            padding: 28px;
+
+        }
+
+
+        .about-cta {
+
+            padding: 40px 25px;
+
+            border-radius: 18px;
+
+        }
+
+
+        .about-cta h2 {
+
+            font-size: 1.9rem;
+
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<!-- =====================================================
+     HERO
+====================================================== -->
+
+<section class="about-hero">
+
+    <div class="container">
+
+        <div class="about-hero-content">
+
+            <div class="about-badge">
+
+                <i class="bi bi-building"></i>
+
+                About SHATHIMART
+
+            </div>
+
+
+            <h1>
+
+                Moving Parcels With
+
+                <span>Trust</span>
+
+                &amp; Care
+
+            </h1>
+
+
+            <p>
+
+                SHATHIMART is a modern delivery management
+                system designed to make parcel shipping,
+                tracking and delivery management simple,
+                transparent and efficient.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     INTRODUCTION
+====================================================== -->
+
+<section class="about-section">
+
+    <div class="container">
+
+        <div class="row g-4 align-items-stretch">
+
+            <div class="col-lg-6">
+
+                <div class="about-intro-card">
+
+                    <div class="about-icon-box">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+
+
+                    <div class="section-label">
+                        Who We Are
+                    </div>
+
+
+                    <h2 class="section-title">
+
+                        A Smarter Way To Manage Deliveries
+
+                    </h2>
+
+
+                    <p class="section-text mb-0">
+
+                        SHATHIMART provides a centralized
+                        platform for managing parcels from
+                        shipment creation through final
+                        delivery.
+
+                        <br><br>
+
+                        Customers can register parcels,
+                        track shipment progress and view
+                        their delivery information from one
+                        convenient platform.
+
+                        <br><br>
+
+                        Administrators and delivery staff can
+                        manage shipments, update parcel
+                        statuses, assign deliveries and
+                        maintain delivery records efficiently.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="about-intro-card">
+
+                    <div class="about-icon-box">
+
+                        <i class="bi bi-diagram-3"></i>
+
+                    </div>
+
+
+                    <div class="section-label">
+                        Our Approach
+                    </div>
+
+
+                    <h2 class="section-title">
+
+                        One Platform, Connected Operations
+
+                    </h2>
+
+
+                    <p class="section-text">
+
+                        The SHATHIMART system connects
+                        customers, administrators and delivery
+                        staff through a unified delivery
+                        management workflow.
+
+                    </p>
+
+
+                    <ul class="feature-list mt-4">
+
+                        <li>
+
+                            <span class="feature-check">
+
+                                <i class="bi bi-check"></i>
+
+                            </span>
+
+                            <span>
+                                Simple parcel registration and
+                                shipment management.
+                            </span>
+
+                        </li>
+
+
+                        <li>
+
+                            <span class="feature-check">
+
+                                <i class="bi bi-check"></i>
+
+                            </span>
+
+                            <span>
+                                Real-time shipment status
+                                visibility through tracking.
+                            </span>
+
+                        </li>
+
+
+                        <li>
+
+                            <span class="feature-check">
+
+                                <i class="bi bi-check"></i>
+
+                            </span>
+
+                            <span>
+                                Organized delivery staff and
+                                parcel assignment.
+                            </span>
+
+                        </li>
+
+
+                        <li>
+
+                            <span class="feature-check">
+
+                                <i class="bi bi-check"></i>
+
+                            </span>
+
+                            <span>
+                                Centralized records for delivery
+                                operations and reporting.
+                            </span>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MISSION & VISION
+====================================================== -->
+
+<section class="about-section about-section-light">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <div class="section-label">
+                Our Purpose
+            </div>
+
+            <h2 class="section-title mb-2">
+                Mission &amp; Vision
+            </h2>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-lg-6">
+
+                <div class="mission-card">
+
+                    <div class="mission-icon">
+
+                        <i class="bi bi-bullseye"></i>
+
+                    </div>
+
+
+                    <h3>
+                        Our Mission
+                    </h3>
+
+
+                    <p>
+
+                        To provide a structured and
+                        user-friendly delivery management
+                        platform that helps customers,
+                        administrators and delivery staff
+                        manage parcel operations efficiently.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <div class="mission-card gold">
+
+                    <div class="mission-icon">
+
+                        <i class="bi bi-eye"></i>
+
+                    </div>
+
+
+                    <h3>
+                        Our Vision
+                    </h3>
+
+
+                    <p>
+
+                        To build a reliable digital delivery
+                        environment where shipment information
+                        is organized, accessible and easy to
+                        track throughout the delivery process.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     SERVICES
+====================================================== -->
+
+<section class="about-section">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <div class="section-label">
+                What We Provide
+            </div>
+
+            <h2 class="section-title mb-2">
+                SHATHIMART Services
+            </h2>
+
+            <p
+                class="section-text mx-auto"
+                style="max-width: 650px;"
+            >
+
+                The system provides a range of features
+                designed around the complete parcel delivery
+                workflow.
+
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+
+
+                    <h4>
+                        Parcel Delivery
+                    </h4>
+
+
+                    <p>
+
+                        Create and manage parcel shipments
+                        with sender, receiver and delivery
+                        information.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                    </div>
+
+
+                    <h4>
+                        Parcel Tracking
+                    </h4>
+
+
+                    <p>
+
+                        Track parcel progress using a unique
+                        tracking number and shipment status.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+
+                        <i class="bi bi-truck"></i>
+
+                    </div>
+
+
+                    <h4>
+                        Delivery Management
+                    </h4>
+
+
+                    <p>
+
+                        Administrators can assign parcels to
+                        delivery staff and manage delivery
+                        operations.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-6 col-lg-3">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+
+                        <i class="bi bi-bar-chart"></i>
+
+                    </div>
+
+
+                    <h4>
+                        Reports
+                    </h4>
+
+
+                    <p>
+
+                        Organized shipment records help
+                        administrators monitor delivery
+                        operations and generate reports.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     STATS
+====================================================== -->
+
+<section class="stats-section">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+
+
+                    <div class="stat-number">
+                        Easy
+                    </div>
+
+
+                    <div class="stat-label">
+                        Parcel Management
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                    </div>
+
+
+                    <div class="stat-number">
+                        Live
+                    </div>
+
+
+                    <div class="stat-label">
+                        Tracking Information
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-people"></i>
+
+                    </div>
+
+
+                    <div class="stat-number">
+                        Multi
+                    </div>
+
+
+                    <div class="stat-label">
+                        User Roles
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-6 col-lg-3">
+
+                <div class="stat-box">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+
+                    <div class="stat-number">
+                        Secure
+                    </div>
+
+
+                    <div class="stat-label">
+                        Account Management
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     WHY SHATHIMART
+====================================================== -->
+
+<section class="about-section">
+
+    <div class="container">
+
+        <div class="row g-5 align-items-center">
+
+            <div class="col-lg-6">
+
+                <div class="section-label">
+                    Why SHATHIMART
+                </div>
+
+
+                <h2 class="section-title">
+
+                    Designed Around The Complete Delivery Journey
+
+                </h2>
+
+
+                <p class="section-text">
+
+                    SHATHIMART brings important delivery
+                    operations together in one system, reducing
+                    the need to manage shipment information
+                    across separate records and processes.
+
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-6">
+
+                <ul class="feature-list">
+
+                    <li>
+
+                        <span class="feature-check">
+                            <i class="bi bi-check-lg"></i>
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Customer Friendly
+                            </strong>
+                            <br>
+
+                            Customers can manage and track
+                            their parcels through a simple
+                            interface.
+
+                        </span>
+
+                    </li>
+
+
+                    <li>
+
+                        <span class="feature-check">
+                            <i class="bi bi-check-lg"></i>
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Organized Operations
+                            </strong>
+                            <br>
+
+                            Administrators can manage
+                            shipments, customers and delivery
+                            staff from one dashboard.
+
+                        </span>
+
+                    </li>
+
+
+                    <li>
+
+                        <span class="feature-check">
+                            <i class="bi bi-check-lg"></i>
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Transparent Tracking
+                            </strong>
+                            <br>
+
+                            Shipment progress can be viewed
+                            through tracking information and
+                            delivery status updates.
+
+                        </span>
+
+                    </li>
+
+
+                    <li>
+
+                        <span class="feature-check">
+                            <i class="bi bi-check-lg"></i>
+                        </span>
+
+                        <span>
+
+                            <strong>
+                                Responsive Design
+                            </strong>
+                            <br>
+
+                            The interface is designed to work
+                            across desktop, tablet and mobile
+                            devices.
+
+                        </span>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     CALL TO ACTION
+====================================================== -->
+
+<section class="about-section pt-0">
+
+    <div class="container">
+
+        <div class="about-cta">
+
+            <h2>
+                You can Track Your Parcel?
+            </h2>
+
+
+            <p>
+
+                Enter your tracking number and view the
+                latest available shipment information.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

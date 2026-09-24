@@ -1,0 +1,879 @@
+{% extends "customer_base.html" %}
+{% block title %}
+    Edit Profile | SHATHIMART
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    /* =========================================================
+       EDIT PROFILE PAGE
+    ========================================================= */
+
+    .edit-profile-page {
+        min-height: calc(100vh - 74px);
+        background: var(--light);
+        padding: 45px 0 70px;
+    }
+
+
+    /* =========================================================
+       PAGE HEADER
+    ========================================================= */
+
+    .edit-page-header {
+        margin-bottom: 25px;
+    }
+
+    .edit-page-header h1 {
+        margin: 0 0 7px;
+        color: var(--dark);
+        font-size: 30px;
+        font-weight: 700;
+    }
+
+    .edit-page-header p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+
+    /* =========================================================
+       MAIN CARD
+    ========================================================= */
+
+    .edit-profile-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+
+    /* =========================================================
+       CARD HEADER
+    ========================================================= */
+
+    .edit-card-header {
+        background: linear-gradient(
+            135deg,
+            var(--dark),
+            var(--dark-soft)
+        );
+        padding: 28px 30px;
+        color: var(--white);
+    }
+
+    .edit-card-header-content {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .edit-avatar {
+        width: 65px;
+        height: 65px;
+        min-width: 65px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 25px;
+        font-weight: 700;
+        border: 3px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .edit-card-header h3 {
+        margin: 0 0 5px;
+        font-size: 21px;
+        font-weight: 700;
+    }
+
+    .edit-card-header p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       FORM AREA
+    ========================================================= */
+
+    .edit-form-body {
+        padding: 32px;
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .form-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .section-title i {
+        color: var(--primary);
+        font-size: 18px;
+    }
+
+    .section-title h5 {
+        margin: 0;
+        color: var(--dark);
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       FORM LABEL
+    ========================================================= */
+
+    .form-label-custom {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--dark);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .required-star {
+        color: #dc2626;
+    }
+
+
+    /* =========================================================
+       FORM INPUTS
+    ========================================================= */
+
+    .custom-input,
+    .custom-textarea,
+    .custom-select {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fafafa;
+        color: var(--text);
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 13px;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    .custom-input:focus,
+    .custom-textarea:focus,
+    .custom-select:focus {
+        border-color: var(--primary);
+        background: var(--white);
+        box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.12);
+    }
+
+    .custom-textarea {
+        min-height: 105px;
+        resize: vertical;
+    }
+
+
+    /* =========================================================
+       DJANGO FORM WIDGET SUPPORT
+    ========================================================= */
+
+    .django-form-field input,
+    .django-form-field select,
+    .django-form-field textarea {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: #fafafa;
+        color: var(--text);
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 13px;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    .django-form-field input:focus,
+    .django-form-field select:focus,
+    .django-form-field textarea:focus {
+        border-color: var(--primary);
+        background: var(--white);
+        box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.12);
+    }
+
+    .django-form-field textarea {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .django-form-field input[type="file"] {
+        padding: 9px;
+        cursor: pointer;
+    }
+
+
+    /* =========================================================
+       HELP TEXT
+    ========================================================= */
+
+    .help-text {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       ERROR MESSAGES
+    ========================================================= */
+
+    .field-error {
+        display: block;
+        margin-top: 6px;
+        color: #dc2626;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .form-error-box {
+        background: rgba(220, 38, 38, 0.07);
+        border: 1px solid rgba(220, 38, 38, 0.18);
+        color: #b91c1c;
+        border-radius: 10px;
+        padding: 13px 15px;
+        margin-bottom: 25px;
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       ACCOUNT INFORMATION
+    ========================================================= */
+
+    .account-info-card {
+        background: #fafafa;
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        padding: 20px;
+        height: 100%;
+    }
+
+    .account-info-card h6 {
+        margin: 0 0 17px;
+        color: var(--dark);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .account-info-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 11px 0;
+        border-bottom: 1px solid #eeeeee;
+    }
+
+    .account-info-row:first-of-type {
+        padding-top: 0;
+    }
+
+    .account-info-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .account-info-icon {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        border-radius: 8px;
+        background: rgba(176, 141, 87, 0.10);
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .account-info-text span {
+        display: block;
+        color: var(--muted);
+        font-size: 10px;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+    }
+
+    .account-info-text strong {
+        display: block;
+        color: var(--text);
+        font-size: 12px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+       BUTTONS
+    ========================================================= */
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+        padding-top: 25px;
+        border-top: 1px solid var(--border);
+        margin-top: 30px;
+    }
+
+    .cancel-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 11px 20px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--white);
+        color: var(--text);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .cancel-btn:hover {
+        background: #f5f5f5;
+        color: var(--dark);
+    }
+
+    .save-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 11px 22px;
+        border: none;
+        border-radius: 10px;
+        background: var(--primary);
+        color: var(--white);
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .save-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 767px) {
+
+        .edit-profile-page {
+            padding: 25px 0 50px;
+        }
+
+        .edit-page-header h1 {
+            font-size: 24px;
+        }
+
+        .edit-card-header {
+            padding: 23px 20px;
+        }
+
+        .edit-form-body {
+            padding: 22px 18px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .cancel-btn,
+        .save-btn {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="edit-profile-page">
+
+    <div class="container">
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <div class="edit-page-header">
+
+            <h1>
+                Edit Profile
+            </h1>
+
+            <p>
+                Update your personal information and account details.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- =================================================
+                 EDIT FORM
+            ================================================== -->
+
+            <div class="col-lg-8">
+
+                <div class="edit-profile-card">
+
+                    <!-- HEADER -->
+
+                    <div class="edit-card-header">
+
+                        <div class="edit-card-header-content">
+
+                            <div class="edit-avatar">
+
+                                {% if user.first_name %}
+                                    {{ user.first_name|first|upper }}
+                                {% else %}
+                                    {{ user.username|first|upper }}
+                                {% endif %}
+
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    Update Your Profile
+                                </h3>
+
+                                <p>
+                                    Keep your SHATHIMART account information up to date.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FORM -->
+
+                    <div class="edit-form-body">
+
+                        <form
+                            method="POST"
+                            enctype="multipart/form-data"
+                        >
+
+                            {% csrf_token %}
+
+
+                            <!-- =================================
+                                 FORM ERRORS
+                            ================================== -->
+
+                            {% if form.non_field_errors %}
+
+                                <div class="form-error-box">
+
+                                    {% for error in form.non_field_errors %}
+
+                                        <div>
+                                            <i class="bi bi-exclamation-circle me-1"></i>
+                                            {{ error }}
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            {% endif %}
+
+
+                            <!-- =================================
+                                 PERSONAL INFORMATION
+                            ================================== -->
+
+                            <div class="form-section">
+
+                                <div class="section-title">
+
+                                    <i class="bi bi-person-vcard"></i>
+
+                                    <h5>
+                                        Personal Information
+                                    </h5>
+
+                                </div>
+
+
+                                <div class="row g-4">
+
+                                    {% for field in form %}
+
+                                        <div class="col-md-6 django-form-field">
+
+                                            <label
+                                                for="{{ field.id_for_label }}"
+                                                class="form-label-custom"
+                                            >
+
+                                                {{ field.label }}
+
+                                                {% if field.field.required %}
+
+                                                    <span class="required-star">
+                                                        *
+                                                    </span>
+
+                                                {% endif %}
+
+                                            </label>
+
+
+                                            {{ field }}
+
+
+                                            {% if field.help_text %}
+
+                                                <span class="help-text">
+                                                    {{ field.help_text|safe }}
+                                                </span>
+
+                                            {% endif %}
+
+
+                                            {% if field.errors %}
+
+                                                {% for error in field.errors %}
+
+                                                    <span class="field-error">
+
+                                                        <i class="bi bi-exclamation-circle"></i>
+
+                                                        {{ error }}
+
+                                                    </span>
+
+                                                {% endfor %}
+
+                                            {% endif %}
+
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =================================
+                                 FORM ACTIONS
+                            ================================== -->
+
+                            <div class="form-actions">
+
+                                <a
+                                    href="{% url 'profile' %}"
+                                    class="cancel-btn"
+                                >
+
+                                    <i class="bi bi-arrow-left"></i>
+
+                                    Cancel
+
+                                </a>
+
+
+                                <button
+                                    type="submit"
+                                    class="save-btn"
+                                >
+
+                                    <i class="bi bi-check-lg"></i>
+
+                                    Save Changes
+
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACCOUNT INFORMATION
+            ================================================== -->
+
+            <div class="col-lg-4">
+
+                <div class="account-info-card">
+
+                    <h6>
+
+                        <i class="bi bi-shield-check me-1"></i>
+
+                        Account Information
+
+                    </h6>
+
+
+                    <!-- USERNAME -->
+
+                    <div class="account-info-row">
+
+                        <div class="account-info-icon">
+
+                            <i class="bi bi-at"></i>
+
+                        </div>
+
+                        <div class="account-info-text">
+
+                            <span>
+                                Username
+                            </span>
+
+                            <strong>
+                                {{ user.username }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="account-info-row">
+
+                        <div class="account-info-icon">
+
+                            <i class="bi bi-envelope"></i>
+
+                        </div>
+
+                        <div class="account-info-text">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong>
+
+                                {% if user.email %}
+                                    {{ user.email }}
+                                {% else %}
+                                    Not provided
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROLE -->
+
+                    <div class="account-info-row">
+
+                        <div class="account-info-icon">
+
+                            <i class="bi bi-person-badge"></i>
+
+                        </div>
+
+                        <div class="account-info-text">
+
+                            <span>
+                                Account Type
+                            </span>
+
+                            <strong>
+
+                                {% if profile.role == "admin" %}
+                                    Administrator
+                                {% elif profile.role == "delivery_staff" %}
+                                    Delivery Staff
+                                {% else %}
+                                    Customer
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ACCOUNT STATUS -->
+
+                    <div class="account-info-row">
+
+                        <div class="account-info-icon">
+
+                            <i class="bi bi-check-circle"></i>
+
+                        </div>
+
+                        <div class="account-info-text">
+
+                            <span>
+                                Status
+                            </span>
+
+                            <strong>
+
+                                {% if user.is_active %}
+                                    Active
+                                {% else %}
+                                    Inactive
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- JOINED -->
+
+                    <div class="account-info-row">
+
+                        <div class="account-info-icon">
+
+                            <i class="bi bi-calendar3"></i>
+
+                        </div>
+
+                        <div class="account-info-text">
+
+                            <span>
+                                Member Since
+                            </span>
+
+                            <strong>
+                                {{ user.date_joined|date:"M d, Y" }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LAST LOGIN -->
+
+                    <div class="account-info-row">
+
+                        <div class="account-info-icon">
+
+                            <i class="bi bi-clock-history"></i>
+
+                        </div>
+
+                        <div class="account-info-text">
+
+                            <span>
+                                Last Login
+                            </span>
+
+                            <strong>
+
+                                {% if user.last_login %}
+                                    {{ user.last_login|date:"M d, Y H:i" }}
+                                {% else %}
+                                    First login
+                                {% endif %}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     BACK TO PROFILE
+                ================================================== -->
+
+                <a
+                    href="{% url 'profile' %}"
+                    style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 8px;
+                        margin-top: 15px;
+                        padding: 12px;
+                        border: 1px solid var(--border);
+                        border-radius: 10px;
+                        background: var(--white);
+                        color: var(--text);
+                        text-decoration: none;
+                        font-size: 13px;
+                        font-weight: 600;
+                    "
+                >
+
+                    <i class="bi bi-person-circle"></i>
+
+                    Back to My Profile
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

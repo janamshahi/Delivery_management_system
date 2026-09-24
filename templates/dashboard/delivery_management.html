@@ -1,0 +1,1142 @@
+{% extends "dashboard/admin_base.html" %}
+
+
+{% block title %}
+SHATHIMART | Deliveries
+{% endblock %}
+
+
+{% block deliveries_active %}
+active
+{% endblock %}
+
+
+{% block topbar_title %}
+Deliveries
+{% endblock %}
+
+
+{% block breadcrumb %}
+Deliveries
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* ============================================================
+   DELIVERY MANAGEMENT
+   ============================================================ */
+
+.delivery-page {
+    width: 100%;
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.delivery-page .content-header {
+    margin-bottom: 28px;
+}
+
+.delivery-page .content-title {
+    margin-bottom: 6px;
+}
+
+.delivery-page .content-subtitle {
+    margin-bottom: 0;
+}
+
+
+/* ============================================================
+   STAT CARD
+   ============================================================ */
+
+.delivery-stat-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 22px;
+    height: 100%;
+    transition: all 0.2s ease;
+}
+
+.delivery-stat-card:hover {
+    border-color: #d9c39a;
+    transform: translateY(-2px);
+}
+
+.delivery-stat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.delivery-stat-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.delivery-stat-value {
+    margin-top: 8px;
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 700;
+    color: #18212b;
+}
+
+.delivery-stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #f4eddf;
+    color: #8f713f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+}
+
+
+/* ============================================================
+   MAIN CARD
+   ============================================================ */
+
+.delivery-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.delivery-card-header {
+    padding: 22px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.delivery-card-title {
+    margin: 0;
+    color: #18212b;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.delivery-card-subtitle {
+    margin: 5px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.delivery-table-wrapper {
+    overflow-x: auto;
+}
+
+.delivery-table {
+    width: 100%;
+    min-width: 1100px;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+.delivery-table thead th {
+    background: #f8f8f5;
+    color: #6b7280;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
+    padding: 15px 18px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.delivery-table tbody td {
+    padding: 17px 18px;
+    border-bottom: 1px solid #eef0f2;
+    vertical-align: middle;
+    color: #263238;
+    font-size: 13px;
+}
+
+.delivery-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.delivery-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.delivery-table tbody tr:hover {
+    background: #fafaf7;
+}
+
+
+/* ============================================================
+   TRACKING
+   ============================================================ */
+
+.tracking-number {
+    color: #18212b;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.tracking-number:hover {
+    color: #8f713f;
+}
+
+.tracking-label {
+    color: #6b7280;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+
+/* ============================================================
+   RECEIVER
+   ============================================================ */
+
+.receiver-name {
+    color: #18212b;
+    font-weight: 700;
+}
+
+.receiver-phone {
+    color: #6b7280;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+
+/* ============================================================
+   ADDRESS
+   ============================================================ */
+
+.receiver-address {
+    max-width: 220px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   STATUS BADGES
+   ============================================================ */
+
+.delivery-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.delivery-status::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+
+/* Pending */
+
+.status-pending {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+
+/* Pickup Requested */
+
+.status-pickup_requested {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+
+/* Assigned */
+
+.status-assigned {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+
+/* Picked Up */
+
+.status-picked_up {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+
+/* In Transit */
+
+.status-in_transit {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+
+/* Out For Delivery */
+
+.status-out_for_delivery {
+    background: #fefce8;
+    color: #a16207;
+}
+
+
+/* Delivered */
+
+.status-delivered {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+
+/* Cancelled */
+
+.status-cancelled {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+/* Failed */
+
+.status-failed {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+
+/* Rescheduled */
+
+.status-rescheduled {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+
+/* ============================================================
+   STAFF ASSIGNMENT
+   ============================================================ */
+
+.staff-assignment {
+    min-width: 245px;
+}
+
+.staff-assignment-form {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.staff-select {
+    width: 175px;
+    min-height: 38px;
+    padding: 8px 32px 8px 11px;
+    border: 1px solid #dfe3e7;
+    border-radius: 9px;
+    background-color: #ffffff;
+    color: #263238;
+    font-size: 12px;
+    font-weight: 500;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.staff-select:focus {
+    border-color: #b08d57;
+    box-shadow: 0 0 0 3px rgba(176, 141, 87, 0.12);
+}
+
+.staff-select option {
+    color: #263238;
+}
+
+
+/* ============================================================
+   ASSIGN BUTTON
+   ============================================================ */
+
+.assign-button {
+    min-width: 72px;
+    min-height: 38px;
+    border: 0;
+    border-radius: 9px;
+    padding: 8px 12px;
+    background: #b08d57;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.assign-button:hover {
+    background: #8f713f;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.assign-button:active {
+    transform: translateY(0);
+}
+
+
+/* ============================================================
+   CURRENT STAFF
+   ============================================================ */
+
+.current-staff {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 9px;
+}
+
+.current-staff-avatar {
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    background: #f4eddf;
+    color: #8f713f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.current-staff-info {
+    min-width: 0;
+}
+
+.current-staff-label {
+    color: #9ca3af;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    font-weight: 700;
+}
+
+.current-staff-name {
+    color: #263238;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.no-staff {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #9ca3af;
+    font-size: 12px;
+    margin-bottom: 9px;
+}
+
+
+/* ============================================================
+   UPDATED TIME
+   ============================================================ */
+
+.updated-time {
+    color: #6b7280;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.updated-date {
+    color: #263238;
+    font-weight: 600;
+}
+
+.updated-clock {
+    display: block;
+    margin-top: 3px;
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+
+.delivery-messages {
+    margin-bottom: 22px;
+}
+
+.delivery-message {
+    border: 0;
+    border-radius: 11px;
+    padding: 13px 16px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.delivery-message:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+
+.delivery-empty {
+    padding: 70px 25px;
+    text-align: center;
+}
+
+.delivery-empty-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 18px;
+    border-radius: 20px;
+    background: #f4eddf;
+    color: #b08d57;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.delivery-empty-title {
+    color: #263238;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.delivery-empty-text {
+    color: #6b7280;
+    font-size: 13px;
+    margin: 0;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 991.98px) {
+
+    .delivery-card-header {
+        padding: 19px;
+    }
+
+    .delivery-table thead th,
+    .delivery-table tbody td {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+}
+
+
+@media (max-width: 767.98px) {
+
+    .delivery-page .content-header {
+        margin-bottom: 20px;
+    }
+
+    .delivery-stat-card {
+        padding: 18px;
+    }
+
+    .delivery-card-header {
+        display: block;
+    }
+
+    .delivery-card-title {
+        font-size: 16px;
+    }
+
+    .delivery-card-subtitle {
+        margin-top: 6px;
+    }
+
+    .delivery-empty {
+        padding: 55px 20px;
+    }
+}
+
+
+@media (max-width: 575.98px) {
+
+    .delivery-stat-value {
+        font-size: 26px;
+    }
+
+    .delivery-stat-icon {
+        width: 43px;
+        height: 43px;
+        font-size: 18px;
+    }
+
+    .staff-assignment-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .staff-select {
+        width: 100%;
+    }
+
+    .assign-button {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<div class="delivery-page">
+
+
+    <!-- ======================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="content-header">
+
+        <div>
+
+            <h1 class="content-title">
+                Delivery Management
+            </h1>
+
+            <p class="content-subtitle">
+                Monitor delivery progress and assign parcels
+                to delivery staff.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         MESSAGES
+         ====================================================== -->
+
+    {% if messages %}
+
+    <div class="delivery-messages">
+
+        {% for message in messages %}
+
+        <div
+            class="alert
+            {% if message.tags == 'success' %}
+                alert-success
+            {% elif message.tags == 'error' %}
+                alert-danger
+            {% elif message.tags == 'warning' %}
+                alert-warning
+            {% else %}
+                alert-info
+            {% endif %}
+            delivery-message
+            alert-dismissible
+            fade
+            show"
+            role="alert"
+        >
+
+            <i
+                class="bi
+                {% if message.tags == 'success' %}
+                    bi-check-circle
+                {% elif message.tags == 'error' %}
+                    bi-exclamation-circle
+                {% elif message.tags == 'warning' %}
+                    bi-exclamation-triangle
+                {% else %}
+                    bi-info-circle
+                {% endif %}
+                me-2"
+            ></i>
+
+            {{ message }}
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+            ></button>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ======================================================
+         STAT
+         ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-sm-6 col-xl-4">
+
+            <div class="delivery-stat-card">
+
+                <div class="delivery-stat-top">
+
+                    <div>
+
+                        <div class="delivery-stat-label">
+                            Active Deliveries
+                        </div>
+
+                        <div class="delivery-stat-value">
+                            {{ total_deliveries }}
+                        </div>
+
+                    </div>
+
+                    <div class="delivery-stat-icon">
+
+                        <i class="bi bi-truck"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         DELIVERY TABLE
+         ====================================================== -->
+
+    <div class="delivery-card">
+
+        <div class="delivery-card-header">
+
+            <div>
+
+                <h5 class="delivery-card-title">
+                    Delivery Parcels
+                </h5>
+
+                <p class="delivery-card-subtitle">
+                    Assign or reassign delivery staff for
+                    parcels currently in the delivery process.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="delivery-table-wrapper">
+
+            <table class="delivery-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Tracking
+                        </th>
+
+                        <th>
+                            Receiver
+                        </th>
+
+                        <th>
+                            Address
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Assigned Staff
+                        </th>
+
+                        <th>
+                            Assign / Reassign
+                        </th>
+
+                        <th>
+                            Updated
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for parcel in parcels %}
+
+                    <tr>
+
+
+                        <!-- ==================================================
+                             TRACKING
+                             ================================================== -->
+
+                        <td>
+
+                            <div>
+
+                                <a
+                                    href="{% url 'admin_parcel_detail' parcel.id %}"
+                                    class="tracking-number"
+                                >
+                                    {{ parcel.tracking_number }}
+                                </a>
+
+                                <div class="tracking-label">
+                                    Parcel #{{ parcel.id }}
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- ==================================================
+                             RECEIVER
+                             ================================================== -->
+
+                        <td>
+
+                            <div class="receiver-name">
+                                {{ parcel.receiver_name }}
+                            </div>
+
+                            {% if parcel.receiver_phone %}
+
+                            <div class="receiver-phone">
+
+                                <i class="bi bi-telephone me-1"></i>
+
+                                {{ parcel.receiver_phone }}
+
+                            </div>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ==================================================
+                             ADDRESS
+                             ================================================== -->
+
+                        <td>
+
+                            <div
+                                class="receiver-address"
+                                title="{{ parcel.receiver_address }}"
+                            >
+
+                                {{ parcel.receiver_address|truncatechars:45 }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- ==================================================
+                             STATUS
+                             ================================================== -->
+
+                        <td>
+
+                            <span
+                                class="delivery-status status-{{ parcel.status }}"
+                            >
+
+                                {{ parcel.get_status_display }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- ==================================================
+                             CURRENT ASSIGNED STAFF
+                             ================================================== -->
+
+                        <td>
+
+                            {% if parcel.delivery and parcel.delivery.delivery_staff %}
+
+                            <div class="current-staff">
+
+                                <div class="current-staff-avatar">
+
+                                    {% if parcel.delivery.delivery_staff.first_name %}
+
+                                        {{ parcel.delivery.delivery_staff.first_name|first|upper }}
+
+                                    {% else %}
+
+                                        {{ parcel.delivery.delivery_staff.username|first|upper }}
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="current-staff-info">
+
+                                    <div class="current-staff-label">
+                                        Assigned To
+                                    </div>
+
+                                    <div
+                                        class="current-staff-name"
+                                        title="{% if parcel.delivery.delivery_staff.get_full_name %}{{ parcel.delivery.delivery_staff.get_full_name }}{% else %}{{ parcel.delivery.delivery_staff.username }}{% endif %}"
+                                    >
+
+                                        {% if parcel.delivery.delivery_staff.get_full_name %}
+
+                                            {{ parcel.delivery.delivery_staff.get_full_name }}
+
+                                        {% else %}
+
+                                            {{ parcel.delivery.delivery_staff.username }}
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            {% else %}
+
+                            <div class="no-staff">
+
+                                <i class="bi bi-person-x"></i>
+
+                                Not assigned
+
+                            </div>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ==================================================
+                             ASSIGN / REASSIGN
+                             ================================================== -->
+
+                        <td>
+
+                            <div class="staff-assignment">
+
+                                {% if delivery_staff %}
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'assign_delivery_staff' parcel.id %}"
+                                    class="staff-assignment-form"
+                                >
+
+                                    {% csrf_token %}
+
+
+                                    <select
+                                        name="delivery_staff"
+                                        class="staff-select"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select staff
+                                        </option>
+
+
+                                        {% for staff in delivery_staff %}
+
+                                        <option
+                                            value="{{ staff.id }}"
+                                            {% if parcel.delivery and parcel.delivery.delivery_staff and parcel.delivery.delivery_staff.id == staff.id %}
+                                                selected
+                                            {% endif %}
+                                        >
+
+                                            {% if staff.get_full_name %}
+
+                                                {{ staff.get_full_name }}
+
+                                            {% else %}
+
+                                                {{ staff.username }}
+
+                                            {% endif %}
+
+                                        </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+
+                                    <button
+                                        type="submit"
+                                        class="assign-button"
+                                    >
+
+                                        {% if parcel.delivery and parcel.delivery.delivery_staff %}
+
+                                            <i class="bi bi-arrow-repeat"></i>
+
+                                            Reassign
+
+                                        {% else %}
+
+                                            <i class="bi bi-person-check"></i>
+
+                                            Assign
+
+                                        {% endif %}
+
+                                    </button>
+
+                                </form>
+
+                                {% else %}
+
+                                <span class="text-muted small">
+
+                                    <i class="bi bi-person-x me-1"></i>
+
+                                    No active delivery staff available.
+
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- ==================================================
+                             UPDATED
+                             ================================================== -->
+
+                        <td>
+
+                            <div class="updated-time">
+
+                                <span class="updated-date">
+
+                                    {{ parcel.updated_at|date:"M d, Y" }}
+
+                                </span>
+
+                                <span class="updated-clock">
+
+                                    {{ parcel.updated_at|date:"H:i" }}
+
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="7">
+
+                            <div class="delivery-empty">
+
+                                <div class="delivery-empty-icon">
+
+                                    <i class="bi bi-truck"></i>
+
+                                </div>
+
+                                <div class="delivery-empty-title">
+
+                                    No Delivery Records
+
+                                </div>
+
+                                <p class="delivery-empty-text">
+
+                                    There are currently no parcels
+                                    moving through the delivery process.
+
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

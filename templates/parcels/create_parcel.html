@@ -1,0 +1,1901 @@
+{% extends "customer_base.html" %}
+
+
+{% block title %}
+Create Parcel | SHATHIMART
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+.parcel-page {
+    background: #f7f7f2;
+    min-height: calc(100vh - 80px);
+    padding: 50px 0;
+}
+
+.parcel-container {
+    max-width: 1100px;
+    margin: auto;
+}
+
+
+/* ============================================================
+   PAGE HEADING
+   ============================================================ */
+
+.page-heading {
+    margin-bottom: 30px;
+}
+
+.page-heading h1 {
+    font-family: "Playfair Display", serif;
+    color: #18212b;
+    font-weight: 700;
+}
+
+.page-heading p {
+    color: #6b7280;
+    margin-bottom: 0;
+}
+
+
+/* ============================================================
+   MAIN CARD
+   ============================================================ */
+
+.parcel-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow: 0 12px 35px rgba(24, 33, 43, 0.08);
+    border: 1px solid #eeeeea;
+}
+
+
+/* ============================================================
+   SECTION TITLE
+   ============================================================ */
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #18212b;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eeeeea;
+}
+
+
+/* ============================================================
+   FORM
+   ============================================================ */
+
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 10px;
+    padding: 12px 14px;
+    border: 1px solid #dcded8;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #b08d57;
+    box-shadow: 0 0 0 0.2rem rgba(176, 141, 87, 0.15);
+}
+
+.required {
+    color: #dc3545;
+}
+
+
+/* ============================================================
+   DELIVERY CHARGE BOX
+   ============================================================ */
+
+.delivery-charge-box {
+    background:
+        linear-gradient(
+            135deg,
+            #f7f5ed 0%,
+            #fffdf8 100%
+        );
+
+    border: 1px solid #e6dcc9;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+
+/* ============================================================
+   DELIVERY CHARGE HEADER
+   ============================================================ */
+
+.delivery-charge-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.delivery-charge-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.delivery-charge-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #b08d57;
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.delivery-charge-heading h5 {
+    margin: 0;
+    color: #18212b;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.delivery-charge-heading p {
+    margin: 4px 0 0;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   CHARGE STATUS
+   ============================================================ */
+
+.charge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 7px 13px;
+
+    border-radius: 50px;
+
+    background: #eaf7ee;
+    border: 1px solid #c9e8d2;
+
+    color: #24723b;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.charge-status.pending {
+    background: #fff3cd;
+    border-color: #ffe69c;
+    color: #856404;
+}
+
+
+/* ============================================================
+   CHARGE AMOUNT
+   ============================================================ */
+
+.charge-amount-box {
+    background: #ffffff;
+    border: 1px solid #e5e0d5;
+    border-radius: 15px;
+    padding: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.charge-label {
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.charge-amount {
+    color: #18212b;
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+
+    transition: 0.2s ease;
+}
+
+.charge-description {
+    max-width: 400px;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: right;
+}
+
+.charge-description i {
+    color: #b08d57;
+}
+
+
+/* ============================================================
+   RATE TABLE
+   ============================================================ */
+
+.rate-table {
+    margin-top: 15px;
+    padding: 15px;
+
+    background: #faf9f4;
+
+    border: 1px solid #ebe5d8;
+    border-radius: 12px;
+}
+
+.rate-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #18212b;
+    margin-bottom: 10px;
+}
+
+.rate-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 8px 0;
+
+    border-bottom: 1px solid #eee9dd;
+
+    font-size: 13px;
+}
+
+.rate-row:last-child {
+    border-bottom: none;
+}
+
+.rate-weight {
+    color: #6b7280;
+}
+
+.rate-price {
+    color: #18212b;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   RATE UPDATE LABEL
+   ============================================================ */
+
+.rate-update-label {
+    margin-top: 12px;
+
+    color: #8a7352;
+
+    font-size: 12px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+.rate-update-label i {
+    color: #b08d57;
+}
+
+
+/* ============================================================
+   INFORMATION MESSAGE
+   ============================================================ */
+
+.charge-notice {
+    margin-top: 15px;
+
+    padding: 13px 15px;
+
+    border-radius: 11px;
+
+    background: #faf9f4;
+
+    border: 1px solid #ebe5d8;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+}
+
+.charge-notice i {
+    color: #b08d57;
+    font-size: 16px;
+    margin-top: 2px;
+}
+
+.charge-notice strong {
+    color: #18212b;
+}
+
+
+/* ============================================================
+   PAYMENT RULES
+   ============================================================ */
+
+.payment-rules-box {
+    background:
+        linear-gradient(
+            135deg,
+            #f7f5ed 0%,
+            #fffdf8 100%
+        );
+
+    border: 1px solid #e6dcc9;
+
+    border-radius: 18px;
+
+    padding: 25px;
+
+    margin-bottom: 30px;
+}
+
+
+/* ============================================================
+   PAYMENT RULES HEADER
+   ============================================================ */
+
+.payment-rules-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    margin-bottom: 22px;
+}
+
+.payment-rules-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 14px;
+
+    background: #b08d57;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+.payment-rules-header h5 {
+    margin: 0;
+
+    color: #18212b;
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+.payment-rules-header p {
+    margin: 4px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   PAYMENT RULE
+   ============================================================ */
+
+.payment-rule {
+    background: #ffffff;
+
+    border: 1px solid #e5e0d5;
+
+    border-radius: 14px;
+
+    padding: 18px;
+
+    height: 100%;
+
+    transition: 0.2s ease;
+}
+
+.payment-rule:hover {
+    border-color: #b08d57;
+
+    box-shadow:
+        0 6px 18px rgba(
+            176,
+            141,
+            87,
+            0.08
+        );
+}
+
+.payment-rule-icon {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 12px;
+
+    background: #f3eee5;
+
+    color: #b08d57;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+
+    margin-bottom: 12px;
+}
+
+.payment-rule h6 {
+    color: #18212b;
+
+    font-weight: 700;
+
+    margin-bottom: 7px;
+}
+
+.payment-rule p {
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    margin: 0;
+}
+
+
+/* ============================================================
+   PAYMENT STEPS
+   ============================================================ */
+
+.payment-process {
+    margin-top: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e0d5;
+
+    border-radius: 14px;
+
+    padding: 20px;
+}
+
+.payment-process-title {
+    color: #18212b;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 16px;
+}
+
+.payment-step {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding: 11px 0;
+
+    border-bottom: 1px solid #eee9dd;
+}
+
+.payment-step:last-child {
+    border-bottom: none;
+
+    padding-bottom: 0;
+}
+
+.payment-step:first-child {
+    padding-top: 0;
+}
+
+.payment-step-number {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: #b08d57;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    flex-shrink: 0;
+}
+
+.payment-step-content strong {
+    display: block;
+
+    color: #18212b;
+
+    font-size: 13px;
+
+    margin-bottom: 3px;
+}
+
+.payment-step-content span {
+    color: #6b7280;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   PAYMENT NOTICE
+   ============================================================ */
+
+.payment-final-notice {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    padding: 13px 15px;
+
+    background: #f7f7f2;
+
+    border: 1px solid #e5e5df;
+
+    border-radius: 11px;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+.payment-final-notice i {
+    color: #b08d57;
+
+    font-size: 16px;
+
+    margin-top: 2px;
+}
+
+.payment-final-notice strong {
+    color: #18212b;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn-swift {
+    background: #b08d57;
+
+    border: none;
+
+    color: #ffffff;
+
+    border-radius: 10px;
+
+    padding: 13px 28px;
+
+    font-weight: 700;
+}
+
+.btn-swift:hover {
+    background: #8f713f;
+
+    color: #ffffff;
+}
+
+.btn-cancel {
+    border: 1px solid #d6d8d2;
+
+    border-radius: 10px;
+
+    padding: 13px 28px;
+
+    color: #374151;
+
+    background: #ffffff;
+
+    text-decoration: none;
+
+    font-weight: 600;
+}
+
+.btn-cancel:hover {
+    background: #f4f4ef;
+
+    color: #18212b;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .parcel-page {
+        padding: 30px 0;
+    }
+
+    .parcel-card {
+        padding: 22px;
+    }
+
+    .page-heading h1 {
+        font-size: 30px;
+    }
+
+    .delivery-charge-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .charge-amount-box {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .charge-description {
+        max-width: none;
+        text-align: left;
+    }
+
+    .payment-rules-box {
+        padding: 20px;
+    }
+
+    .payment-rules-header {
+        align-items: flex-start;
+    }
+
+    .btn-cancel,
+    .btn-swift {
+        width: 100%;
+        text-align: center;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+    }
+
+    .rate-row {
+        font-size: 12px;
+    }
+
+}
+
+</style>
+
+
+<section class="parcel-page">
+
+    <div class="container parcel-container">
+
+
+        <!-- ========================================================
+             PAGE HEADING
+             ======================================================== -->
+
+        <div class="page-heading">
+
+            <h1>
+                Create New Parcel
+            </h1>
+
+            <p>
+                Enter the sender, receiver and parcel information
+                to create your shipment.
+            </p>
+
+        </div>
+
+
+        <!-- ========================================================
+             MESSAGES
+             ======================================================== -->
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="alert alert-{{ message.tags }}">
+
+                    {{ message }}
+
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <!-- ========================================================
+             FORM CARD
+             ======================================================== -->
+
+        <div class="parcel-card">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <!-- =================================================
+                     SENDER
+                     ================================================= -->
+
+                <div class="section-title">
+
+                    <i class="bi bi-person me-2"></i>
+
+                    Sender Information
+
+                </div>
+
+
+                <div class="row g-4 mb-4">
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Sender Name
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="sender_name"
+                            class="form-control"
+                            value="{{ request.POST.sender_name|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Sender Phone
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="tel"
+                            name="sender_phone"
+                            class="form-control"
+                            value="{{ request.POST.sender_phone|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <label class="form-label">
+
+                            Sender Address
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <textarea
+                            name="sender_address"
+                            class="form-control"
+                            rows="3"
+                            required
+                        >{{ request.POST.sender_address|default:'' }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     RECEIVER
+                     ================================================= -->
+
+                <div class="section-title">
+
+                    <i class="bi bi-person-check me-2"></i>
+
+                    Receiver Information
+
+                </div>
+
+
+                <div class="row g-4 mb-4">
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Receiver Name
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            name="receiver_name"
+                            class="form-control"
+                            value="{{ request.POST.receiver_name|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Receiver Phone
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="tel"
+                            name="receiver_phone"
+                            class="form-control"
+                            value="{{ request.POST.receiver_phone|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <label class="form-label">
+
+                            Receiver Address
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <textarea
+                            name="receiver_address"
+                            class="form-control"
+                            rows="3"
+                            required
+                        >{{ request.POST.receiver_address|default:'' }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     PARCEL
+                     ================================================= -->
+
+                <div class="section-title">
+
+                    <i class="bi bi-box-seam me-2"></i>
+
+                    Parcel Information
+
+                </div>
+
+
+                <div class="row g-4 mb-4">
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Parcel Type
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <select
+                            name="parcel_type"
+                            class="form-select"
+                            required
+                        >
+
+                            <option value="package"
+                                {% if request.POST.parcel_type == "package" or not request.POST.parcel_type %}
+                                    selected
+                                {% endif %}
+                            >
+                                Package
+                            </option>
+
+                            <option value="document"
+                                {% if request.POST.parcel_type == "document" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Document
+                            </option>
+
+                            <option value="fragile"
+                                {% if request.POST.parcel_type == "fragile" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Fragile Item
+                            </option>
+
+                            <option value="electronics"
+                                {% if request.POST.parcel_type == "electronics" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Electronics
+                            </option>
+
+                            <option value="clothing"
+                                {% if request.POST.parcel_type == "clothing" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Clothing
+                            </option>
+
+                            <option value="food"
+                                {% if request.POST.parcel_type == "food" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Food Item
+                            </option>
+
+                            <option value="other"
+                                {% if request.POST.parcel_type == "other" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Weight (kg)
+
+                            <span class="required">*</span>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            name="weight"
+                            id="weightInput"
+                            class="form-control"
+                            min="0.01"
+                            step="0.01"
+                            placeholder="Enter parcel weight"
+                            value="{{ request.POST.weight|default:'' }}"
+                            required
+                        >
+
+
+                        <small class="text-muted">
+
+                            Delivery charge is calculated automatically
+                            according to the current SHATHIMART rates.
+
+                        </small>
+
+                    </div>
+
+
+                    <div class="col-12">
+
+                        <label class="form-label">
+
+                            Description
+
+                        </label>
+
+
+                        <textarea
+                            name="description"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Describe the parcel contents..."
+                        >{{ request.POST.description|default:'' }}</textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DELIVERY INFORMATION
+                     ================================================= -->
+
+                <div class="section-title">
+
+                    <i class="bi bi-truck me-2"></i>
+
+                    Delivery Information
+
+                </div>
+
+
+                <div class="row g-4 mb-4">
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Pickup Date
+
+                        </label>
+
+
+                        <input
+                            type="date"
+                            name="pickup_date"
+                            class="form-control"
+                            value="{{ request.POST.pickup_date|default:'' }}"
+                        >
+
+                    </div>
+
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Delivery Date
+
+                        </label>
+
+
+                        <input
+                            type="date"
+                            name="delivery_date"
+                            class="form-control"
+                            value="{{ request.POST.delivery_date|default:'' }}"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DELIVERY CHARGE
+                     ================================================= -->
+
+                <div class="section-title">
+
+                    <i class="bi bi-cash-stack me-2"></i>
+
+                    Delivery Charge
+
+                </div>
+
+
+                <div class="delivery-charge-box">
+
+
+                    <!-- HEADER -->
+
+                    <div class="delivery-charge-header">
+
+                        <div class="delivery-charge-heading">
+
+                            <div class="delivery-charge-icon">
+
+                                <i class="bi bi-cash-stack"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h5>
+                                    Delivery Charge
+                                </h5>
+
+                                <p>
+                                    Automatically calculated from
+                                    the current SHATHIMART pricing rates
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="charge-status pending"
+                            id="chargeStatus"
+                        >
+
+                            <i class="bi bi-calculator"></i>
+
+                            Enter Weight
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="charge-amount-box">
+
+
+                        <div>
+
+                            <div class="charge-label">
+
+                                Current Delivery Charge
+
+                            </div>
+
+
+                            <div
+                                class="charge-amount"
+                                id="deliveryChargeDisplay"
+                            >
+
+                                Rs. 0.00
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="charge-description">
+
+                            <i class="bi bi-calculator-fill me-1"></i>
+
+                            The charge is automatically calculated
+                            based on the parcel weight. The amount
+                            cannot be manually changed by the customer.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         RATE TABLE
+                         ================================================= -->
+
+                    <div class="rate-table">
+
+                        <div class="rate-title">
+
+                            <i class="bi bi-list-check me-1"></i>
+
+                            Current SHATHIMART Delivery Rates
+
+                        </div>
+
+
+                        <div class="rate-row">
+
+                            <span class="rate-weight">
+                                Up to 1 kg
+                            </span>
+
+                            <span class="rate-price">
+                                Rs. {{ rates.up_to_1kg|floatformat:2 }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="rate-row">
+
+                            <span class="rate-weight">
+                                Above 1 kg – 3 kg
+                            </span>
+
+                            <span class="rate-price">
+                                Rs. {{ rates.up_to_3kg|floatformat:2 }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="rate-row">
+
+                            <span class="rate-weight">
+                                Above 3 kg – 5 kg
+                            </span>
+
+                            <span class="rate-price">
+                                Rs. {{ rates.up_to_5kg|floatformat:2 }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="rate-row">
+
+                            <span class="rate-weight">
+                                Above 5 kg
+                            </span>
+
+                            <span class="rate-price">
+                                Rs. {{ rates.above_5kg|floatformat:2 }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="rate-update-label">
+
+                            <i class="bi bi-info-circle-fill"></i>
+
+                            <span>
+                                These rates are set and managed by
+                                SHATHIMART administrators.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         NOTICE
+                         ================================================= -->
+
+                    <div class="charge-notice">
+
+                        <i class="bi bi-info-circle-fill"></i>
+
+                        <div>
+
+                            <strong>
+                                How does the delivery charge work?
+                            </strong>
+
+                            <br>
+
+                            Enter the parcel weight above and the
+                            charge will be calculated automatically
+                            using the current SHATHIMART rates.
+
+                            The same calculation is performed securely
+                            on the server when you submit the parcel.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     PAYMENT RULES
+                     ================================================= -->
+
+                <div class="section-title">
+
+                    <i class="bi bi-credit-card me-2"></i>
+
+                    Payment Information
+
+                </div>
+
+
+                <div class="payment-rules-box">
+
+
+                    <!-- HEADER -->
+
+                    <div class="payment-rules-header">
+
+                        <div class="payment-rules-icon">
+
+                            <i class="bi bi-wallet2"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h5>
+                                Payment Rules
+                            </h5>
+
+                            <p>
+                                Please read the payment process
+                                before creating your parcel.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAYMENT RULE CARDS -->
+
+                    <div class="row g-4">
+
+
+                        <!-- PICKUP -->
+
+                        <div class="col-md-6">
+
+                            <div class="payment-rule">
+
+                                <div class="payment-rule-icon">
+
+                                    <i class="bi bi-box-arrow-up"></i>
+
+                                </div>
+
+
+                                <h6>
+                                    When Your Parcel Is Picked Up
+                                </h6>
+
+
+                                <p>
+
+                                    Your parcel will be collected
+                                    by the assigned SHATHIMART
+                                    delivery staff. The delivery
+                                    charge is already calculated
+                                    from the current SHATHIMART
+                                    delivery rates.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DELIVERY -->
+
+                        <div class="col-md-6">
+
+                            <div class="payment-rule">
+
+                                <div class="payment-rule-icon">
+
+                                    <i class="bi bi-house-check"></i>
+
+                                </div>
+
+
+                                <h6>
+                                    When Your Parcel Is Delivered
+                                </h6>
+
+
+                                <p>
+
+                                    The receiver will receive the
+                                    parcel at the provided delivery
+                                    address. The delivery payment
+                                    status will be handled by
+                                    authorized SHATHIMART staff.
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PAYMENT PROCESS
+                         ================================================= -->
+
+                    <div class="payment-process">
+
+                        <div class="payment-process-title">
+
+                            <i class="bi bi-list-ol me-2"></i>
+
+                            Payment Process
+
+                        </div>
+
+
+                        <!-- STEP 1 -->
+
+                        <div class="payment-step">
+
+                            <div class="payment-step-number">
+                                1
+                            </div>
+
+
+                            <div class="payment-step-content">
+
+                                <strong>
+                                    Create Parcel
+                                </strong>
+
+                                <span>
+
+                                    Enter the parcel details and
+                                    weight. The delivery charge is
+                                    calculated automatically.
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STEP 2 -->
+
+                        <div class="payment-step">
+
+                            <div class="payment-step-number">
+                                2
+                            </div>
+
+
+                            <div class="payment-step-content">
+
+                                <strong>
+                                    Parcel Pickup
+                                </strong>
+
+                                <span>
+
+                                    The delivery staff picks up the
+                                    parcel. The payment remains
+                                    pending until handled by
+                                    authorized staff.
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STEP 3 -->
+
+                        <div class="payment-step">
+
+                            <div class="payment-step-number">
+                                3
+                            </div>
+
+
+                            <div class="payment-step-content">
+
+                                <strong>
+                                    Parcel In Transit
+                                </strong>
+
+                                <span>
+
+                                    The parcel is transported to the
+                                    receiver's destination while the
+                                    payment status is tracked by
+                                    SHATHIMART.
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STEP 4 -->
+
+                        <div class="payment-step">
+
+                            <div class="payment-step-number">
+                                4
+                            </div>
+
+
+                            <div class="payment-step-content">
+
+                                <strong>
+                                    Delivery to Receiver
+                                </strong>
+
+                                <span>
+
+                                    The receiver receives the parcel.
+                                    Authorized SHATHIMART staff can
+                                    update the payment status.
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =================================================
+                         FINAL NOTICE
+                         ================================================= -->
+
+                    <div class="payment-final-notice">
+
+                        <i class="bi bi-shield-check"></i>
+
+
+                        <div>
+
+                            <strong>
+                                Important Payment Notice
+                            </strong>
+
+                            <br>
+
+                            You do not need to select a payment method
+                            while creating the parcel. The system
+                            automatically records the payment as
+                            <strong>Cash on Delivery (COD)</strong>
+                            with a
+                            <strong>Pending</strong>
+                            status. Authorized SHATHIMART staff will
+                            update the payment status when appropriate.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     BUTTONS
+                     ================================================= -->
+
+                <div class="d-flex gap-3 justify-content-end form-buttons">
+
+
+                    <a
+                        href="{% url 'my_parcels' %}"
+                        class="btn-cancel"
+                    >
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="btn-swift"
+                    >
+
+                        <i class="bi bi-send me-2"></i>
+
+                        Create Parcel
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================
+     DELIVERY CHARGE JAVASCRIPT
+     
+     IMPORTANT:
+     These values come from the Django DeliveryChargeRate model.
+     
+     They are NOT hard-coded.
+     
+     The server still performs the final calculation using
+     parcels/utils.py.
+     ============================================================ -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    /* ============================================================
+       ELEMENTS
+       ============================================================ */
+
+    const weightInput = document.getElementById(
+        "weightInput"
+    );
+
+    const chargeDisplay = document.getElementById(
+        "deliveryChargeDisplay"
+    );
+
+    const chargeStatus = document.getElementById(
+        "chargeStatus"
+    );
+
+
+    /* ============================================================
+       ADMIN-CONFIGURED RATES
+       
+       These values are passed from Django:
+       
+       rates.up_to_1kg
+       rates.up_to_3kg
+       rates.up_to_5kg
+       rates.above_5kg
+       
+       Therefore, when the admin changes the rates from the
+       Delivery Charges page, the Create Parcel page automatically
+       uses the new values.
+       ============================================================ */
+
+    const rateUpTo1Kg = parseFloat(
+        "{{ rates.up_to_1kg|default:'0' }}"
+    );
+
+    const rateUpTo3Kg = parseFloat(
+        "{{ rates.up_to_3kg|default:'0' }}"
+    );
+
+    const rateUpTo5Kg = parseFloat(
+        "{{ rates.up_to_5kg|default:'0' }}"
+    );
+
+    const rateAbove5Kg = parseFloat(
+        "{{ rates.above_5kg|default:'0' }}"
+    );
+
+
+    /* ============================================================
+       FORMAT MONEY
+       ============================================================ */
+
+    function formatMoney(amount) {
+
+        return "Rs. " + amount.toFixed(2);
+
+    }
+
+
+    /* ============================================================
+       DELIVERY CHARGE CALCULATION
+       ============================================================ */
+
+    function calculateDeliveryCharge() {
+
+        const weight = parseFloat(
+            weightInput.value
+        );
+
+
+        /* ========================================================
+           INVALID / EMPTY WEIGHT
+           ======================================================== */
+
+        if (
+            isNaN(weight) ||
+            weight <= 0
+        ) {
+
+            chargeDisplay.textContent =
+                "Rs. 0.00";
+
+
+            chargeStatus.classList.add(
+                "pending"
+            );
+
+
+            chargeStatus.innerHTML =
+                '<i class="bi bi-calculator"></i> ' +
+                'Enter Weight';
+
+
+            return;
+
+        }
+
+
+        /* ========================================================
+           UP TO 1 KG
+           ======================================================== */
+
+        let charge;
+
+
+        if (weight <= 1) {
+
+            charge = rateUpTo1Kg;
+
+        }
+
+
+        /* ========================================================
+           ABOVE 1 KG TO 3 KG
+           ======================================================== */
+
+        else if (weight <= 3) {
+
+            charge = rateUpTo3Kg;
+
+        }
+
+
+        /* ========================================================
+           ABOVE 3 KG TO 5 KG
+           ======================================================== */
+
+        else if (weight <= 5) {
+
+            charge = rateUpTo5Kg;
+
+        }
+
+
+        /* ========================================================
+           ABOVE 5 KG
+           ======================================================== */
+
+        else {
+
+            charge = rateAbove5Kg;
+
+        }
+
+
+        /* ========================================================
+           DISPLAY AMOUNT
+           ======================================================== */
+
+        chargeDisplay.textContent =
+            formatMoney(charge);
+
+
+        /* ========================================================
+           UPDATE STATUS
+           ======================================================== */
+
+        chargeStatus.classList.remove(
+            "pending"
+        );
+
+
+        chargeStatus.innerHTML =
+            '<i class="bi bi-check-circle-fill"></i> ' +
+            'Charge Calculated';
+
+    }
+
+
+    /* ============================================================
+       WEIGHT INPUT EVENT
+       ============================================================ */
+
+    weightInput.addEventListener(
+        "input",
+        calculateDeliveryCharge
+    );
+
+
+    weightInput.addEventListener(
+        "change",
+        calculateDeliveryCharge
+    );
+
+
+    /* ============================================================
+       INITIALIZE
+       
+       If a user submits invalid data and Django returns the same
+       page, the entered weight will still show its calculated
+       charge.
+       ============================================================ */
+
+    calculateDeliveryCharge();
+
+});
+
+</script>
+
+
+{% endblock %}

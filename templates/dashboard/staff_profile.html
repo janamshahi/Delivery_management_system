@@ -1,0 +1,1074 @@
+{% extends "dashboard/staff_base.html" %}
+
+
+{% block title %}
+    My Profile | SHATHIMART
+{% endblock %}
+
+
+{% block staff_profile_active %}
+    active
+{% endblock %}
+
+
+{% block topbar_title %}
+    My Profile
+{% endblock %}
+
+
+{% block breadcrumb %}
+    <span>Dashboard</span>
+    <span class="breadcrumb-separator">/</span>
+    <span>My Profile</span>
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =========================================================
+       STAFF PROFILE
+    ========================================================= */
+
+    .staff-profile-page {
+        width: 100%;
+    }
+
+
+    /* =========================================================
+       PROFILE HEADER
+    ========================================================= */
+
+    .profile-header {
+        position: relative;
+        overflow: hidden;
+        background:
+            linear-gradient(
+                135deg,
+                #18212b 0%,
+                #263442 55%,
+                #344454 100%
+            );
+        border-radius: 22px;
+        padding: 30px;
+        margin-bottom: 22px;
+        color: #ffffff;
+        box-shadow: 0 12px 30px rgba(24, 33, 43, .10);
+    }
+
+    .profile-header::before {
+        content: "";
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.07);
+        right: -80px;
+        top: -120px;
+    }
+
+    .profile-header::after {
+        content: "";
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.05);
+        right: 90px;
+        bottom: -100px;
+    }
+
+    .profile-header-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+
+    /* =========================================================
+       PROFILE AVATAR
+    ========================================================= */
+
+    .profile-avatar {
+        width: 82px;
+        height: 82px;
+        border-radius: 22px;
+        background: rgba(255,255,255,.10);
+        border: 1px solid rgba(255,255,255,.16);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d9c39a;
+        font-size: 34px;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+
+    /* =========================================================
+       HEADER INFORMATION
+    ========================================================= */
+
+    .profile-header-info {
+        min-width: 0;
+    }
+
+    .profile-name {
+        font-family: "Playfair Display", serif;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.25;
+        margin: 0 0 6px;
+    }
+
+    .profile-username {
+        color: rgba(255,255,255,.65);
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .staff-role-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 50px;
+        background: rgba(176,141,87,.15);
+        border: 1px solid rgba(176,141,87,.28);
+        color: #dfc99f;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       MAIN GRID
+    ========================================================= */
+
+    .profile-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        gap: 22px;
+        align-items: start;
+    }
+
+    .profile-card {
+        background: #ffffff;
+        border: 1px solid #e6e8eb;
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+
+    /* =========================================================
+       CARD HEADER
+    ========================================================= */
+
+    .card-header-custom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 19px 21px;
+        border-bottom: 1px solid #eef0f2;
+    }
+
+    .card-header-title {
+        color: #18212b;
+        font-size: 16px;
+        font-weight: 750;
+        margin: 0;
+    }
+
+    .card-header-subtitle {
+        color: #9ca3af;
+        font-size: 11px;
+        margin: 4px 0 0;
+    }
+
+
+    /* =========================================================
+       PROFILE INFORMATION
+    ========================================================= */
+
+    .profile-info {
+        padding: 5px 0;
+    }
+
+    .info-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 17px 21px;
+        border-bottom: 1px solid #f0f1f3;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        background: #f2eee7;
+        color: #8f713f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
+    }
+
+    .info-content {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .info-label {
+        color: #9ca3af;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        margin-bottom: 4px;
+    }
+
+    .info-value {
+        color: #374151;
+        font-size: 12px;
+        font-weight: 650;
+        word-break: break-word;
+    }
+
+    .info-value.empty {
+        color: #b0b5bb;
+        font-weight: 500;
+    }
+
+
+    /* =========================================================
+       ACCOUNT STATUS
+    ========================================================= */
+
+    .status-section {
+        padding: 18px 20px;
+    }
+
+    .account-status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 13px 14px;
+        background: #f8faf9;
+        border: 1px solid #e6efea;
+        border-radius: 12px;
+    }
+
+    .account-status-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .status-active-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #16a34a;
+        box-shadow: 0 0 0 4px rgba(22,163,74,.10);
+    }
+
+    .status-text {
+        color: #374151;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status-active {
+        color: #15803d;
+        font-size: 10px;
+        font-weight: 750;
+    }
+
+
+    /* =========================================================
+       RIGHT SIDE CARDS
+    ========================================================= */
+
+    .side-card {
+        margin-bottom: 22px;
+    }
+
+    .side-card:last-child {
+        margin-bottom: 0;
+    }
+
+
+    /* =========================================================
+       ROLE CARD
+    ========================================================= */
+
+    .role-card-body {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .role-icon {
+        width: 62px;
+        height: 62px;
+        margin: 0 auto 14px;
+        border-radius: 18px;
+        background: #f2eee7;
+        color: #8f713f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+    }
+
+    .role-title {
+        color: #18212b;
+        font-size: 15px;
+        font-weight: 750;
+        margin-bottom: 6px;
+    }
+
+    .role-description {
+        color: #9ca3af;
+        font-size: 10px;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+
+    /* =========================================================
+       QUICK ACTIONS
+    ========================================================= */
+
+    .quick-actions {
+        padding: 11px;
+    }
+
+    .quick-action {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px;
+        border-radius: 11px;
+        color: #374151;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+    .quick-action:hover {
+        background: #faf8f4;
+        color: #8f713f;
+    }
+
+    .quick-action-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #f2eee7;
+        color: #8f713f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 15px;
+    }
+
+    .quick-action-title {
+        color: #374151;
+        font-size: 11px;
+        font-weight: 750;
+    }
+
+    .quick-action:hover .quick-action-title {
+        color: #8f713f;
+    }
+
+    .quick-action-description {
+        color: #9ca3af;
+        font-size: 9px;
+        margin-top: 2px;
+    }
+
+
+    /* =========================================================
+       EDIT PROFILE BUTTON
+    ========================================================= */
+
+    .profile-footer {
+        padding: 18px 21px;
+        border-top: 1px solid #eef0f2;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .edit-profile-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 9px 15px;
+        border-radius: 9px;
+        background: #b08d57;
+        border: 1px solid #b08d57;
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+    .edit-profile-btn:hover {
+        background: #967545;
+        border-color: #967545;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 1100px) {
+
+        .profile-grid {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @media (max-width: 767px) {
+
+        .profile-header {
+            padding: 23px;
+            border-radius: 17px;
+        }
+
+        .profile-header-content {
+            align-items: flex-start;
+        }
+
+        .profile-avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 17px;
+            font-size: 27px;
+        }
+
+        .profile-name {
+            font-size: 24px;
+        }
+
+        .profile-username {
+            font-size: 11px;
+        }
+
+        .card-header-custom {
+            padding: 16px;
+        }
+
+        .info-row {
+            padding: 15px 16px;
+        }
+
+        .profile-footer {
+            padding: 16px;
+        }
+
+    }
+
+
+    @media (max-width: 480px) {
+
+        .profile-header {
+            padding: 20px;
+        }
+
+        .profile-header-content {
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .profile-avatar {
+            width: 64px;
+            height: 64px;
+        }
+
+        .profile-name {
+            font-size: 22px;
+        }
+
+        .info-row {
+            align-items: flex-start;
+            gap: 11px;
+        }
+
+        .info-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+        }
+
+        .profile-footer {
+            justify-content: stretch;
+        }
+
+        .edit-profile-btn {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="staff-profile-page">
+
+
+    <!-- =====================================================
+         PROFILE HEADER
+    ====================================================== -->
+
+    <div class="profile-header">
+
+        <div class="profile-header-content">
+
+
+            <!-- AVATAR -->
+
+            <div class="profile-avatar">
+
+                <i class="bi bi-person"></i>
+
+            </div>
+
+
+            <!-- USER INFORMATION -->
+
+            <div class="profile-header-info">
+
+                <h1 class="profile-name">
+
+                    {% if request.user.get_full_name %}
+
+                        {{ request.user.get_full_name }}
+
+                    {% else %}
+
+                        {{ request.user.username }}
+
+                    {% endif %}
+
+                </h1>
+
+
+                <div class="profile-username">
+
+                    @{{ request.user.username }}
+
+                </div>
+
+
+                <div class="staff-role-badge">
+
+                    <i class="bi bi-truck"></i>
+
+                    Delivery Staff
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         PROFILE GRID
+    ====================================================== -->
+
+    <div class="profile-grid">
+
+
+        <!-- =================================================
+             PROFILE INFORMATION
+        ================================================== -->
+
+        <div class="profile-card">
+
+
+            <div class="card-header-custom">
+
+                <div>
+
+                    <h2 class="card-header-title">
+                        Personal Information
+                    </h2>
+
+                    <p class="card-header-subtitle">
+                        Your account and contact information
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="profile-info">
+
+
+                <!-- FULL NAME -->
+
+                <div class="info-row">
+
+                    <div class="info-icon">
+
+                        <i class="bi bi-person"></i>
+
+                    </div>
+
+                    <div class="info-content">
+
+                        <div class="info-label">
+                            Full Name
+                        </div>
+
+                        <div class="info-value">
+
+                            {% if request.user.get_full_name %}
+
+                                {{ request.user.get_full_name }}
+
+                            {% else %}
+
+                                <span class="empty">
+                                    Name not provided
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- USERNAME -->
+
+                <div class="info-row">
+
+                    <div class="info-icon">
+
+                        <i class="bi bi-person-badge"></i>
+
+                    </div>
+
+                    <div class="info-content">
+
+                        <div class="info-label">
+                            Username
+                        </div>
+
+                        <div class="info-value">
+                            {{ request.user.username }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- EMAIL -->
+
+                <div class="info-row">
+
+                    <div class="info-icon">
+
+                        <i class="bi bi-envelope"></i>
+
+                    </div>
+
+                    <div class="info-content">
+
+                        <div class="info-label">
+                            Email Address
+                        </div>
+
+                        <div class="info-value">
+
+                            {% if request.user.email %}
+
+                                {{ request.user.email }}
+
+                            {% else %}
+
+                                <span class="empty">
+                                    Email not provided
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- PHONE -->
+
+                <div class="info-row">
+
+                    <div class="info-icon">
+
+                        <i class="bi bi-telephone"></i>
+
+                    </div>
+
+                    <div class="info-content">
+
+                        <div class="info-label">
+                            Phone Number
+                        </div>
+
+                        <div class="info-value">
+
+                            {% if profile.phone %}
+
+                                {{ profile.phone }}
+
+                            {% else %}
+
+                                <span class="empty">
+                                    Phone number not provided
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ADDRESS -->
+
+                <div class="info-row">
+
+                    <div class="info-icon">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                    </div>
+
+                    <div class="info-content">
+
+                        <div class="info-label">
+                            Address
+                        </div>
+
+                        <div class="info-value">
+
+                            {% if profile.address %}
+
+                                {{ profile.address }}
+
+                            {% else %}
+
+                                <span class="empty">
+                                    Address not provided
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ROLE -->
+
+                <div class="info-row">
+
+                    <div class="info-icon">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+                    <div class="info-content">
+
+                        <div class="info-label">
+                            Account Role
+                        </div>
+
+                        <div class="info-value">
+                            Delivery Staff
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- ACCOUNT STATUS -->
+
+            <div class="status-section">
+
+                <div class="account-status">
+
+                    <div class="account-status-left">
+
+                        <span class="status-active-dot"></span>
+
+                        <span class="status-text">
+                            Account Status
+                        </span>
+
+                    </div>
+
+                    <span class="status-active">
+                        {% if request.user.is_active %}
+                            Active
+                        {% else %}
+                            Inactive
+                        {% endif %}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EDIT BUTTON -->
+
+            <div class="profile-footer">
+
+            
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             RIGHT SIDEBAR
+        ================================================== -->
+
+        <div>
+
+
+            <!-- =================================================
+                 ROLE INFORMATION
+            ================================================== -->
+
+            <div class="profile-card side-card">
+
+
+                <div class="card-header-custom">
+
+                    <div>
+
+                        <h2 class="card-header-title">
+                            Staff Account
+                        </h2>
+
+                        <p class="card-header-subtitle">
+                            Your SHATHIMART role
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="role-card-body">
+
+                    <div class="role-icon">
+
+                        <i class="bi bi-truck"></i>
+
+                    </div>
+
+                    <div class="role-title">
+                        Delivery Staff
+                    </div>
+
+                    <p class="role-description">
+
+                        You are responsible for managing assigned
+                        parcels and updating their delivery progress.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 QUICK ACTIONS
+            ================================================== -->
+
+            <div class="profile-card side-card">
+
+
+                <div class="card-header-custom">
+
+                    <div>
+
+                        <h2 class="card-header-title">
+                            Quick Actions
+                        </h2>
+
+                        <p class="card-header-subtitle">
+                            Useful staff tools
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="quick-actions">
+
+
+                    <!-- DASHBOARD -->
+
+                    <a
+                        href="{% url 'staff_dashboard' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            <i class="bi bi-speedometer2"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-action-title">
+                                Dashboard
+                            </div>
+
+                            <div class="quick-action-description">
+                                Return to staff dashboard
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+
+                    <!-- MY PARCELS -->
+
+                    <a
+                        href="{% url 'staff_parcels' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            <i class="bi bi-box-seam"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-action-title">
+                                My Parcels
+                            </div>
+
+                            <div class="quick-action-description">
+                                View assigned parcels
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+
+
+                    <!-- LOGOUT -->
+
+                    <a
+                        href="{% url 'logout' %}"
+                        class="quick-action"
+                    >
+
+                        <div class="quick-action-icon">
+
+                            <i class="bi bi-box-arrow-right"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="quick-action-title">
+                                Logout
+                            </div>
+
+                            <div class="quick-action-description">
+                                Sign out of your account
+                            </div>
+
+                        </div>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

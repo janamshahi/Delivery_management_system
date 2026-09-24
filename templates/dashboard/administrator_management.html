@@ -1,0 +1,655 @@
+{% extends "dashboard/admin_base.html" %}
+
+{% block title %}
+SHATHIMART | Administrators
+{% endblock %}
+
+
+{% block administrators_active %}
+active
+{% endblock %}
+
+
+{% block topbar_title %}
+Administrators
+{% endblock %}
+
+
+{% block breadcrumb %}
+Administrators
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    /* ======================================================
+       PAGE HEADER
+    ====================================================== */
+
+    .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .content-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: #252525;
+    }
+
+    .content-subtitle {
+        margin: 0;
+        color: #777;
+        font-size: 14px;
+    }
+
+
+    /* ======================================================
+       ADMIN CARD
+    ====================================================== */
+
+    .admin-card {
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid #eeeeee;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+
+    .admin-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 22px;
+        border-bottom: 1px solid #eeeeee;
+    }
+
+
+    .admin-card-title {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        color: #292929;
+    }
+
+
+    /* ======================================================
+       TABLE
+    ====================================================== */
+
+    .admin-table {
+        margin: 0;
+        vertical-align: middle;
+    }
+
+
+    .admin-table thead th {
+        background: #f7f7f2;
+        color: #555;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 15px 18px;
+        border-bottom: 1px solid #e8e8e8;
+        white-space: nowrap;
+    }
+
+
+    .admin-table tbody td {
+        padding: 17px 18px;
+        border-bottom: 1px solid #eeeeee;
+        color: #555;
+        font-size: 14px;
+    }
+
+
+    .admin-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+
+    .admin-table tbody tr {
+        transition: 0.2s ease;
+    }
+
+
+    .admin-table tbody tr:hover {
+        background: #fafaf7;
+    }
+
+
+    /* ======================================================
+       ADMIN NAME
+    ====================================================== */
+
+    .administrator-name {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 190px;
+    }
+
+
+    .administrator-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #b8b63b;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        font-weight: 700;
+        flex-shrink: 0;
+    }
+
+
+    .administrator-name-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+
+    .administrator-name-text strong {
+        color: #252525;
+        font-size: 14px;
+    }
+
+
+    .administrator-role {
+        color: #999;
+        font-size: 11px;
+    }
+
+
+    /* ======================================================
+       USERNAME
+    ====================================================== */
+
+    .username-text {
+        color: #444;
+        font-weight: 500;
+    }
+
+
+    /* ======================================================
+       EMAIL
+    ====================================================== */
+
+    .email-text {
+        color: #666;
+    }
+
+
+    /* ======================================================
+       PHONE
+    ====================================================== */
+
+    .phone-text {
+        color: #666;
+    }
+
+
+    /* ======================================================
+       JOINED
+    ====================================================== */
+
+    .joined-text {
+        color: #777;
+        white-space: nowrap;
+    }
+
+
+    /* ======================================================
+       STATUS
+    ====================================================== */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        background: #eaf7ed;
+        color: #27833b;
+    }
+
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        background: #35a84a;
+        border-radius: 50%;
+    }
+
+
+    /* ======================================================
+       VIEW BUTTON
+    ====================================================== */
+
+    .view-profile-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+
+        padding: 8px 13px;
+
+        border-radius: 8px;
+
+        background: #b8b63b;
+        color: #ffffff;
+
+        text-decoration: none;
+
+        font-size: 12px;
+        font-weight: 600;
+
+        transition: all 0.2s ease;
+
+        white-space: nowrap;
+    }
+
+
+    .view-profile-btn:hover {
+        background: #9f9d2f;
+        color: #ffffff;
+        transform: translateY(-1px);
+    }
+
+
+    /* ======================================================
+       EMPTY STATE
+    ====================================================== */
+
+    .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+
+    .empty-icon {
+        width: 65px;
+        height: 65px;
+        margin: 0 auto 15px;
+
+        border-radius: 50%;
+
+        background: #f7f7f2;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #b8b63b;
+
+        font-size: 28px;
+    }
+
+
+    .empty-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+
+    .empty-text {
+        font-size: 13px;
+        color: #888;
+        margin: 0;
+    }
+
+
+    /* ======================================================
+       RESPONSIVE
+    ====================================================== */
+
+    @media (max-width: 900px) {
+
+        .admin-table {
+            min-width: 950px;
+        }
+
+    }
+
+
+    @media (max-width: 576px) {
+
+        .content-title {
+            font-size: 23px;
+        }
+
+        .content-subtitle {
+            font-size: 13px;
+        }
+
+        .admin-card-header {
+            padding: 16px;
+        }
+
+    }
+
+</style>
+
+
+<!-- ======================================================
+     PAGE HEADER
+====================================================== -->
+
+<div class="content-header">
+
+    <div>
+
+        <h1 class="content-title">
+            Administrators
+        </h1>
+
+        <p class="content-subtitle">
+            Manage SHATHIMART administrator accounts.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     ADMINISTRATOR CARD
+====================================================== -->
+
+<div class="admin-card">
+
+
+    <!-- CARD HEADER -->
+
+    <div class="admin-card-header">
+
+        <h5 class="admin-card-title">
+
+            Administrator List
+
+        </h5>
+
+    </div>
+
+
+    <!-- ==================================================
+         TABLE
+    ================================================== -->
+
+    <div class="table-responsive">
+
+        <table class="table admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Name
+                    </th>
+
+                    <th>
+                        Username
+                    </th>
+
+                    <th>
+                        Email
+                    </th>
+
+                    <th>
+                        Phone
+                    </th>
+
+                    <th>
+                        Joined
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for administrator in administrators %}
+
+                <tr>
+
+
+                    <!-- NAME -->
+
+                    <td>
+
+                        <div class="administrator-name">
+
+
+                            <!-- AVATAR -->
+
+                            <div class="administrator-avatar">
+
+                                {% if administrator.user.first_name %}
+
+                                    {{ administrator.user.first_name|first|upper }}
+
+                                {% else %}
+
+                                    {{ administrator.user.username|first|upper }}
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- NAME -->
+
+                            <div class="administrator-name-text">
+
+                                <strong>
+
+                                    {% if administrator.user.get_full_name %}
+
+                                        {{ administrator.user.get_full_name }}
+
+                                    {% else %}
+
+                                        {{ administrator.user.username }}
+
+                                    {% endif %}
+
+                                </strong>
+
+
+                                <span class="administrator-role">
+
+                                    Administrator
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- USERNAME -->
+
+                    <td>
+
+                        <span class="username-text">
+
+                            {{ administrator.user.username }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- EMAIL -->
+
+                    <td>
+
+                        <span class="email-text">
+
+                            {{ administrator.user.email|default:"—" }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- PHONE -->
+
+                    <td>
+
+                        <span class="phone-text">
+
+                            {{ administrator.phone|default:"—" }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- JOINED -->
+
+                    <td>
+
+                        <span class="joined-text">
+
+                            {{ administrator.created_at|date:"M d, Y" }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        {% if administrator.user.is_active %}
+
+                            <span class="status-badge">
+
+                                <span class="status-dot"></span>
+
+                                Active
+
+                            </span>
+
+                        {% else %}
+
+                            <span
+                                class="status-badge"
+                                style="
+                                    background:#fceaea;
+                                    color:#c0392b;
+                                "
+                            >
+
+                                <span
+                                    class="status-dot"
+                                    style="background:#c0392b;"
+                                ></span>
+
+                                Inactive
+
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTION -->
+
+                    <td>
+
+                        <a
+                            href="{% url 'administrator_profile' administrator.user.id %}"
+                            class="view-profile-btn"
+                        >
+
+                            <i class="bi bi-eye"></i>
+
+                            View Profile
+
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+                {% empty %}
+
+
+                <!-- EMPTY -->
+
+                <tr>
+
+                    <td colspan="7">
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+
+                                <i class="bi bi-people"></i>
+
+                            </div>
+
+
+                            <div class="empty-title">
+
+                                No Administrators Found
+
+                            </div>
+
+
+                            <p class="empty-text">
+
+                                There are currently no administrator accounts.
+
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

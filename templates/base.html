@@ -1,0 +1,2387 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="SHATHIMART Delivery Management System - Reliable parcel delivery, tracking and shipment management."
+    >
+
+    <meta
+        name="theme-color"
+        content="#18212b"
+    >
+
+    <title>
+        {% block title %}
+            SHATHIMART | Delivery Management System
+        {% endblock %}
+    </title>
+
+
+    <!-- =====================================================
+         GOOGLE FONTS
+    ====================================================== -->
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         BOOTSTRAP 5
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         BOOTSTRAP ICONS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <style>
+
+        :root {
+
+            --primary: #b08d57;
+            --primary-dark: #8f713f;
+            --primary-light: #d9c39a;
+
+            --dark: #18212b;
+            --dark-soft: #263442;
+            --dark-hover: #314252;
+
+            --light: #f7f7f2;
+            --white: #ffffff;
+
+            --text: #263238;
+            --muted: #6b7280;
+
+            --border: #e5e7eb;
+
+            --success: #198754;
+            --warning: #f59e0b;
+            --danger: #dc3545;
+            --info: #0dcaf0;
+
+            --shadow-sm:
+                0 4px 12px rgba(24, 33, 43, 0.06);
+
+            --shadow:
+                0 10px 30px rgba(24, 33, 43, 0.10);
+
+            --transition:
+                all .25s ease;
+
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            padding-top: 74px;
+
+            font-family: "DM Sans", sans-serif;
+
+            background: var(--light);
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+            line-height: 1.6;
+
+        }
+
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+
+        button,
+        input,
+        select,
+        textarea {
+            font-family: inherit;
+        }
+
+
+        ::selection {
+
+            background: var(--primary);
+
+            color: var(--white);
+
+        }
+
+
+        /* =====================================================
+           SCROLLBAR
+        ====================================================== */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+
+        ::-webkit-scrollbar-track {
+            background: #eeeeea;
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+
+            background: var(--primary);
+
+            border-radius: 20px;
+
+        }
+
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+
+        /* =====================================================
+           FIXED NAVBAR
+        ====================================================== */
+
+        .main-navbar {
+
+            background: var(--dark);
+
+            height: 74px;
+
+            min-height: 74px;
+
+            display: flex;
+
+            align-items: center;
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            width: 100%;
+
+            z-index: 1050;
+
+            box-shadow:
+                0 2px 15px rgba(0, 0, 0, .15);
+
+            transition:
+                box-shadow .25s ease;
+
+        }
+
+
+        .main-navbar.scrolled {
+
+            box-shadow:
+                0 5px 25px rgba(0, 0, 0, .22);
+
+        }
+
+
+        /* =====================================================
+           BRAND
+        ====================================================== */
+
+        .brand {
+
+            font-family: "Playfair Display", serif;
+
+            color: var(--white);
+
+            font-size: 1.55rem;
+
+            font-weight: 700;
+
+            letter-spacing: .3px;
+
+            white-space: nowrap;
+
+            transition: var(--transition);
+
+        }
+
+
+        .brand span {
+            color: var(--primary);
+        }
+
+
+        .brand:hover {
+            color: var(--white);
+        }
+
+
+        /* =====================================================
+           NAVIGATION LINKS
+        ====================================================== */
+
+        .nav-link-custom {
+
+            color: rgba(255, 255, 255, .78);
+
+            font-weight: 500;
+
+            margin-left: 22px;
+
+            padding: 8px 2px;
+
+            position: relative;
+
+            transition: var(--transition);
+
+        }
+
+
+        .nav-link-custom::after {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            bottom: 0;
+
+            width: 0;
+
+            height: 2px;
+
+            background: var(--primary);
+
+            border-radius: 5px;
+
+            transition: width .25s ease;
+
+        }
+
+
+        .nav-link-custom:hover {
+
+            color: var(--primary);
+
+        }
+
+
+        .nav-link-custom:hover::after {
+
+            width: 100%;
+
+        }
+
+
+        .nav-link-custom i {
+
+            font-size: .95rem;
+
+        }
+
+
+        /* =====================================================
+           NOTIFICATION
+        ====================================================== */
+
+        .notification-wrapper {
+
+            position: relative;
+
+            margin-left: 22px;
+
+        }
+
+
+        .notification-button {
+
+            position: relative;
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(255, 255, 255, .18);
+
+            background: rgba(255, 255, 255, .06);
+
+            color: rgba(255, 255, 255, .85);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            cursor: pointer;
+
+            transition: var(--transition);
+
+        }
+
+
+        .notification-button:hover {
+
+            background: rgba(176, 141, 87, .18);
+
+            border-color: var(--primary);
+
+            color: var(--primary);
+
+        }
+
+
+        .notification-button i {
+            font-size: 1.1rem;
+        }
+
+
+        .notification-badge {
+
+            position: absolute;
+
+            top: -3px;
+
+            right: -3px;
+
+            min-width: 19px;
+
+            height: 19px;
+
+            padding: 0 5px;
+
+            border-radius: 20px;
+
+            background: var(--danger);
+
+            color: #ffffff;
+
+            border: 2px solid var(--dark);
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            line-height: 1;
+
+        }
+
+
+        /* =====================================================
+           NOTIFICATION DROPDOWN
+        ====================================================== */
+
+        .notification-menu {
+
+            position: absolute;
+
+            top: calc(100% + 12px);
+
+            right: 0;
+
+            width: 360px;
+
+            max-width: calc(100vw - 30px);
+
+            background: var(--white);
+
+            border-radius: 14px;
+
+            border: 1px solid var(--border);
+
+            box-shadow:
+                0 15px 45px rgba(0, 0, 0, .18);
+
+            overflow: hidden;
+
+            display: none;
+
+            z-index: 1100;
+
+        }
+
+
+        .notification-menu.show {
+
+            display: block;
+
+            animation:
+                notificationDrop .18s ease;
+
+        }
+
+
+        @keyframes notificationDrop {
+
+            from {
+
+                opacity: 0;
+
+                transform: translateY(-7px);
+
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+
+        .notification-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 15px 17px;
+
+            border-bottom: 1px solid var(--border);
+
+        }
+
+
+        .notification-header h6 {
+
+            margin: 0;
+
+            color: var(--dark);
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+        }
+
+
+        .notification-header span {
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+        }
+
+
+        .notification-list {
+
+            max-height: 370px;
+
+            overflow-y: auto;
+
+        }
+
+
+        .notification-item {
+
+            display: flex;
+
+            gap: 12px;
+
+            padding: 14px 16px;
+
+            border-bottom: 1px solid #f0f0f0;
+
+            color: var(--text);
+
+            transition: background .2s ease;
+
+        }
+
+
+        .notification-item:hover {
+            background: #faf9f5;
+        }
+
+
+        .notification-item.unread {
+            background: #fffaf1;
+        }
+
+
+        .notification-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            min-width: 38px;
+
+            border-radius: 50%;
+
+            background: rgba(176, 141, 87, .13);
+
+            color: var(--primary);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        .notification-content {
+
+            min-width: 0;
+
+            flex: 1;
+
+        }
+
+
+        .notification-title {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 2px;
+
+        }
+
+
+        .notification-title strong {
+
+            color: var(--dark);
+
+            font-size: 13px;
+
+        }
+
+
+        .unread-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            min-width: 7px;
+
+            border-radius: 50%;
+
+            background: var(--danger);
+
+        }
+
+
+        .notification-message {
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.5;
+
+            display: -webkit-box;
+
+            -webkit-line-clamp: 2;
+
+            -webkit-box-orient: vertical;
+
+            overflow: hidden;
+
+        }
+
+
+        .notification-time {
+
+            color: #9ca3af;
+
+            font-size: 10px;
+
+            margin-top: 4px;
+
+        }
+
+
+        .notification-empty {
+
+            padding: 35px 20px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+        }
+
+
+        .notification-empty i {
+
+            font-size: 28px;
+
+            color: var(--primary);
+
+            display: block;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .notification-footer {
+
+            padding: 11px 16px;
+
+            border-top: 1px solid var(--border);
+
+            text-align: center;
+
+        }
+
+
+        .notification-footer a {
+
+            color: var(--primary-dark);
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+        }
+
+
+        .notification-footer a:hover {
+            color: var(--primary);
+        }
+
+
+        /* =====================================================
+           GOLD BUTTON
+        ====================================================== */
+
+        .btn-gold {
+
+            background: var(--primary);
+
+            border: 1px solid var(--primary);
+
+            color: var(--white);
+
+            font-weight: 600;
+
+            padding: 10px 20px;
+
+            border-radius: 8px;
+
+            transition: var(--transition);
+
+            box-shadow:
+                0 4px 12px rgba(176, 141, 87, .18);
+
+        }
+
+
+        .btn-gold:hover {
+
+            background: var(--primary-dark);
+
+            border-color: var(--primary-dark);
+
+            color: var(--white);
+
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 7px 18px rgba(176, 141, 87, .25);
+
+        }
+
+
+        .btn-gold:focus {
+
+            box-shadow:
+                0 0 0 .2rem rgba(176, 141, 87, .25);
+
+        }
+
+
+        /* =====================================================
+           OUTLINE BUTTON
+        ====================================================== */
+
+        .btn-outline-light-custom {
+
+            border: 1px solid rgba(255, 255, 255, .35);
+
+            color: var(--white);
+
+            padding: 9px 18px;
+
+            border-radius: 8px;
+
+            transition: var(--transition);
+
+        }
+
+
+        .btn-outline-light-custom:hover {
+
+            background: var(--white);
+
+            color: var(--dark);
+
+            border-color: var(--white);
+
+        }
+
+
+        /* =====================================================
+           NAVBAR TOGGLER
+        ====================================================== */
+
+        .navbar-toggler {
+
+            border: 1px solid rgba(255, 255, 255, .25);
+
+            padding: 7px 10px;
+
+            border-radius: 8px;
+
+        }
+
+
+        .navbar-toggler:focus {
+
+            box-shadow:
+                0 0 0 .2rem rgba(176, 141, 87, .25);
+
+        }
+
+
+        .navbar-toggler-icon {
+
+            background-image:
+
+                url(
+                    "data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255,255,255,0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"
+                );
+
+        }
+
+
+        /* =====================================================
+           MAIN CONTENT
+        ====================================================== */
+
+        main {
+
+            min-height: 400px;
+
+        }
+
+
+        /* =====================================================
+           FLASH MESSAGE CONTAINER
+        ====================================================== */
+
+        .message-container {
+
+            position: fixed;
+
+            top: 90px;
+
+            right: 20px;
+
+            z-index: 9999;
+
+            width:
+                min(420px, calc(100% - 40px));
+
+        }
+
+
+        .message-container .alert {
+
+            border-radius: 12px;
+
+            border: 1px solid transparent;
+
+            padding: 14px 16px;
+
+            margin-bottom: 12px;
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, .10);
+
+        }
+
+
+        .message-container .alert-success {
+
+            border-color:
+                rgba(25, 135, 84, .15);
+
+        }
+
+
+        .message-container .alert-danger {
+
+            border-color:
+                rgba(220, 53, 69, .15);
+
+        }
+
+
+        .message-container .alert-warning {
+
+            border-color:
+                rgba(245, 158, 11, .15);
+
+        }
+
+
+        .message-container .alert-info {
+
+            border-color:
+                rgba(13, 202, 240, .15);
+
+        }
+
+
+        .message-icon {
+
+            width: 30px;
+
+            height: 30px;
+
+            min-width: 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: rgba(0, 0, 0, .05);
+
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        .main-footer {
+
+            background: var(--dark);
+
+            color: rgba(255, 255, 255, .70);
+
+            padding: 55px 0 25px;
+
+            margin-top: 80px;
+
+        }
+
+
+        .footer-brand {
+            display: inline-block;
+        }
+
+
+        .footer-title {
+
+            color: var(--white);
+
+            font-weight: 700;
+
+            margin-bottom: 16px;
+
+            font-size: 1rem;
+
+        }
+
+
+        .footer-description {
+
+            max-width: 520px;
+
+            line-height: 1.8;
+
+            color: rgba(255, 255, 255, .65);
+
+        }
+
+
+        .footer-link {
+
+            display: block;
+
+            color: rgba(255, 255, 255, .65);
+
+            margin-bottom: 9px;
+
+            transition: var(--transition);
+
+        }
+
+
+        .footer-link:hover {
+
+            color: var(--primary);
+
+            transform: translateX(2px);
+
+        }
+
+
+        .footer-contact {
+
+            color: rgba(255, 255, 255, .70);
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .footer-contact i {
+
+            color: var(--primary);
+
+            width: 20px;
+
+        }
+
+
+        .footer-bottom {
+
+            border-top:
+                1px solid rgba(255, 255, 255, .10);
+
+            margin-top: 35px;
+
+            padding-top: 20px;
+
+            font-size: .9rem;
+
+            color: rgba(255, 255, 255, .55);
+
+        }
+
+
+        .footer-bottom strong {
+
+            color: rgba(255, 255, 255, .75);
+
+        }
+
+
+        /* =====================================================
+           BACK TO TOP
+        ====================================================== */
+
+        .back-to-top {
+
+            position: fixed;
+
+            right: 22px;
+
+            bottom: 22px;
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: var(--primary);
+
+            color: var(--white);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform: translateY(10px);
+
+            transition: var(--transition);
+
+            z-index: 1020;
+
+            box-shadow:
+                0 6px 18px rgba(0, 0, 0, .18);
+
+        }
+
+
+        .back-to-top.show {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform: translateY(0);
+
+        }
+
+
+        .back-to-top:hover {
+
+            background: var(--primary-dark);
+
+            transform: translateY(-2px);
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 991px) {
+
+            .main-navbar {
+
+                height: auto;
+
+                min-height: 74px;
+
+            }
+
+
+            .navbar-collapse {
+
+                padding: 15px 0 12px;
+
+                background: var(--dark);
+
+            }
+
+
+            .nav-link-custom {
+
+                width: 100%;
+
+                margin-left: 0;
+
+                margin-top: 5px;
+
+                padding: 10px 0;
+
+            }
+
+
+            .nav-link-custom::after {
+
+                display: none;
+
+            }
+
+
+            .nav-link-custom:hover {
+
+                padding-left: 5px;
+
+            }
+
+
+            .notification-wrapper {
+
+                width: 100%;
+
+                margin-left: 0;
+
+                margin-top: 8px;
+
+            }
+
+
+            .notification-button {
+
+                width: 100%;
+
+                height: 44px;
+
+                border-radius: 8px;
+
+                justify-content: flex-start;
+
+                padding-left: 15px;
+
+                gap: 10px;
+
+            }
+
+
+            .notification-button::after {
+
+                content: "Notifications";
+
+                font-family: "DM Sans", sans-serif;
+
+                font-size: 14px;
+
+                font-weight: 500;
+
+            }
+
+
+            .notification-badge {
+
+                left: 30px;
+
+                right: auto;
+
+                top: 4px;
+
+            }
+
+
+            .notification-menu {
+
+                position: static;
+
+                width: 100%;
+
+                max-width: 100%;
+
+                margin-top: 8px;
+
+                box-shadow: none;
+
+            }
+
+
+            .btn-gold {
+
+                margin-top: 12px;
+
+            }
+
+        }
+
+
+        @media (max-width: 576px) {
+
+            body {
+
+                padding-top: 74px;
+
+            }
+
+
+            .brand {
+
+                font-size: 1.35rem;
+
+            }
+
+
+            .message-container {
+
+                top: 85px;
+
+                right: 10px;
+
+                width:
+                    calc(100% - 20px);
+
+            }
+
+
+            .main-footer {
+
+                padding-top: 40px;
+
+            }
+
+
+            .footer-bottom {
+
+                font-size: .82rem;
+
+            }
+
+
+            .back-to-top {
+
+                right: 15px;
+
+                bottom: 15px;
+
+                width: 40px;
+
+                height: 40px;
+
+            }
+
+        }
+
+
+        @media (prefers-reduced-motion: reduce) {
+
+            html {
+                scroll-behavior: auto;
+            }
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration: .01ms !important;
+
+                animation-iteration-count: 1 !important;
+
+                transition-duration: .01ms !important;
+
+                scroll-behavior: auto !important;
+
+            }
+
+        }
+
+    </style>
+
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     NAVBAR
+========================================================= -->
+
+<nav
+    class="navbar navbar-expand-lg main-navbar"
+    id="mainNavbar"
+>
+
+    <div class="container">
+
+
+        <!-- BRAND -->
+
+        <a
+            href="{% url 'home' %}"
+            class="brand"
+            aria-label="SHATHIMART Home"
+        >
+
+            SHATHI<span>MART</span>
+
+        </a>
+
+
+        <!-- MOBILE MENU -->
+
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarContent"
+            aria-controls="navbarContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <!-- NAVIGATION -->
+
+        <div
+            class="collapse navbar-collapse"
+            id="navbarContent"
+        >
+
+            <div
+                class="
+                    ms-auto
+                    d-flex
+                    align-items-lg-center
+                    flex-column
+                    flex-lg-row
+                "
+            >
+
+
+                <!-- HOME -->
+
+                <a
+                    href="{% url 'home' %}"
+                    class="nav-link-custom"
+                >
+
+                    <i class="bi bi-house-door me-1"></i>
+
+                    Home
+
+                </a>
+
+
+                <!-- ABOUT -->
+
+                <a
+                    href="{% url 'about' %}"
+                    class="nav-link-custom"
+                >
+
+                    <i class="bi bi-info-circle me-1"></i>
+
+                    About
+
+                </a>
+
+
+                {% if user.is_authenticated %}
+
+
+                    <!-- TRACK PARCEL -->
+
+                    <a
+                        href="{% url 'track_parcel' %}"
+                        class="nav-link-custom"
+                    >
+
+                        <i class="bi bi-geo-alt me-1"></i>
+
+                        Track Parcel
+
+                    </a>
+
+
+                    <!-- DASHBOARD -->
+
+                    <a
+                        href="{% url 'dashboard' %}"
+                        class="nav-link-custom"
+                    >
+
+                        <i class="bi bi-grid me-1"></i>
+
+                        Dashboard
+
+                    </a>
+
+
+                    <!-- NOTIFICATIONS -->
+
+                    <div class="notification-wrapper">
+
+                        <button
+                            type="button"
+                            class="notification-button"
+                            id="notificationButton"
+                            aria-label="Notifications"
+                            aria-expanded="false"
+                        >
+
+                            <i class="bi bi-bell"></i>
+
+
+                            {% if unread_notifications_count > 0 %}
+
+                                <span
+                                    class="notification-badge"
+                                >
+
+                                    {% if unread_notifications_count > 99 %}
+                                        99+
+                                    {% else %}
+                                        {{ unread_notifications_count }}
+                                    {% endif %}
+
+                                </span>
+
+                            {% endif %}
+
+                        </button>
+
+
+                        <!-- NOTIFICATION DROPDOWN -->
+
+                        <div
+                            class="notification-menu"
+                            id="notificationMenu"
+                        >
+
+                            <div class="notification-header">
+
+                                <h6>
+                                    Notifications
+                                </h6>
+
+                                <span>
+
+                                    {% if unread_notifications_count > 0 %}
+
+                                        {{ unread_notifications_count }}
+                                        unread
+
+                                    {% else %}
+
+                                        All caught up
+
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="notification-list">
+
+                                {% for notification in navbar_notifications %}
+
+                                    <a
+                                        href="{% if notification.parcel %}{% url 'track_parcel' %}?tracking_number={{ notification.parcel.tracking_number }}{% else %}#{% endif %}"
+                                        class="notification-item {% if not notification.is_read %}unread{% endif %}"
+                                    >
+
+                                        <div class="notification-icon">
+
+                                            <i class="bi bi-bell"></i>
+
+                                        </div>
+
+
+                                        <div class="notification-content">
+
+                                            <div class="notification-title">
+
+                                                <strong>
+                                                    {{ notification.title }}
+                                                </strong>
+
+
+                                                {% if not notification.is_read %}
+
+                                                    <span
+                                                        class="unread-dot"
+                                                    ></span>
+
+                                                {% endif %}
+
+                                            </div>
+
+
+                                            <div class="notification-message">
+
+                                                {{ notification.message }}
+
+                                            </div>
+
+
+                                            <div class="notification-time">
+
+                                                {{ notification.created_at|timesince }}
+                                                ago
+
+                                            </div>
+
+                                        </div>
+
+                                    </a>
+
+                                {% empty %}
+
+                                    <div class="notification-empty">
+
+                                        <i class="bi bi-bell-slash"></i>
+
+                                        <div>
+                                            No notifications
+                                        </div>
+
+                                        <small>
+                                            You're all caught up.
+                                        </small>
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+
+                            <div class="notification-footer">
+
+                                <a
+                                    href="{% url 'notification_list' %}"
+                                >
+
+                                    View all notifications
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PROFILE -->
+
+                    <a
+                        href="{% url 'profile' %}"
+                        class="nav-link-custom"
+                    >
+
+                        <i class="bi bi-person-circle me-1"></i>
+
+                        Profile
+
+                    </a>
+
+
+                    <!-- LOGOUT -->
+
+                    <a
+                        href="{% url 'logout' %}"
+                        class="nav-link-custom"
+                    >
+
+                        <i class="bi bi-box-arrow-right me-1"></i>
+
+                        Logout
+
+                    </a>
+
+
+                {% else %}
+
+
+                    <!-- LOGIN -->
+
+                    <a
+                        href="{% url 'login' %}"
+                        class="nav-link-custom"
+                    >
+
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+
+                        Login
+
+                    </a>
+
+
+                    <!-- REGISTER -->
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="btn btn-gold ms-lg-4 mt-3 mt-lg-0"
+                    >
+
+                        <i class="bi bi-person-plus me-1"></i>
+
+                        Get Started
+
+                    </a>
+
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     FLASH MESSAGES
+========================================================= -->
+
+{% if messages %}
+
+<div
+    class="message-container"
+    aria-live="polite"
+    aria-atomic="true"
+>
+
+    {% for message in messages %}
+
+        <div
+            class="
+                alert
+                {% if message.tags == 'success' %}
+                    alert-success
+                {% elif message.tags == 'error' %}
+                    alert-danger
+                {% elif message.tags == 'warning' %}
+                    alert-warning
+                {% elif message.tags == 'info' %}
+                    alert-info
+                {% else %}
+                    alert-info
+                {% endif %}
+                alert-dismissible
+                fade
+                show
+            "
+            role="alert"
+        >
+
+            <div class="d-flex align-items-center pe-3">
+
+                <div class="message-icon me-2">
+
+                    {% if message.tags == 'success' %}
+
+                        <i class="bi bi-check-circle"></i>
+
+                    {% elif message.tags == 'error' %}
+
+                        <i class="bi bi-exclamation-circle"></i>
+
+                    {% elif message.tags == 'warning' %}
+
+                        <i class="bi bi-exclamation-triangle"></i>
+
+                    {% else %}
+
+                        <i class="bi bi-info-circle"></i>
+
+                    {% endif %}
+
+                </div>
+
+
+                <span>
+                    {{ message }}
+                </span>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+            ></button>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main id="main-content">
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="main-footer">
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <div class="col-lg-5">
+
+                <a
+                    href="{% url 'home' %}"
+                    class="brand footer-brand mb-3"
+                >
+
+                    SHATHI<span>MART</span>
+
+                </a>
+
+
+                <p class="footer-description mb-0">
+
+                    A reliable and modern parcel delivery
+                    management system designed to make
+                    shipping simple, transparent and efficient.
+
+                </p>
+
+            </div>
+
+
+            <div class="col-lg-2 col-md-4">
+
+                <div class="footer-title">
+                    Quick Links
+                </div>
+
+
+                <a
+                    href="{% url 'home' %}"
+                    class="footer-link"
+                >
+
+                    <i class="bi bi-chevron-right me-1"></i>
+
+                    Home
+
+                </a>
+
+
+                <!-- FOOTER ABOUT -->
+
+                <a
+                    href="{% url 'home' %}#about"
+                    class="footer-link"
+                >
+
+                    <i class="bi bi-chevron-right me-1"></i>
+
+                    About
+
+                </a>
+
+
+                {% if user.is_authenticated %}
+
+                    <a
+                        href="{% url 'track_parcel' %}"
+                        class="footer-link"
+                    >
+
+                        <i class="bi bi-chevron-right me-1"></i>
+
+                        Track Parcel
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'dashboard' %}"
+                        class="footer-link"
+                    >
+
+                        <i class="bi bi-chevron-right me-1"></i>
+
+                        Dashboard
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'profile' %}"
+                        class="footer-link"
+                    >
+
+                        <i class="bi bi-chevron-right me-1"></i>
+
+                        Profile
+
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{% url 'login' %}"
+                        class="footer-link"
+                    >
+
+                        <i class="bi bi-chevron-right me-1"></i>
+
+                        Login
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="footer-link"
+                    >
+
+                        <i class="bi bi-chevron-right me-1"></i>
+
+                        Register
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="col-lg-2 col-md-4">
+
+                <div class="footer-title">
+                    Services
+                </div>
+
+
+                <span class="footer-link">
+
+                    <i class="bi bi-box-seam me-1"></i>
+
+                    Parcel Delivery
+
+                </span>
+
+
+                <span class="footer-link">
+
+                    <i class="bi bi-geo-alt me-1"></i>
+
+                    Parcel Tracking
+
+                </span>
+
+
+                <span class="footer-link">
+
+                    <i class="bi bi-house-check me-1"></i>
+
+                    Door-to-Door Delivery
+
+                </span>
+
+
+                <span class="footer-link">
+
+                    <i class="bi bi-truck me-1"></i>
+
+                    Shipment Management
+
+                </span>
+
+            </div>
+
+
+            <div class="col-lg-3 col-md-4">
+
+                <div class="footer-title">
+                    Contact
+                </div>
+
+
+                <div class="footer-contact">
+
+                    <i class="bi bi-envelope me-2"></i>
+
+                    support@shathimart.com
+
+                </div>
+
+
+                <div class="footer-contact">
+
+                    <i class="bi bi-telephone me-2"></i>
+
+                    +977 9800000000
+
+                </div>
+
+
+                <div class="footer-contact">
+
+                    <i class="bi bi-geo-alt me-2"></i>
+
+                    Nepal
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom text-center">
+
+            © {% now "Y" %}
+
+            <strong>SHATHIMART</strong>.
+
+            All rights reserved.
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================================================
+     BACK TO TOP
+========================================================= -->
+
+<button
+    type="button"
+    class="back-to-top"
+    id="backToTop"
+    aria-label="Back to top"
+>
+
+    <i class="bi bi-arrow-up"></i>
+
+</button>
+
+
+
+<!-- =========================================================
+     BOOTSTRAP JS
+========================================================= -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
+
+
+
+<!-- =========================================================
+     GLOBAL JAVASCRIPT
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =================================================
+           AUTO DISMISS MESSAGES
+        ================================================= */
+
+        const alerts =
+            document.querySelectorAll(
+                ".message-container .alert"
+            );
+
+
+        alerts.forEach(function (alert) {
+
+            setTimeout(function () {
+
+                if (
+                    typeof bootstrap !== "undefined"
+                ) {
+
+                    const alertInstance =
+                        bootstrap.Alert.getOrCreateInstance(
+                            alert
+                        );
+
+                    alertInstance.close();
+
+                } else {
+
+                    alert.remove();
+
+                }
+
+            }, 5000);
+
+        });
+
+
+
+        /* =================================================
+           NAVBAR SHADOW ON SCROLL
+        ================================================= */
+
+        const mainNavbar =
+            document.getElementById(
+                "mainNavbar"
+            );
+
+
+        function updateNavbar() {
+
+            if (!mainNavbar) {
+                return;
+            }
+
+
+            if (window.scrollY > 10) {
+
+                mainNavbar.classList.add(
+                    "scrolled"
+                );
+
+            } else {
+
+                mainNavbar.classList.remove(
+                    "scrolled"
+                );
+
+            }
+
+        }
+
+
+        window.addEventListener(
+            "scroll",
+            updateNavbar
+        );
+
+
+        updateNavbar();
+
+
+
+        /* =================================================
+           NOTIFICATION DROPDOWN
+        ================================================= */
+
+        const notificationButton =
+            document.getElementById(
+                "notificationButton"
+            );
+
+
+        const notificationMenu =
+            document.getElementById(
+                "notificationMenu"
+            );
+
+
+        if (
+            notificationButton &&
+            notificationMenu
+        ) {
+
+
+            notificationButton.addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+
+                    const isOpen =
+                        notificationMenu.classList.toggle(
+                            "show"
+                        );
+
+
+                    notificationButton.setAttribute(
+                        "aria-expanded",
+                        isOpen ? "true" : "false"
+                    );
+
+                }
+            );
+
+
+            notificationMenu.addEventListener(
+                "click",
+                function (event) {
+
+                    event.stopPropagation();
+
+                }
+            );
+
+
+            document.addEventListener(
+                "click",
+                function () {
+
+                    notificationMenu.classList.remove(
+                        "show"
+                    );
+
+
+                    notificationButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
+            );
+
+        }
+
+
+
+        /* =================================================
+           BACK TO TOP
+        ================================================= */
+
+        const backToTop =
+            document.getElementById(
+                "backToTop"
+            );
+
+
+        if (backToTop) {
+
+            window.addEventListener(
+                "scroll",
+                function () {
+
+                    if (
+                        window.scrollY > 350
+                    ) {
+
+                        backToTop.classList.add(
+                            "show"
+                        );
+
+                    } else {
+
+                        backToTop.classList.remove(
+                            "show"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            backToTop.addEventListener(
+                "click",
+                function () {
+
+                    window.scrollTo({
+
+                        top: 0,
+
+                        behavior: "smooth"
+
+                    });
+
+                }
+            );
+
+        }
+
+
+
+        /* =================================================
+           CLOSE MOBILE NAVBAR
+        ================================================= */
+
+        const navbarContent =
+            document.getElementById(
+                "navbarContent"
+            );
+
+
+        const navLinks =
+            navbarContent
+                ? navbarContent.querySelectorAll(
+                    "a"
+                )
+                : [];
+
+
+        navLinks.forEach(
+            function (link) {
+
+                link.addEventListener(
+                    "click",
+                    function () {
+
+                        if (
+                            window.innerWidth < 992 &&
+                            navbarContent.classList.contains(
+                                "show"
+                            )
+                        ) {
+
+                            const collapse =
+                                bootstrap.Collapse
+                                    .getOrCreateInstance(
+                                        navbarContent
+                                    );
+
+
+                            collapse.hide();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+
+
+        /* =================================================
+           PREVENT DOUBLE SUBMISSION
+        ================================================= */
+
+        document
+            .querySelectorAll("form")
+            .forEach(
+                function (form) {
+
+                    form.addEventListener(
+                        "submit",
+                        function () {
+
+                            const submitButtons =
+                                form.querySelectorAll(
+                                    'button[type="submit"], input[type="submit"]'
+                                );
+
+
+                            submitButtons.forEach(
+                                function (button) {
+
+                                    if (
+                                        button.dataset
+                                            .noDisable === "true"
+                                    ) {
+
+                                        return;
+
+                                    }
+
+
+                                    button.disabled = true;
+
+
+                                    if (
+                                        button.tagName ===
+                                        "BUTTON"
+                                    ) {
+
+                                        const originalText =
+                                            button.innerHTML;
+
+
+                                        button.dataset
+                                            .originalText =
+                                            originalText;
+
+
+                                        button.innerHTML =
+                                            `
+                                            <span
+                                                class="spinner-border spinner-border-sm me-2"
+                                                role="status"
+                                                aria-hidden="true"
+                                            ></span>
+                                            Processing...
+                                            `;
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+    }
+);
+
+</script>
+
+
+
+{% block extra_js %}
+{% endblock %}
+
+
+</body>
+
+</html>

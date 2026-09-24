@@ -1,0 +1,883 @@
+{% extends "base.html" %}
+
+{% block title %}
+    SHATHIMART | Reliable Parcel Delivery
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    min-height: 650px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(24, 33, 43, .96) 0%,
+            rgba(24, 33, 43, .78) 45%,
+            rgba(24, 33, 43, .25) 100%
+        ),
+        url("https://images.unsplash.com/photo-1586528116493-da8b0e6a1fbd?auto=format&fit=crop&w=1800&q=85")
+        center / cover no-repeat;
+
+    display: flex;
+    align-items: center;
+}
+
+.hero-content {
+    max-width: 720px;
+    color: white;
+}
+
+.hero-label {
+    display: inline-block;
+
+    color: #e3c18c;
+
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    font-family: "Playfair Display", serif;
+
+    font-size: clamp(3rem, 6vw, 5.2rem);
+
+    line-height: 1.05;
+
+    margin-bottom: 25px;
+}
+
+.hero h1 span {
+    color: #d0a968;
+}
+
+.hero p {
+    font-size: 1.15rem;
+
+    color: rgba(255, 255, 255, .82);
+
+    max-width: 600px;
+
+    line-height: 1.8;
+}
+
+.hero-buttons {
+    margin-top: 35px;
+}
+
+.hero-buttons .btn {
+    padding: 13px 25px;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   TRACKING
+========================================================= */
+
+.tracking-wrapper {
+    margin-top: -70px;
+
+    position: relative;
+
+    z-index: 5;
+}
+
+.tracking-box {
+    background: white;
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, .12);
+}
+
+.tracking-title {
+    font-family: "Playfair Display", serif;
+
+    font-size: 1.5rem;
+
+    font-weight: 700;
+}
+
+.tracking-input {
+    height: 52px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+}
+
+.tracking-input:focus {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 .2rem rgba(176, 141, 87, .15);
+}
+
+
+/* =========================================================
+   GENERAL SECTIONS
+========================================================= */
+
+.section {
+    padding: 90px 0;
+}
+
+.section-label {
+    color: var(--primary);
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 2px;
+
+    font-size: .85rem;
+}
+
+.section-title {
+    font-family: "Playfair Display", serif;
+
+    font-size: 2.8rem;
+
+    font-weight: 700;
+
+    margin-top: 10px;
+}
+
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+.service-card {
+    background: white;
+
+    border-radius: 15px;
+
+    padding: 35px 28px;
+
+    height: 100%;
+
+    border: 1px solid #eee;
+
+    transition: .3s;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, .08);
+}
+
+.service-icon {
+    width: 62px;
+    height: 62px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(176, 141, 87, .12);
+
+    color: var(--primary);
+
+    border-radius: 14px;
+
+    font-size: 1.7rem;
+
+    margin-bottom: 22px;
+}
+
+.service-card h4 {
+    font-weight: 700;
+
+    margin-bottom: 12px;
+}
+
+.service-card p {
+    color: var(--muted);
+
+    line-height: 1.7;
+
+    margin-bottom: 0;
+}
+
+
+/* =========================================================
+   HOW IT WORKS
+========================================================= */
+
+.process-card {
+    position: relative;
+
+    padding: 10px;
+}
+
+.process-number {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+
+    background: var(--dark);
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+
+    font-size: 1.2rem;
+
+    margin-bottom: 20px;
+}
+
+.process-card h4 {
+    margin-bottom: 12px;
+}
+
+.process-card p {
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats-section {
+    background: var(--dark);
+
+    color: white;
+
+    padding: 70px 0;
+}
+
+.stat-number {
+    font-family: "Playfair Display", serif;
+
+    font-size: 3rem;
+
+    color: #d0a968;
+
+    font-weight: 700;
+}
+
+.stat-label {
+    color: rgba(255, 255, 255, .65);
+
+    font-size: .95rem;
+}
+
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta-box {
+    background:
+        linear-gradient(
+            135deg,
+            #18212b,
+            #2d3b49
+        );
+
+    border-radius: 20px;
+
+    padding: 65px;
+
+    color: white;
+}
+
+.cta-box h2 {
+    font-family: "Playfair Display", serif;
+
+    font-size: 2.8rem;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .hero {
+        min-height: 570px;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .hero-buttons {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 12px;
+
+        align-items: flex-start;
+    }
+
+    .hero-buttons .btn {
+        margin-right: 0 !important;
+    }
+
+    .tracking-wrapper {
+        margin-top: -35px;
+    }
+
+    .section {
+        padding: 65px 0;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+    }
+
+    .cta-box {
+        padding: 40px 25px;
+    }
+
+    .cta-box h2 {
+        font-size: 2.2rem;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+    <div class="container">
+
+        <div class="hero-content">
+
+            <div class="hero-label">
+                SHATHIMART DELIVERY SYSTEM
+            </div>
+
+            <h1>
+                Delivering More Than
+                <span>Parcels.</span>
+            </h1>
+
+            <p>
+                <strong>SHATHIMART</strong> makes parcel delivery
+                simple, transparent and reliable. Create shipments,
+                track deliveries and stay informed every step
+                of the journey.
+            </p>
+
+            <div class="hero-buttons">
+
+                {% if user.is_authenticated %}
+
+                    <a
+                        href="{% url 'create_parcel' %}"
+                        class="btn btn-gold me-2"
+                    >
+                        <i class="bi bi-box-seam me-2"></i>
+                        Send a Parcel
+                    </a>
+
+                    <a
+                        href="{% url 'track_parcel' %}"
+                        class="btn btn-outline-light-custom"
+                    >
+                        <i class="bi bi-search me-2"></i>
+                        Track Parcel
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="btn btn-gold me-2"
+                    >
+                        <i class="bi bi-person-plus me-2"></i>
+                        Get Started
+                        <i class="bi bi-arrow-right ms-2"></i>
+                    </a>
+
+                    <a
+                        href="{% url 'track_parcel' %}"
+                        class="btn btn-outline-light-custom"
+                    >
+                        <i class="bi bi-search me-2"></i>
+                        Track a Parcel
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRACKING BOX
+========================================================= -->
+
+<section class="tracking-wrapper">
+
+    <div class="container">
+
+        <div class="tracking-box">
+
+            <div class="row align-items-center g-3">
+
+                <!-- TRACKING TITLE -->
+
+                <div class="col-lg-4">
+
+                    <div class="tracking-title">
+                        Track Your Parcel
+                    </div>
+
+                    <div class="text-muted small mt-1">
+                        Enter your tracking number to see
+                        the latest delivery status.
+                    </div>
+
+                </div>
+
+
+                <!-- TRACKING FORM -->
+
+                <div class="col-lg-8">
+
+                    <form
+                        method="POST"
+                        action="{% url 'track_parcel' %}"
+                        class="row g-2"
+                    >
+
+                        {% csrf_token %}
+
+                        <div class="col-md-8">
+
+                            <label
+                                for="tracking_number"
+                                class="visually-hidden"
+                            >
+                                Tracking Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="tracking_number"
+                                name="tracking_number"
+                                class="form-control tracking-input"
+                                placeholder="e.g. TRK202609230001"
+                                autocomplete="off"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-gold w-100"
+                                style="height:52px;"
+                            >
+                                <i class="bi bi-search me-2"></i>
+                                Track Now
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SERVICES
+========================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <div class="section-label">
+                SHATHIMART SERVICES
+            </div>
+
+            <h2 class="section-title">
+                Everything You Need for Delivery
+            </h2>
+
+            <p class="text-muted mt-3">
+                A complete digital solution for managing
+                your parcels from pickup to delivery.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            <!-- SERVICE 1 -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
+
+                    <h4>
+                        Easy Parcel Booking
+                    </h4>
+
+                    <p>
+                        Create a parcel delivery request
+                        quickly with sender and receiver
+                        information in one simple form.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SERVICE 2 -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+
+                    <h4>
+                        Parcel Tracking
+                    </h4>
+
+                    <p>
+                        Follow your parcel through every
+                        delivery stage using a unique
+                        tracking number.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SERVICE 3 -->
+
+            <div class="col-lg-4 col-md-6">
+
+                <div class="service-card">
+
+                    <div class="service-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+
+                    <h4>
+                        Secure Delivery
+                    </h4>
+
+                    <p>
+                        Keep your shipment information
+                        organized and accessible through
+                        your secure SHATHIMART account.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     HOW IT WORKS
+========================================================= -->
+
+<section class="section bg-white">
+
+    <div class="container">
+
+        <div class="text-center mb-5">
+
+            <div class="section-label">
+                HOW SHATHIMART WORKS
+            </div>
+
+            <h2 class="section-title">
+                Simple From Start to Finish
+            </h2>
+
+        </div>
+
+
+        <div class="row g-5">
+
+            <!-- STEP 1 -->
+
+            <div class="col-md-4">
+
+                <div class="process-card">
+
+                    <div class="process-number">
+                        01
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Create Your Parcel
+                    </h4>
+
+                    <p class="text-muted">
+                        Enter sender, receiver and parcel
+                        details and create your shipment.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 2 -->
+
+            <div class="col-md-4">
+
+                <div class="process-card">
+
+                    <div class="process-number">
+                        02
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Track Your Shipment
+                    </h4>
+
+                    <p class="text-muted">
+                        Use your unique tracking number to
+                        monitor your parcel journey.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 3 -->
+
+            <div class="col-md-4">
+
+                <div class="process-card">
+
+                    <div class="process-number">
+                        03
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Receive Your Parcel
+                    </h4>
+
+                    <p class="text-muted">
+                        Get your parcel delivered safely
+                        and receive the final delivery update.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     STATS
+========================================================= -->
+
+<section class="stats-section">
+
+    <div class="container">
+
+        <div class="row text-center g-4">
+
+            <!-- STAT 1 -->
+
+            <div class="col-6 col-md-3">
+
+                <div class="stat-number">
+                    1K+
+                </div>
+
+                <div class="stat-label">
+                    Parcels Managed
+                </div>
+
+            </div>
+
+
+            <!-- STAT 2 -->
+
+            <div class="col-6 col-md-3">
+
+                <div class="stat-number">
+                    500+
+                </div>
+
+                <div class="stat-label">
+                    Happy Customers
+                </div>
+
+            </div>
+
+
+            <!-- STAT 3 -->
+
+            <div class="col-6 col-md-3">
+
+                <div class="stat-number">
+                    98%
+                </div>
+
+                <div class="stat-label">
+                    Successful Deliveries
+                </div>
+
+            </div>
+
+
+            <!-- STAT 4 -->
+
+            <div class="col-6 col-md-3">
+
+                <div class="stat-number">
+                    24/7
+                </div>
+
+                <div class="stat-label">
+                    Tracking Access
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="cta-box text-center">
+
+            <h2>
+                Ready to Send Your Parcel?
+            </h2>
+
+            <p class="mt-3 mb-4 text-white-50">
+                Join <strong>SHATHIMART</strong> and experience
+                a simpler way to manage your deliveries.
+            </p>
+
+
+            {% if user.is_authenticated %}
+
+                <a
+                    href="{% url 'create_parcel' %}"
+                    class="btn btn-gold"
+                >
+                    <i class="bi bi-box-seam me-2"></i>
+                    Send a Parcel
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+
+            {% else %}
+
+                <a
+                    href="{% url 'register' %}"
+                    class="btn btn-gold"
+                >
+                    <i class="bi bi-person-plus me-2"></i>
+                    Create Free Account
+                    <i class="bi bi-arrow-right ms-2"></i>
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

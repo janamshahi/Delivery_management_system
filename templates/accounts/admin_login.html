@@ -1,0 +1,600 @@
+{% extends "base.html" %}
+
+{% block title %}Administrator Login | SwiftShip{% endblock %}
+
+{% block content %}
+
+<style>
+    :root {
+        --primary: #b08d57;
+        --primary-dark: #8f713f;
+        --dark: #18212b;
+        --dark-2: #222d38;
+        --light: #f7f7f2;
+        --muted: #8993a0;
+        --border: rgba(255,255,255,0.10);
+    }
+
+    .admin-login-page {
+        min-height: calc(100vh - 150px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 20px;
+        background:
+            radial-gradient(
+                circle at top right,
+                rgba(176,141,87,0.18),
+                transparent 35%
+            ),
+            linear-gradient(
+                135deg,
+                #101820,
+                #18212b 55%,
+                #202b36
+            );
+    }
+
+    .admin-login-wrapper {
+        width: 100%;
+        max-width: 1050px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: #ffffff;
+        border-radius: 26px;
+        overflow: hidden;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    }
+
+    /* ======================================================
+       LEFT SIDE
+    ====================================================== */
+
+    .admin-brand-panel {
+        position: relative;
+        padding: 55px;
+        background:
+            linear-gradient(
+                145deg,
+                rgba(24,33,43,0.98),
+                rgba(35,47,59,0.98)
+            );
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .admin-brand-panel::before {
+        content: "";
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border: 1px solid rgba(176,141,87,0.25);
+        border-radius: 50%;
+        top: -100px;
+        right: -100px;
+    }
+
+    .admin-brand-panel::after {
+        content: "";
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        border: 1px solid rgba(176,141,87,0.15);
+        border-radius: 50%;
+        bottom: -80px;
+        left: -80px;
+    }
+
+    .admin-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .admin-icon {
+        width: 76px;
+        height: 76px;
+        border-radius: 20px;
+        background: rgba(176,141,87,0.14);
+        border: 1px solid rgba(176,141,87,0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-size: 34px;
+        margin-bottom: 28px;
+    }
+
+    .admin-brand {
+        font-family: "Playfair Display", serif;
+        font-size: 38px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .admin-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin-bottom: 20px;
+    }
+
+    .admin-label span {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--primary);
+    }
+
+    .admin-heading {
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.3;
+        margin-bottom: 18px;
+    }
+
+    .admin-description {
+        color: #b8c0c9;
+        font-size: 15px;
+        line-height: 1.8;
+        max-width: 430px;
+        margin-bottom: 35px;
+    }
+
+    .security-item {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        color: #d8dde2;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+
+    .security-item i {
+        color: var(--primary);
+        font-size: 18px;
+    }
+
+    /* ======================================================
+       RIGHT SIDE
+    ====================================================== */
+
+    .admin-form-panel {
+        padding: 55px;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .form-top {
+        margin-bottom: 32px;
+    }
+
+    .form-top h2 {
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 8px;
+    }
+
+    .form-top p {
+        color: var(--muted);
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .form-group {
+        margin-bottom: 21px;
+    }
+
+    .form-label-custom {
+        display: block;
+        color: var(--dark);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 9px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-wrapper > i {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary);
+        font-size: 17px;
+        z-index: 2;
+    }
+
+    .admin-input {
+        width: 100%;
+        height: 52px;
+        padding: 0 45px;
+        border: 1px solid #e1e5e9;
+        border-radius: 12px;
+        background: #fafafa;
+        color: var(--dark);
+        font-size: 14px;
+        outline: none;
+        transition: 0.25s ease;
+        box-sizing: border-box;
+    }
+
+    .admin-input:focus {
+        border-color: var(--primary);
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(176,141,87,0.10);
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        color: #8993a0;
+        cursor: pointer;
+        font-size: 17px;
+    }
+
+    .password-toggle:hover {
+        color: var(--primary);
+    }
+
+    .admin-submit {
+        width: 100%;
+        height: 53px;
+        border: none;
+        border-radius: 12px;
+        background: var(--dark);
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        cursor: pointer;
+        transition: 0.25s ease;
+        margin-top: 8px;
+    }
+
+    .admin-submit:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(143,113,63,0.25);
+    }
+
+    .admin-footer {
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid #edf0f2;
+        text-align: center;
+    }
+
+    .admin-footer p {
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .admin-footer a {
+        color: var(--primary-dark);
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .admin-footer a:hover {
+        text-decoration: underline;
+    }
+
+    .customer-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    /* ======================================================
+       FORM ERRORS
+    ====================================================== */
+
+    .error-message {
+        margin-top: 7px;
+        color: #dc3545;
+        font-size: 12px;
+    }
+
+    /* ======================================================
+       RESPONSIVE
+    ====================================================== */
+
+    @media (max-width: 850px) {
+
+        .admin-login-wrapper {
+            grid-template-columns: 1fr;
+            max-width: 600px;
+        }
+
+        .admin-brand-panel {
+            padding: 40px;
+        }
+
+        .admin-form-panel {
+            padding: 40px;
+        }
+
+        .admin-description {
+            max-width: none;
+        }
+    }
+
+    @media (max-width: 576px) {
+
+        .admin-login-page {
+            padding: 25px 15px;
+        }
+
+        .admin-brand-panel {
+            padding: 32px 25px;
+        }
+
+        .admin-form-panel {
+            padding: 32px 25px;
+        }
+
+        .admin-brand {
+            font-size: 32px;
+        }
+
+        .admin-heading {
+            font-size: 23px;
+        }
+
+        .form-top h2 {
+            font-size: 26px;
+        }
+    }
+</style>
+
+
+<div class="admin-login-page">
+
+    <div class="admin-login-wrapper">
+
+        <!-- ==================================================
+             LEFT BRAND PANEL
+        ================================================== -->
+
+        <div class="admin-brand-panel">
+
+            <div class="admin-content">
+
+                <div class="admin-icon">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+
+                <div class="admin-label">
+                    <span></span>
+                    Secure Administration
+                </div>
+
+                <div class="admin-brand">
+                    SHATHIMART
+                </div>
+
+                <h1 class="admin-heading">
+                    Administrator Control Center
+                </h1>
+
+                <p class="admin-description">
+                    Manage parcels, customers, delivery operations,
+                    tracking activities, and the complete SHATHIMART
+                    delivery system from one secure dashboard.
+                </p>
+
+                <div class="security-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Secure administrator authentication</span>
+                </div>
+
+                <div class="security-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Complete parcel management</span>
+                </div>
+
+                <div class="security-item">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Real-time delivery monitoring</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             LOGIN FORM
+        ================================================== -->
+
+        <div class="admin-form-panel">
+
+            <div class="form-top">
+
+                <h2>
+                    Administrator Login
+                </h2>
+
+                <p>
+                    Sign in to access the SwiftShip administration panel.
+                </p>
+
+            </div>
+
+
+            <form method="POST" action="{% url 'admin_login' %}">
+
+                {% csrf_token %}
+
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label
+                        for="admin_username"
+                        class="form-label-custom"
+                    >
+                        Username
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-person-badge"></i>
+
+                        <input
+                            type="text"
+                            id="admin_username"
+                            name="username"
+                            class="admin-input"
+                            placeholder="Enter administrator username"
+                            autocomplete="username"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label
+                        for="admin_password"
+                        class="form-label-custom"
+                    >
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input
+                            type="password"
+                            id="admin_password"
+                            name="password"
+                            class="admin-input"
+                            placeholder="Enter administrator password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="toggleAdminPassword()"
+                            aria-label="Show password"
+                        >
+                            <i
+                                class="bi bi-eye"
+                                id="adminPasswordIcon"
+                            ></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="admin-submit"
+                >
+
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                    Sign In as Administrator
+
+                </button>
+
+            </form>
+
+
+            <!-- FOOTER -->
+
+            <div class="admin-footer">
+
+                <p>
+                    Are you a customer?
+                </p>
+
+                <a
+                    href="{% url 'login' %}"
+                    class="customer-link"
+                >
+                    <i class="bi bi-person"></i>
+                    Customer Login
+                </a>
+
+                <span class="mx-2 text-muted">•</span>
+
+                <a
+                    href="{% url 'staff_login' %}"
+                >
+                    Delivery Staff Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function toggleAdminPassword() {
+
+    const passwordInput =
+        document.getElementById("admin_password");
+
+    const passwordIcon =
+        document.getElementById("adminPasswordIcon");
+
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+        passwordIcon.classList.remove("bi-eye");
+
+        passwordIcon.classList.add("bi-eye-slash");
+
+    } else {
+
+        passwordInput.type = "password";
+
+        passwordIcon.classList.remove("bi-eye-slash");
+
+        passwordIcon.classList.add("bi-eye");
+
+    }
+}
+
+</script>
+
+{% endblock %}

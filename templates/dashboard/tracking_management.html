@@ -1,0 +1,718 @@
+{% extends "dashboard/admin_base.html" %}
+
+
+{% block title %}
+    SHATHIMART | Tracking
+{% endblock %}
+
+
+{% block tracking_active %}
+    active
+{% endblock %}
+
+
+{% block topbar_title %}
+    Tracking
+{% endblock %}
+
+
+{% block breadcrumb %}
+    Tracking
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+
+    .tracking-header {
+        margin-bottom: 25px;
+    }
+
+    .tracking-header h1 {
+        font-size: 25px;
+        font-weight: 700;
+        color: var(--dark);
+        margin-bottom: 5px;
+    }
+
+    .tracking-header p {
+        color: var(--muted);
+        font-size: 13px;
+        margin: 0;
+    }
+
+    .tracking-summary {
+        border: 1px solid var(--border);
+        background: var(--white);
+        border-radius: 14px;
+        padding: 20px;
+        height: 100%;
+    }
+
+    .summary-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(176,141,87,.12);
+        color: var(--primary-dark);
+        font-size: 20px;
+    }
+
+    .summary-label {
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .6px;
+    }
+
+    .summary-number {
+        color: var(--dark);
+        font-size: 27px;
+        font-weight: 700;
+        margin-top: 2px;
+    }
+
+    .tracking-table-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .tracking-table-header {
+        padding: 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .tracking-table-title {
+        color: var(--dark);
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .tracking-table-subtitle {
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: 4px;
+    }
+
+    .tracking-table th {
+        background: #fafaf8;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        white-space: nowrap;
+    }
+
+    .tracking-table td {
+        color: var(--text);
+        font-size: 12px;
+        vertical-align: middle;
+    }
+
+    .tracking-number {
+        color: var(--dark);
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .tracking-number i {
+        color: var(--primary);
+    }
+
+    .customer-name {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--dark);
+    }
+
+    .customer-email {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .current-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 6px 9px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-pending {
+        background: rgba(108,117,125,.12);
+        color: #6c757d;
+    }
+
+    .status-pickup_requested {
+        background: rgba(255,193,7,.13);
+        color: #9a7200;
+    }
+
+    .status-assigned {
+        background: rgba(13,110,253,.12);
+        color: #0d6efd;
+    }
+
+    .status-picked_up {
+        background: rgba(111,66,193,.12);
+        color: #6f42c1;
+    }
+
+    .status-in_transit {
+        background: rgba(13,202,240,.13);
+        color: #087990;
+    }
+
+    .status-out_for_delivery {
+        background: rgba(255,152,0,.13);
+        color: #b26a00;
+    }
+
+    .status-delivered {
+        background: rgba(25,135,84,.12);
+        color: #198754;
+    }
+
+    .status-cancelled {
+        background: rgba(220,53,69,.12);
+        color: #dc3545;
+    }
+
+    .status-failed {
+        background: rgba(220,53,69,.12);
+        color: #dc3545;
+    }
+
+    .status-rescheduled {
+        background: rgba(13,202,240,.12);
+        color: #087990;
+    }
+
+    .view-tracking-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 11px;
+        border-radius: 8px;
+        background: var(--dark);
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 600;
+        transition: .2s ease;
+        white-space: nowrap;
+    }
+
+    .view-tracking-btn:hover {
+        color: #ffffff;
+        transform: translateY(-1px);
+        opacity: .92;
+    }
+
+    .empty-state {
+        padding: 70px 20px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: rgba(176,141,87,.10);
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 25px;
+    }
+
+    .empty-state h6 {
+        color: var(--dark);
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .empty-state p {
+        color: var(--muted);
+        font-size: 12px;
+        margin: 0;
+    }
+
+</style>
+
+
+<!-- ============================================================
+     PAGE HEADER
+============================================================= -->
+
+<div class="tracking-header">
+
+    <h1>
+        Parcel Tracking
+    </h1>
+
+    <p>
+        Select a parcel to view its complete tracking history and
+        current delivery status.
+    </p>
+
+</div>
+
+
+<!-- ============================================================
+     SUMMARY
+============================================================= -->
+
+<div class="row g-3 mb-4">
+
+    <div class="col-12 col-md-4">
+
+        <div class="tracking-summary">
+
+            <div class="d-flex align-items-center justify-content-between">
+
+                <div>
+
+                    <div class="summary-label">
+                        Total Parcels
+                    </div>
+
+                    <div class="summary-number">
+                        {{ total_parcels }}
+                    </div>
+
+                </div>
+
+                <div class="summary-icon">
+
+                    <i class="bi bi-box-seam"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-12 col-md-8">
+
+        <div class="tracking-summary">
+
+            <div class="d-flex align-items-center gap-3">
+
+                <div
+                    class="summary-icon"
+                    style="
+                        background: rgba(13,110,253,.10);
+                        color: #0d6efd;
+                    "
+                >
+
+                    <i class="bi bi-activity"></i>
+
+                </div>
+
+                <div>
+
+                    <div
+                        style="
+                            color: var(--dark);
+                            font-size: 14px;
+                            font-weight: 700;
+                        "
+                    >
+                        Parcel Tracking
+                    </div>
+
+                    <div
+                        style="
+                            color: var(--muted);
+                            font-size: 12px;
+                            margin-top: 3px;
+                        "
+                    >
+                        Click <strong>View Tracking</strong> to see
+                        the complete status history of a specific parcel.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     PARCEL LIST
+============================================================= -->
+
+<div class="tracking-table-card">
+
+
+    <!-- HEADER -->
+
+    <div class="tracking-table-header">
+
+        <div>
+
+            <h5 class="tracking-table-title">
+                Parcel List
+            </h5>
+
+            <div class="tracking-table-subtitle">
+                Select a parcel to view its tracking status
+            </div>
+
+        </div>
+
+        <span
+            class="badge rounded-pill"
+            style="
+                background: rgba(176,141,87,.12);
+                color: var(--primary-dark);
+                font-size: 10px;
+                padding: 7px 10px;
+            "
+        >
+            {{ total_parcels }} Parcels
+        </span>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="table-responsive">
+
+        <table class="table admin-table tracking-table align-middle mb-0">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        #
+                    </th>
+
+                    <th>
+                        Tracking Number
+                    </th>
+
+                    <th>
+                        Customer
+                    </th>
+
+                    <th>
+                        Current Status
+                    </th>
+
+                    <th>
+                        Last Updated
+                    </th>
+
+                    <th class="text-end">
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for parcel in parcels %}
+
+                <tr>
+
+                    <!-- NUMBER -->
+
+                    <td>
+
+                        <span
+                            style="
+                                color: var(--muted);
+                                font-size: 11px;
+                                font-weight: 700;
+                            "
+                        >
+                            {{ forloop.counter }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- TRACKING NUMBER -->
+
+                    <td>
+
+                        <div class="tracking-number">
+
+                            <i class="bi bi-box-seam me-1"></i>
+
+                            {{ parcel.tracking_number }}
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- CUSTOMER -->
+
+                    <td>
+
+                        {% if parcel.customer %}
+
+                            {% if parcel.customer.user %}
+
+                                <div class="customer-name">
+
+                                    {{ parcel.customer.user.get_full_name|default:parcel.customer.user.username }}
+
+                                </div>
+
+                                <div class="customer-email">
+
+                                    {{ parcel.customer.user.email }}
+
+                                </div>
+
+                            {% else %}
+
+                                <div class="customer-name">
+                                    {{ parcel.customer }}
+                                </div>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <span
+                                style="
+                                    color: var(--muted);
+                                    font-size: 12px;
+                                "
+                            >
+                                —
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- CURRENT STATUS -->
+
+                    <td>
+
+                        <span
+                            class="
+                                current-status
+                                status-{{ parcel.status }}
+                            "
+                        >
+
+                            {% if parcel.status == "pending" %}
+
+                                <i class="bi bi-clock"></i>
+
+                            {% elif parcel.status == "pickup_requested" %}
+
+                                <i class="bi bi-hand-index"></i>
+
+                            {% elif parcel.status == "assigned" %}
+
+                                <i class="bi bi-person-check"></i>
+
+                            {% elif parcel.status == "picked_up" %}
+
+                                <i class="bi bi-box-arrow-up"></i>
+
+                            {% elif parcel.status == "in_transit" %}
+
+                                <i class="bi bi-truck"></i>
+
+                            {% elif parcel.status == "out_for_delivery" %}
+
+                                <i class="bi bi-truck-front"></i>
+
+                            {% elif parcel.status == "delivered" %}
+
+                                <i class="bi bi-check-circle"></i>
+
+                            {% elif parcel.status == "cancelled" %}
+
+                                <i class="bi bi-x-circle"></i>
+
+                            {% elif parcel.status == "failed" %}
+
+                                <i class="bi bi-exclamation-circle"></i>
+
+                            {% elif parcel.status == "rescheduled" %}
+
+                                <i class="bi bi-calendar-event"></i>
+
+                            {% else %}
+
+                                <i class="bi bi-info-circle"></i>
+
+                            {% endif %}
+
+                            {{ parcel.get_status_display }}
+
+                        </span>
+
+                    </td>
+
+
+                    <!-- LAST UPDATED -->
+
+                    <td>
+
+                        <div
+                            style="
+                                color: var(--text);
+                                font-size: 12px;
+                                font-weight: 600;
+                            "
+                        >
+
+                            {{ parcel.updated_at|date:"M d, Y" }}
+
+                        </div>
+
+                        <div
+                            style="
+                                color: var(--muted);
+                                font-size: 10px;
+                                margin-top: 2px;
+                            "
+                        >
+
+                            {{ parcel.updated_at|date:"h:i A" }}
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- ACTION -->
+
+                    <td class="text-end">
+
+                        <a
+                            href="{% url 'parcel_tracking' parcel.id %}"
+                            class="view-tracking-btn"
+                            title="View Parcel Tracking"
+                        >
+
+                            <i class="bi bi-geo-alt"></i>
+
+                            View Tracking
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="p-0"
+                    >
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+
+                                <i class="bi bi-box-seam"></i>
+
+                            </div>
+
+                            <h6>
+                                No Parcels Found
+                            </h6>
+
+                            <p>
+                                No parcels are available for tracking yet.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% if parcels %}
+
+    <div
+        style="
+            border-top: 1px solid var(--border);
+            padding: 13px 20px;
+            background: #fafaf8;
+        "
+    >
+
+        <div
+            style="
+                color: var(--muted);
+                font-size: 11px;
+            "
+        >
+
+            <i class="bi bi-info-circle me-1"></i>
+
+            Choose a parcel and click
+            <strong>View Tracking</strong>
+            to see its complete tracking history.
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+</div>
+
+
+{% endblock %}

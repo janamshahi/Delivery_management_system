@@ -1,0 +1,971 @@
+{% extends "dashboard/staff_base.html" %}
+
+{% block title %}
+    SHATHIMART | My Parcels
+{% endblock %}
+
+{% block staff_parcels_active %}
+    active
+{% endblock %}
+
+{% block topbar_title %}
+    My Parcels
+{% endblock %}
+
+{% block breadcrumb %}
+    My Parcels
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =====================================================
+       PAGE
+    ===================================================== */
+
+    .page-wrapper {
+        padding: 10px 0 30px;
+    }
+
+
+    /* =====================================================
+       PAGE HEADER
+    ===================================================== */
+
+    .page-header {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 18px;
+        padding: 24px 26px;
+        margin-bottom: 22px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .page-header-left h2 {
+        margin: 0;
+        font-size: 25px;
+        font-weight: 700;
+        color: #222;
+    }
+
+    .page-header-left p {
+        margin: 7px 0 0;
+        color: #888;
+        font-size: 14px;
+    }
+
+    .total-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        background: #f1f1e8;
+        color: #6e6c27;
+
+        padding: 10px 15px;
+        border-radius: 10px;
+
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .total-badge i {
+        font-size: 16px;
+    }
+
+
+    /* =====================================================
+       STAT CARD
+    ===================================================== */
+
+    .summary-card {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 16px;
+
+        padding: 20px;
+
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        margin-bottom: 22px;
+
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.035);
+    }
+
+    .summary-icon {
+        width: 50px;
+        height: 50px;
+
+        border-radius: 13px;
+
+        background: #f1f1e8;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #77752c;
+        font-size: 22px;
+
+        flex-shrink: 0;
+    }
+
+    .summary-content span {
+        display: block;
+        color: #888;
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+
+    .summary-content strong {
+        display: block;
+        font-size: 23px;
+        color: #252525;
+        font-weight: 700;
+    }
+
+
+    /* =====================================================
+       TABLE CARD
+    ===================================================== */
+
+    .table-card {
+        background: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 18px;
+
+        overflow: hidden;
+
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .table-header {
+        padding: 20px 24px;
+
+        border-bottom: 1px solid #eeeeee;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .table-header-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .table-header-title i {
+        width: 38px;
+        height: 38px;
+
+        border-radius: 10px;
+
+        background: #f1f1e8;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #77752c;
+        font-size: 18px;
+    }
+
+    .table-header-title h4 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 700;
+        color: #252525;
+    }
+
+
+    /* =====================================================
+       TABLE
+    ===================================================== */
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .parcel-table {
+        width: 100%;
+        min-width: 950px;
+        border-collapse: collapse;
+    }
+
+    .parcel-table thead th {
+        background: #f8f8f5;
+
+        padding: 14px 18px;
+
+        text-align: left;
+
+        font-size: 11px;
+        font-weight: 700;
+
+        color: #777;
+
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        border-bottom: 1px solid #e8e8e8;
+
+        white-space: nowrap;
+    }
+
+    .parcel-table tbody td {
+        padding: 16px 18px;
+
+        border-bottom: 1px solid #eeeeee;
+
+        font-size: 13px;
+
+        color: #444;
+
+        vertical-align: middle;
+    }
+
+    .parcel-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .parcel-table tbody tr {
+        transition: 0.2s ease;
+    }
+
+    .parcel-table tbody tr:hover {
+        background: #fafaf7;
+    }
+
+
+    /* =====================================================
+       TRACKING NUMBER
+    ===================================================== */
+
+    .tracking-number {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        color: #292929;
+
+        font-weight: 700;
+
+        text-decoration: none;
+    }
+
+    .tracking-number i {
+        color: #8a8834;
+        font-size: 16px;
+    }
+
+    .tracking-number:hover {
+        color: #77752c;
+    }
+
+
+    /* =====================================================
+       CUSTOMER
+    ===================================================== */
+
+    .customer-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .customer-avatar {
+        width: 34px;
+        height: 34px;
+
+        border-radius: 50%;
+
+        background: #f1f1e8;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #77752c;
+
+        font-size: 15px;
+
+        flex-shrink: 0;
+    }
+
+    .customer-name {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .customer-email {
+        margin-top: 2px;
+        color: #999;
+        font-size: 11px;
+    }
+
+
+    /* =====================================================
+       RECEIVER
+    ===================================================== */
+
+    .receiver-name {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .receiver-phone {
+        margin-top: 3px;
+        color: #999;
+        font-size: 11px;
+    }
+
+
+    /* =====================================================
+       ADDRESS
+    ===================================================== */
+
+    .address-cell {
+        max-width: 230px;
+        line-height: 1.5;
+    }
+
+    .address-cell i {
+        color: #8a8834;
+        margin-right: 4px;
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+
+        padding: 7px 11px;
+
+        border-radius: 30px;
+
+        background: #f1f1f1;
+
+        color: #555;
+
+        font-size: 11px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: currentColor;
+    }
+
+
+    /* =====================================================
+       STATUS COLORS
+    ===================================================== */
+
+    .status-assigned {
+        background: #f1f1e8;
+        color: #77752c;
+    }
+
+    .status-picked {
+        background: #eef5ff;
+        color: #3971b8;
+    }
+
+    .status-transit {
+        background: #f3efff;
+        color: #7354a6;
+    }
+
+    .status-out {
+        background: #fff3df;
+        color: #ad701f;
+    }
+
+    .status-delivered {
+        background: #eaf7ef;
+        color: #36804e;
+    }
+
+    .status-failed {
+        background: #fff0f0;
+        color: #bd4b4b;
+    }
+
+    .status-rescheduled {
+        background: #f5efff;
+        color: #7755a7;
+    }
+
+
+    /* =====================================================
+       ACTION
+    ===================================================== */
+
+    .action-btn {
+        width: 36px;
+        height: 36px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9px;
+
+        background: #f1f1e8;
+
+        color: #77752c;
+
+        text-decoration: none;
+
+        font-size: 16px;
+
+        transition: 0.2s ease;
+    }
+
+    .action-btn:hover {
+        background: #d9d75f;
+        color: #222;
+
+        transform: translateY(-1px);
+    }
+
+
+    /* =====================================================
+       EMPTY STATE
+    ===================================================== */
+
+    .empty-state {
+        padding: 65px 20px;
+
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 75px;
+        height: 75px;
+
+        margin: 0 auto 18px;
+
+        border-radius: 20px;
+
+        background: #f1f1e8;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        color: #77752c;
+
+        font-size: 32px;
+    }
+
+    .empty-state h4 {
+        margin: 0 0 7px;
+
+        font-size: 18px;
+        font-weight: 700;
+
+        color: #333;
+    }
+
+    .empty-state p {
+        margin: 0;
+
+        font-size: 13px;
+
+        color: #999;
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 768px) {
+
+        .page-header {
+            padding: 20px;
+        }
+
+        .page-header-left h2 {
+            font-size: 21px;
+        }
+
+        .summary-card {
+            padding: 17px;
+        }
+
+        .table-header {
+            padding: 18px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-wrapper">
+
+
+    <!-- ====================================================
+         PAGE HEADER
+    ===================================================== -->
+
+    <div class="page-header">
+
+        <div class="page-header-left">
+
+            <h2>
+                My Parcels
+            </h2>
+
+            <p>
+                View and manage parcels assigned to you.
+            </p>
+
+        </div>
+
+
+        <div class="total-badge">
+
+            <i class="bi bi-box-seam"></i>
+
+            {{ total_parcels }} Parcel{{ total_parcels|pluralize }}
+
+        </div>
+
+    </div>
+
+
+    <!-- ====================================================
+         SUMMARY
+    ===================================================== -->
+
+    <div class="summary-card">
+
+        <div class="summary-icon">
+
+            <i class="bi bi-truck"></i>
+
+        </div>
+
+
+        <div class="summary-content">
+
+            <span>
+                Assigned Parcels
+            </span>
+
+            <strong>
+                {{ total_parcels }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- ====================================================
+         PARCEL TABLE
+    ===================================================== -->
+
+    <div class="table-card">
+
+
+        <!-- TABLE HEADER -->
+
+        <div class="table-header">
+
+            <div class="table-header-title">
+
+                <i class="bi bi-boxes"></i>
+
+                <h4>
+                    Assigned Parcels
+                </h4>
+
+            </div>
+
+        </div>
+
+
+        {% if parcels %}
+
+        <div class="table-responsive">
+
+            <table class="parcel-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Tracking
+                        </th>
+
+                        <th>
+                            Customer
+                        </th>
+
+                        <th>
+                            Receiver
+                        </th>
+
+                        <th>
+                            Address
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Weight
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for parcel in parcels %}
+
+                    <tr>
+
+
+                        <!-- =================================
+                             TRACKING
+                        ================================== -->
+
+                        <td>
+
+                            <a
+                                href="{% url 'staff_parcel_detail' parcel.id %}"
+                                class="tracking-number"
+                                title="View parcel details"
+                            >
+
+                                <i class="bi bi-upc-scan"></i>
+
+                                {{ parcel.tracking_number }}
+
+                            </a>
+
+                        </td>
+
+
+                        <!-- =================================
+                             CUSTOMER
+                        ================================== -->
+
+                        <td>
+
+                            <div class="customer-box">
+
+                                <div class="customer-avatar">
+
+                                    <i class="bi bi-person"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="customer-name">
+
+                                        {% if parcel.customer.get_full_name %}
+
+                                            {{ parcel.customer.get_full_name }}
+
+                                        {% else %}
+
+                                            {{ parcel.customer.username }}
+
+                                        {% endif %}
+
+                                    </div>
+
+
+                                    {% if parcel.customer.email %}
+
+                                    <div class="customer-email">
+
+                                        {{ parcel.customer.email }}
+
+                                    </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- =================================
+                             RECEIVER
+                        ================================== -->
+
+                        <td>
+
+                            <div class="receiver-name">
+
+                                {{ parcel.receiver_name }}
+
+                            </div>
+
+
+                            {% if parcel.receiver_phone %}
+
+                            <div class="receiver-phone">
+
+                                {{ parcel.receiver_phone }}
+
+                            </div>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================
+                             ADDRESS
+                        ================================== -->
+
+                        <td>
+
+                            <div class="address-cell">
+
+                                <i class="bi bi-geo-alt"></i>
+
+                                {{ parcel.receiver_address }}
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- =================================
+                             TYPE
+                        ================================== -->
+
+                        <td>
+
+                            {{ parcel.get_parcel_type_display }}
+
+                        </td>
+
+
+                        <!-- =================================
+                             WEIGHT
+                        ================================== -->
+
+                        <td>
+
+                            {{ parcel.weight }} kg
+
+                        </td>
+
+
+                        <!-- =================================
+                             STATUS
+                        ================================== -->
+
+                        <td>
+
+                            {% if parcel.status == "assigned" %}
+
+                                <span class="status-badge status-assigned">
+
+                                    <span class="status-dot"></span>
+
+                                    {{ parcel.get_status_display }}
+
+                                </span>
+
+
+                            {% elif parcel.status == "picked_up" %}
+
+                                <span class="status-badge status-picked">
+
+                                    <span class="status-dot"></span>
+
+                                    {{ parcel.get_status_display }}
+
+                                </span>
+
+
+                            {% elif parcel.status == "in_transit" %}
+
+                                <span class="status-badge status-transit">
+
+                                    <span class="status-dot"></span>
+
+                                    {{ parcel.get_status_display }}
+
+                                </span>
+
+
+                            {% elif parcel.status == "out_for_delivery" %}
+
+                                <span class="status-badge status-out">
+
+                                    <span class="status-dot"></span>
+
+                                    {{ parcel.get_status_display }}
+
+                                </span>
+
+
+                            {% elif parcel.status == "delivered" %}
+
+                                <span class="status-badge status-delivered">
+
+                                    <span class="status-dot"></span>
+
+                                    {{ parcel.get_status_display }}
+
+                                </span>
+
+
+                            {% elif parcel.status == "failed" %}
+
+                                <span class="status-badge status-failed">
+
+                                    <span class="status-dot"></span>
+
+                                    {{ parcel.get_status_display }}
+
+                                </span>
+
+
+                            {% elif parcel.status == "rescheduled" %}
+
+                                <span class="status-badge status-rescheduled">
+
+                                    <span class="status-dot"></span>
+
+                                    {{ parcel.get_status_display }}
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="status-badge">
+
+                                    <span class="status-dot"></span>
+
+                                    {{ parcel.get_status_display }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- =================================
+                             ACTION
+                        ================================== -->
+
+                        <td>
+
+                            <a
+                                href="{% url 'staff_parcel_detail' parcel.id %}"
+                                class="action-btn"
+                                title="View / Update Parcel"
+                            >
+
+                                <i class="bi bi-pencil-square"></i>
+
+                            </a>
+
+                        </td>
+
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        {% else %}
+
+
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-box-seam"></i>
+
+            </div>
+
+            <h4>
+                No Parcels Assigned
+            </h4>
+
+            <p>
+                You currently have no parcels assigned for delivery.
+            </p>
+
+        </div>
+
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

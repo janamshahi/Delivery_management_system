@@ -1,0 +1,195 @@
+{% extends "dashboard/admin_base.html" %}
+
+{% block title %}
+SHATHIMART | Manage Parcels
+{% endblock %}
+
+{% block parcels_active %}
+active
+{% endblock %}
+
+{% block topbar_title %}
+Manage Parcels
+{% endblock %}
+
+{% block breadcrumb %}
+Parcels
+{% endblock %}
+
+
+{% block content %}
+
+<div class="content-header">
+
+    <div>
+
+        <h1 class="content-title">
+            Manage Parcels
+        </h1>
+
+        <p class="content-subtitle">
+            View and manage all customer parcels.
+        </p>
+
+    </div>
+
+    <div>
+
+    </div>
+
+</div>
+
+
+<div class="admin-card">
+
+    <div class="admin-card-header">
+
+        <h5 class="admin-card-title">
+            All Parcels
+        </h5>
+
+        <span class="badge text-bg-light">
+            {{ total_parcels }} Parcels
+        </span>
+
+    </div>
+
+
+    <div class="table-responsive">
+
+        <table class="table admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Tracking
+                    </th>
+
+                    <th>
+                        Customer
+                    </th>
+
+                    <th>
+                        Receiver
+                    </th>
+
+                    <th>
+                        Type
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Created
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for parcel in parcels %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            {{ parcel.tracking_number }}
+                        </strong>
+
+                    </td>
+
+
+                    <td>
+
+                        {% if parcel.customer.get_full_name %}
+
+                            {{ parcel.customer.get_full_name }}
+
+                        {% else %}
+
+                            {{ parcel.customer.username }}
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+                        {{ parcel.receiver_name }}
+                    </td>
+
+
+                    <td>
+                        {{ parcel.get_parcel_type_display }}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status-badge status-{{ parcel.status }}"
+                        >
+                            {{ parcel.get_status_display }}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        {{ parcel.created_at|date:"M d, Y" }}
+                    </td>
+
+
+                    <td>
+
+                        <a
+                            href="{% url 'admin_parcel_detail' parcel.id %}"
+                            class="btn btn-sm btn-outline-dark"
+                        >
+                            <i class="bi bi-eye"></i>
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="text-center py-5 text-muted"
+                    >
+
+                        <i class="bi bi-box-seam fs-2 d-block mb-2"></i>
+
+                        No parcels found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

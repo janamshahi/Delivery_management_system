@@ -1,0 +1,385 @@
+{% extends "customer_base.html" %}
+{% block title %}
+Track Parcel | SHATHIMART
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .tracking-page {
+        background: #f7f7f2;
+        min-height: calc(100vh - 80px);
+        padding: 70px 0;
+    }
+
+    .tracking-wrapper {
+        max-width: 950px;
+        margin: auto;
+    }
+
+    .tracking-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .tracking-header h1 {
+        font-family: "Playfair Display", serif;
+        color: #18212b;
+        font-weight: 700;
+        font-size: 42px;
+    }
+
+    .tracking-header p {
+        color: #6b7280;
+    }
+
+    .search-card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(24, 33, 43, .07);
+        border: 1px solid #eeeeea;
+        margin-bottom: 35px;
+    }
+
+    .tracking-input {
+        border-radius: 10px;
+        padding: 14px;
+        border: 1px solid #d9dbd5;
+    }
+
+    .tracking-input:focus {
+        border-color: #b08d57;
+        box-shadow: 0 0 0 0.2rem rgba(176, 141, 87, .15);
+    }
+
+    .btn-swift {
+        background: #b08d57;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 22px;
+        font-weight: 700;
+    }
+
+    .btn-swift:hover {
+        background: #8f713f;
+        color: white;
+    }
+
+    .result-card {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 30px;
+        border: 1px solid #eeeeea;
+        box-shadow: 0 10px 30px rgba(24, 33, 43, .06);
+    }
+
+    .tracking-number {
+        color: #b08d57;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    .status {
+        display: inline-block;
+        background: #f0f1ec;
+        color: #374151;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .info-box {
+        background: #f7f7f2;
+        border-radius: 12px;
+        padding: 18px;
+        height: 100%;
+    }
+
+    .info-box small {
+        display: block;
+        color: #6b7280;
+        margin-bottom: 5px;
+    }
+
+    .info-box strong {
+        color: #18212b;
+    }
+
+    .timeline {
+        margin-top: 30px;
+        padding-left: 35px;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 25px;
+    }
+
+    .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -25px;
+        top: 5px;
+        bottom: -5px;
+        width: 2px;
+        background: #dddeda;
+    }
+
+    .timeline-item:last-child::before {
+        display: none;
+    }
+
+    .timeline-dot {
+        position: absolute;
+        left: -32px;
+        top: 0;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #b08d57;
+        border: 3px solid #f7f7f2;
+    }
+
+    .timeline-status {
+        font-weight: 700;
+        color: #18212b;
+    }
+
+    .timeline-time {
+        color: #6b7280;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+</style>
+
+
+<section class="tracking-page">
+
+    <div class="container tracking-wrapper">
+
+        <div class="tracking-header">
+
+            <h1>Track Your Parcel</h1>
+
+            <p>
+                Enter your SHATHIMART tracking number to view
+                the latest delivery status.
+            </p>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- SEARCH -->
+        <!-- ================================================= -->
+
+        <div class="search-card">
+
+            <form method="GET">
+
+                <div class="row g-3">
+
+                    <div class="col-md-9">
+
+                        <input
+                            type="text"
+                            name="tracking_number"
+                            class="form-control tracking-input"
+                            placeholder="Enter tracking number e.g. TRK202609230001"
+                            value="{{ tracking_number }}"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <button
+                            type="submit"
+                            class="btn-swift w-100"
+                        >
+                            <i class="bi bi-search me-2"></i>
+                            Track Parcel
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        {% if error %}
+
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle me-2"></i>
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        {% if parcel %}
+
+            <div class="result-card">
+
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+
+                    <div>
+
+                        <div class="text-muted small">
+                            TRACKING NUMBER
+                        </div>
+
+                        <div class="tracking-number">
+                            {{ parcel.tracking_number }}
+                        </div>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="status">
+                            {{ parcel.get_status_display }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <hr class="my-4">
+
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+
+                        <div class="info-box">
+
+                            <small>
+                                Receiver
+                            </small>
+
+                            <strong>
+                                {{ parcel.receiver_name }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="info-box">
+
+                            <small>
+                                Destination
+                            </small>
+
+                            <strong>
+                                {{ parcel.receiver_address }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+
+                        <div class="info-box">
+
+                            <small>
+                                Parcel Type
+                            </small>
+
+                            <strong>
+                                {{ parcel.get_parcel_type_display }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================================= -->
+                <!-- TRACKING HISTORY -->
+                <!-- ================================================= -->
+
+                <h5 class="mt-5 mb-3">
+                    Tracking History
+                </h5>
+
+                {% if tracking_history %}
+
+                    <div class="timeline">
+
+                        {% for history in tracking_history %}
+
+                            <div class="timeline-item">
+
+                                <div class="timeline-dot"></div>
+
+                                <div class="timeline-status">
+                                    {{ history.get_status_display }}
+                                </div>
+
+                                <div class="timeline-time">
+                                    {{ history.created_at|date:"M d, Y - h:i A" }}
+                                </div>
+
+                                {% if history.location %}
+
+                                    <div class="mt-2">
+
+                                        <i class="bi bi-geo-alt me-1"></i>
+
+                                        {{ history.location }}
+
+                                    </div>
+
+                                {% endif %}
+
+                                {% if history.remarks %}
+
+                                    <div class="text-muted mt-1">
+                                        {{ history.remarks }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <p class="text-muted">
+                        No tracking history available.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

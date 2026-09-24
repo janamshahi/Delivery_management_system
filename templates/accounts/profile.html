@@ -1,0 +1,1622 @@
+{% extends "customer_base.html" %}
+{% block title %}
+    My Profile | SHATHIMART
+{% endblock %}
+
+{% block extra_css %}
+
+<style>
+
+    /* =========================================================
+       PROFILE PAGE
+    ========================================================= */
+
+    .profile-page {
+        padding: 45px 0 70px;
+        background: var(--light);
+        min-height: calc(100vh - 74px);
+    }
+
+
+    /* =========================================================
+       PROFILE HEADER
+    ========================================================= */
+
+    .profile-header {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(
+            135deg,
+            var(--dark),
+            var(--dark-soft)
+        );
+        border-radius: 20px;
+        padding: 35px;
+        color: var(--white);
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(24, 33, 43, 0.12);
+    }
+
+    .profile-header::before {
+        content: "";
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(197, 153, 87, 0.1);
+        right: -80px;
+        top: -100px;
+    }
+
+    .profile-header::after {
+        content: "";
+        position: absolute;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: rgba(160, 129, 129, 0.03);
+        left: -60px;
+        bottom: -90px;
+    }
+
+    .profile-header-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+    }
+
+    .profile-user {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+
+    /* =========================================================
+       PROFILE AVATAR
+    ========================================================= */
+
+    .profile-avatar {
+        width: 88px;
+        height: 88px;
+        min-width: 88px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 34px;
+        font-weight: 700;
+        border: 4px solid rgba(255, 255, 255, 0.20);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+    }
+
+    .profile-user-info h2 {
+        margin: 0 0 5px;
+        font-size: 28px;
+        font-weight: 700;
+        font-family: "DM Sans", sans-serif;
+    }
+
+    .profile-user-info p {
+        margin: 0 0 10px;
+        color: rgba(222, 219, 219, 0.7);
+        font-size: 14px;
+    }
+
+    .customer-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(176, 141, 87, 0.18);
+        border: 1px solid rgba(176, 141, 87, 0.35);
+        color: var(--primary-light);
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       EDIT BUTTON
+    ========================================================= */
+
+    .edit-profile-btn {
+        position: relative;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--primary);
+        color: var(--white);
+        text-decoration: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all 0.25s ease;
+        white-space: nowrap;
+    }
+
+    .edit-profile-btn:hover {
+        background: var(--primary-dark);
+        color: var(--white);
+        transform: translateY(-2px);
+    }
+
+
+    /* =========================================================
+       STAT CARDS
+    ========================================================= */
+
+    .profile-stat-card {
+        height: 100%;
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.25s ease;
+    }
+
+    .profile-stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+    }
+
+    .stat-icon {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .stat-total .stat-icon {
+        background: rgba(176, 141, 87, 0.13);
+        color: var(--primary-dark);
+    }
+
+    .stat-active .stat-icon {
+        background: rgba(37, 99, 235, 0.10);
+        color: #2563eb;
+    }
+
+    .stat-delivered .stat-icon {
+        background: rgba(22, 163, 74, 0.10);
+        color: #16a34a;
+    }
+
+    .stat-cancelled .stat-icon {
+        background: rgba(220, 38, 38, 0.10);
+        color: #dc2626;
+    }
+
+    .stat-content span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 3px;
+    }
+
+    .stat-content h3 {
+        margin: 0;
+        font-size: 25px;
+        font-weight: 700;
+        color: var(--dark);
+    }
+
+
+    /* =========================================================
+       CONTENT CARDS
+    ========================================================= */
+
+    .profile-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .profile-card-header {
+        padding: 20px 22px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .profile-card-header h5 {
+        margin: 0;
+        color: var(--dark);
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .profile-card-header i {
+        color: var(--primary);
+        margin-right: 7px;
+    }
+
+    .profile-card-body {
+        padding: 22px;
+    }
+
+
+    /* =========================================================
+       INFORMATION ROWS
+    ========================================================= */
+
+    .info-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-row:first-child {
+        padding-top: 0;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .info-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border-radius: 10px;
+        background: rgba(176, 141, 87, 0.10);
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .info-content {
+        min-width: 0;
+    }
+
+    .info-label {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 3px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    .info-value {
+        display: block;
+        color: var(--text);
+        font-size: 14px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+       ACCOUNT STATUS
+    ========================================================= */
+
+    .account-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(22, 163, 74, 0.10);
+        color: #15803d;
+        border-radius: 50px;
+        padding: 6px 11px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #16a34a;
+    }
+
+
+    /* =========================================================
+       RECENT PARCELS
+    ========================================================= */
+
+    .parcel-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .parcel-table th {
+        background: #fafafa;
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        font-weight: 700;
+        padding: 13px 18px;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+    }
+
+    .parcel-table td {
+        padding: 15px 18px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 13px;
+        color: var(--text);
+        vertical-align: middle;
+    }
+
+    .parcel-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .tracking-number {
+        color: var(--primary-dark);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .tracking-number:hover {
+        color: var(--primary);
+    }
+
+    .parcel-type {
+        color: var(--muted);
+    }
+
+
+    /* =========================================================
+       STATUS BADGES
+    ========================================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 10px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-pending {
+        background: rgba(245, 158, 11, 0.12);
+        color: #b45309;
+    }
+
+    .status-pickup_requested {
+        background: rgba(245, 158, 11, 0.12);
+        color: #b45309;
+    }
+
+    .status-assigned {
+        background: rgba(37, 99, 235, 0.10);
+        color: #1d4ed8;
+    }
+
+    .status-picked_up {
+        background: rgba(59, 130, 246, 0.10);
+        color: #2563eb;
+    }
+
+    .status-in_transit {
+        background: rgba(124, 58, 237, 0.10);
+        color: #7c3aed;
+    }
+
+    .status-out_for_delivery {
+        background: rgba(176, 141, 87, 0.13);
+        color: var(--primary-dark);
+    }
+
+    .status-delivered {
+        background: rgba(22, 163, 74, 0.10);
+        color: #15803d;
+    }
+
+    .status-cancelled {
+        background: rgba(220, 38, 38, 0.10);
+        color: #b91c1c;
+    }
+
+    .status-failed {
+        background: rgba(220, 38, 38, 0.10);
+        color: #b91c1c;
+    }
+
+    .status-rescheduled {
+        background: rgba(124, 58, 237, 0.10);
+        color: #6d28d9;
+    }
+
+
+    /* =========================================================
+       VIEW BUTTON
+    ========================================================= */
+
+    .view-parcel-btn {
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+        background: #f5f5f5;
+        color: var(--dark);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .view-parcel-btn:hover {
+        background: var(--primary);
+        color: var(--white);
+    }
+
+
+    /* =========================================================
+       QUICK ACTIONS
+    ========================================================= */
+
+    .quick-action {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        text-decoration: none;
+        color: var(--text);
+        padding: 13px 0;
+        border-bottom: 1px solid #f0f0f0;
+        transition: all 0.2s ease;
+    }
+
+    .quick-action:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .quick-action:first-child {
+        padding-top: 0;
+    }
+
+    .quick-action:hover {
+        color: var(--primary-dark);
+        padding-left: 4px;
+    }
+
+    .quick-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        border-radius: 10px;
+        background: rgba(176, 141, 87, 0.10);
+        color: var(--primary-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .quick-action-content {
+        min-width: 0;
+    }
+
+    .quick-action-content strong {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 2px;
+    }
+
+    .quick-action-content span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+    ========================================================= */
+
+    .empty-state {
+        text-align: center;
+        padding: 45px 20px;
+    }
+
+    .empty-icon {
+        width: 65px;
+        height: 65px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: rgba(176, 141, 87, 0.10);
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 27px;
+    }
+
+    .empty-state h6 {
+        margin-bottom: 6px;
+        color: var(--dark);
+        font-weight: 700;
+    }
+
+    .empty-state p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 991px) {
+
+        .profile-header-content {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .edit-profile-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+    }
+
+
+    @media (max-width: 767px) {
+
+        .profile-page {
+            padding: 25px 0 50px;
+        }
+
+        .profile-header {
+            padding: 25px 20px;
+            border-radius: 15px;
+        }
+
+        .profile-user {
+            align-items: flex-start;
+        }
+
+        .profile-avatar {
+            width: 68px;
+            height: 68px;
+            min-width: 68px;
+            font-size: 26px;
+        }
+
+        .profile-user-info h2 {
+            font-size: 22px;
+        }
+
+        .profile-stat-card {
+            padding: 17px;
+        }
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            min-width: 45px;
+            font-size: 18px;
+        }
+
+        .stat-content h3 {
+            font-size: 21px;
+        }
+
+        .profile-card-body {
+            padding: 17px;
+        }
+
+        .table-responsive {
+            border-radius: 0;
+        }
+
+    }
+
+
+    @media (max-width: 480px) {
+
+        .profile-user {
+            gap: 13px;
+        }
+
+        .profile-avatar {
+            width: 58px;
+            height: 58px;
+            min-width: 58px;
+            font-size: 22px;
+        }
+
+        .profile-user-info h2 {
+            font-size: 19px;
+        }
+
+        .profile-user-info p {
+            font-size: 12px;
+        }
+
+        .customer-badge {
+            font-size: 10px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="profile-page">
+
+    <div class="container">
+
+        <!-- =================================================
+             PROFILE HEADER
+        ================================================== -->
+
+        <div class="profile-header">
+
+            <div class="profile-header-content">
+
+                <div class="profile-user">
+
+                    <div class="profile-avatar">
+
+                        {% if user.first_name %}
+                            {{ user.first_name|first|upper }}
+                        {% else %}
+                            {{ user.username|first|upper }}
+                        {% endif %}
+
+                    </div>
+
+                    <div class="profile-user-info">
+
+                        <h2>
+                            {% if user.get_full_name %}
+                                {{ user.get_full_name }}
+                            {% else %}
+                                {{ user.username }}
+                            {% endif %}
+                        </h2>
+
+                        <p>
+                            <i class="bi bi-person me-1"></i>
+                            @{{ user.username }}
+                        </p>
+
+                        <span class="customer-badge">
+
+                            <i class="bi bi-person-check-fill"></i>
+
+                            {% if profile.role == "admin" %}
+                                Administrator
+                            {% elif profile.role == "delivery_staff" %}
+                                Delivery Staff
+                            {% else %}
+                                Customer
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EDIT PROFILE -->
+
+                <a
+                    href="{% url 'profile_edit' %}"
+                    class="edit-profile-btn"
+                >
+
+                    <i class="bi bi-pencil-square"></i>
+
+                    Edit Profile
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <div class="row g-3 mb-4">
+
+            <!-- TOTAL -->
+
+            <div class="col-6 col-lg-3">
+
+                <div class="profile-stat-card stat-total">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-box-seam"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>Total Parcels</span>
+
+                        <h3>
+                            {{ total_parcels }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIVE -->
+
+            <div class="col-6 col-lg-3">
+
+                <div class="profile-stat-card stat-active">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-truck"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>Active Parcels</span>
+
+                        <h3>
+                            {{ active_parcels }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DELIVERED -->
+
+            <div class="col-6 col-lg-3">
+
+                <div class="profile-stat-card stat-delivered">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-check-circle"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>Delivered</span>
+
+                        <h3>
+                            {{ delivered_parcels }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CANCELLED -->
+
+            <div class="col-6 col-lg-3">
+
+                <div class="profile-stat-card stat-cancelled">
+
+                    <div class="stat-icon">
+
+                        <i class="bi bi-x-circle"></i>
+
+                    </div>
+
+                    <div class="stat-content">
+
+                        <span>Cancelled</span>
+
+                        <h3>
+                            {{ cancelled_parcels }}
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+
+        <div class="row g-4">
+
+
+            <!-- =============================================
+                 PERSONAL INFORMATION
+            ============================================== -->
+
+            <div class="col-lg-5">
+
+                <div class="profile-card">
+
+                    <div class="profile-card-header">
+
+                        <h5>
+
+                            <i class="bi bi-person-vcard"></i>
+
+                            Personal Information
+
+                        </h5>
+
+                    </div>
+
+
+                    <div class="profile-card-body">
+
+
+                        <!-- FULL NAME -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-person"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Full Name
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if user.get_full_name %}
+                                        {{ user.get_full_name }}
+                                    {% else %}
+                                        Not provided
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- USERNAME -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-at"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Username
+                                </span>
+
+                                <span class="info-value">
+                                    {{ user.username }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-envelope"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Email Address
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if user.email %}
+                                        {{ user.email }}
+                                    {% else %}
+                                        Not provided
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PHONE -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-telephone"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Phone Number
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if profile.phone %}
+                                        {{ profile.phone }}
+                                    {% else %}
+                                        Not provided
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ADDRESS -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-geo-alt"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Address
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if profile.address %}
+                                        {{ profile.address }}
+                                    {% else %}
+                                        Not provided
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CITY -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-building"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    City
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if profile.city %}
+                                        {{ profile.city }}
+                                    {% else %}
+                                        Not provided
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 ACCOUNT INFORMATION
+            ============================================== -->
+
+            <div class="col-lg-3">
+
+                <div class="profile-card">
+
+                    <div class="profile-card-header">
+
+                        <h5>
+
+                            <i class="bi bi-shield-check"></i>
+
+                            Account
+
+                        </h5>
+
+                    </div>
+
+
+                    <div class="profile-card-body">
+
+
+                        <!-- ROLE -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-person-badge"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Account Type
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if profile.role == "admin" %}
+                                        Administrator
+                                    {% elif profile.role == "delivery_staff" %}
+                                        Delivery Staff
+                                    {% else %}
+                                        Customer
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- STATUS -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-check2-circle"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Account Status
+                                </span>
+
+                                <span class="account-status">
+
+                                    <span class="status-dot"></span>
+
+                                    {% if user.is_active %}
+                                        Active
+                                    {% else %}
+                                        Inactive
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- JOINED -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-calendar3"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Joined
+                                </span>
+
+                                <span class="info-value">
+
+                                    {{ user.date_joined|date:"M d, Y" }}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- LAST LOGIN -->
+
+                        <div class="info-row">
+
+                            <div class="info-icon">
+
+                                <i class="bi bi-clock-history"></i>
+
+                            </div>
+
+                            <div class="info-content">
+
+                                <span class="info-label">
+                                    Last Login
+                                </span>
+
+                                <span class="info-value">
+
+                                    {% if user.last_login %}
+                                        {{ user.last_login|date:"M d, Y H:i" }}
+                                    {% else %}
+                                        First login
+                                    {% endif %}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 QUICK ACTIONS
+            ============================================== -->
+
+            <div class="col-lg-4">
+
+                <div class="profile-card">
+
+                    <div class="profile-card-header">
+
+                        <h5>
+
+                            <i class="bi bi-lightning-charge"></i>
+
+                            Quick Actions
+
+                        </h5>
+
+                    </div>
+
+
+                    <div class="profile-card-body">
+
+
+                        <!-- EDIT PROFILE -->
+
+                        <a
+                            href="{% url 'profile_edit' %}"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon">
+
+                                <i class="bi bi-pencil-square"></i>
+
+                            </div>
+
+                            <div class="quick-action-content">
+
+                                <strong>
+                                    Edit Profile
+                                </strong>
+
+                                <span>
+                                    Update your personal information
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- DASHBOARD -->
+
+                        <a
+                            href="{% url 'dashboard' %}"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon">
+
+                                <i class="bi bi-speedometer2"></i>
+
+                            </div>
+
+                            <div class="quick-action-content">
+
+                                <strong>
+                                    Dashboard
+                                </strong>
+
+                                <span>
+                                    View your delivery dashboard
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- MY PARCELS -->
+
+                        <a
+                            href="{% url 'my_parcels' %}"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon">
+
+                                <i class="bi bi-box-seam"></i>
+
+                            </div>
+
+                            <div class="quick-action-content">
+
+                                <strong>
+                                    My Parcels
+                                </strong>
+
+                                <span>
+                                    View all your shipments
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- NOTIFICATIONS -->
+
+                        <a
+                            href="{% url 'notification_list' %}"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon">
+
+                                <i class="bi bi-bell"></i>
+
+                            </div>
+
+                            <div class="quick-action-content">
+
+                                <strong>
+                                    Notifications
+                                </strong>
+
+                                <span>
+                                    Check your latest notifications
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                        <!-- LOGOUT -->
+
+                        <a
+                            href="{% url 'logout' %}"
+                            class="quick-action"
+                        >
+
+                            <div class="quick-icon">
+
+                                <i class="bi bi-box-arrow-right"></i>
+
+                            </div>
+
+                            <div class="quick-action-content">
+
+                                <strong>
+                                    Logout
+                                </strong>
+
+                                <span>
+                                    Sign out of your account
+                                </span>
+
+                            </div>
+
+                        </a>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 RECENT PARCELS
+            ============================================== -->
+
+            <div class="col-12">
+
+                <div class="profile-card">
+
+                    <div class="profile-card-header">
+
+                        <h5>
+
+                            <i class="bi bi-box-seam"></i>
+
+                            Recent Parcels
+
+                        </h5>
+
+                        <a
+                            href="{% url 'my_parcels' %}"
+                            class="view-parcel-btn"
+                            title="View all parcels"
+                        >
+
+                            <i class="bi bi-arrow-right"></i>
+
+                        </a>
+
+                    </div>
+
+
+                    {% if recent_parcels %}
+
+                        <div class="table-responsive">
+
+                            <table class="parcel-table">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Tracking Number
+                                        </th>
+
+                                        <th>
+                                            Receiver
+                                        </th>
+
+                                        <th>
+                                            Parcel Type
+                                        </th>
+
+                                        <th>
+                                            Weight
+                                        </th>
+
+                                        <th>
+                                            Status
+                                        </th>
+
+                                        <th>
+                                            Created
+                                        </th>
+
+                                        <th>
+                                            Action
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    {% for parcel in recent_parcels %}
+
+                                        <tr>
+
+                                            <!-- TRACKING -->
+
+                                            <td>
+
+                                                <a
+                                                    href="{% url 'track_parcel' %}?tracking_number={{ parcel.tracking_number }}"
+                                                    class="tracking-number"
+                                                >
+
+                                                    {{ parcel.tracking_number }}
+
+                                                </a>
+
+                                            </td>
+
+
+                                            <!-- RECEIVER -->
+
+                                            <td>
+
+                                                {{ parcel.receiver_name }}
+
+                                            </td>
+
+
+                                            <!-- TYPE -->
+
+                                            <td>
+
+                                                <span class="parcel-type">
+
+                                                    {{ parcel.get_parcel_type_display }}
+
+                                                </span>
+
+                                            </td>
+
+
+                                            <!-- WEIGHT -->
+
+                                            <td>
+
+                                                {{ parcel.weight }} kg
+
+                                            </td>
+
+
+                                            <!-- STATUS -->
+
+                                            <td>
+
+                                                <span
+                                                    class="status-badge status-{{ parcel.status }}"
+                                                >
+
+                                                    {{ parcel.get_status_display }}
+
+                                                </span>
+
+                                            </td>
+
+
+                                            <!-- CREATED -->
+
+                                            <td>
+
+                                                {{ parcel.created_at|date:"M d, Y" }}
+
+                                            </td>
+
+
+                                            <!-- ACTION -->
+
+                                            <td>
+
+                                                <a
+                                                    href="{% url 'track_parcel' %}?tracking_number={{ parcel.tracking_number }}"
+                                                    class="view-parcel-btn"
+                                                    title="Track Parcel"
+                                                >
+
+                                                    <i class="bi bi-eye"></i>
+
+                                                </a>
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    {% else %}
+
+                        <div class="empty-state">
+
+                            <div class="empty-icon">
+
+                                <i class="bi bi-box-seam"></i>
+
+                            </div>
+
+                            <h6>
+                                No Parcels Yet
+                            </h6>
+
+                            <p>
+                                You haven't created any parcels yet.
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

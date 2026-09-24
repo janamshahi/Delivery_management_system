@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Parcels | SHATHIMART 
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .parcel-page {
+        background: #f7f7f2;
+        min-height: calc(100vh - 80px);
+        padding: 50px 0;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        font-family: "Playfair Display", serif;
+        color: #18212b;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .page-header p {
+        color: #6b7280;
+        margin: 0;
+    }
+
+    .btn-swift {
+        background: #b08d57;
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .btn-swift:hover {
+        background: #8f713f;
+        color: #ffffff;
+    }
+
+    .parcel-card {
+        background: #ffffff;
+        border-radius: 16px;
+        border: 1px solid #eeeeea;
+        box-shadow: 0 8px 25px rgba(24, 33, 43, 0.06);
+        overflow: hidden;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table th {
+        background: #f7f7f2;
+        color: #374151;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        white-space: nowrap;
+    }
+
+    .table td {
+        vertical-align: middle;
+        color: #374151;
+    }
+
+    .tracking {
+        color: #8f713f;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .tracking:hover {
+        color: #b08d57;
+    }
+
+    .status {
+        display: inline-flex;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        background: #f0f1ec;
+        color: #374151;
+    }
+
+    .empty-state {
+        padding: 70px 20px;
+        text-align: center;
+    }
+
+    .empty-state i {
+        font-size: 55px;
+        color: #b08d57;
+    }
+
+    .empty-state h3 {
+        margin-top: 20px;
+        color: #18212b;
+    }
+
+    .empty-state p {
+        color: #6b7280;
+    }
+
+</style>
+
+
+<section class="parcel-page">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>My Parcels</h1>
+
+                <p>
+                    View and manage all your parcels.
+                </p>
+
+            </div>
+
+            <a
+                href="{% url 'create_parcel' %}"
+                class="btn-swift"
+            >
+                <i class="bi bi-plus-lg me-2"></i>
+                Create Parcel
+            </a>
+
+        </div>
+
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+
+        <div class="parcel-card">
+
+            {% if parcels %}
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Tracking Number</th>
+
+                                <th>Receiver</th>
+
+                                <th>Type</th>
+
+                                <th>Weight</th>
+
+                                <th>Status</th>
+
+                                <th>Created</th>
+
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for parcel in parcels %}
+
+                                <tr>
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'parcel_detail' parcel.id %}"
+                                            class="tracking"
+                                        >
+                                            {{ parcel.tracking_number }}
+                                        </a>
+
+                                    </td>
+
+                                    <td>
+                                        {{ parcel.receiver_name }}
+                                    </td>
+
+                                    <td>
+                                        {{ parcel.get_parcel_type_display }}
+                                    </td>
+
+                                    <td>
+                                        {{ parcel.weight }} kg
+                                    </td>
+
+                                    <td>
+
+                                        <span class="status">
+                                            {{ parcel.get_status_display }}
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+                                        {{ parcel.created_at|date:"M d, Y" }}
+                                    </td>
+
+                                    <td>
+
+                                        <a
+                                            href="{% url 'parcel_detail' parcel.id %}"
+                                            class="btn btn-sm btn-outline-secondary"
+                                        >
+                                            View
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+
+                    <i class="bi bi-box-seam"></i>
+
+                    <h3>No Parcels Yet</h3>
+
+                    <p>
+                        You haven't created any parcels yet.
+                    </p>
+
+                    <a
+                        href="{% url 'create_parcel' %}"
+                        class="btn-swift d-inline-block mt-3"
+                    >
+                        Create Your First Parcel
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
